@@ -1,0 +1,10 @@
+.main {
+  margin: 0 auto;
+}
+.content {
+  margin: 0 auto;
+  color: black;
+}
+body > div {
+  border: 2px solid blue;
+}
