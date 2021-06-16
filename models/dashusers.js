@@ -15,8 +15,8 @@ const dashUserSchema = mongoose.Schema({
 
     role: {
         type: String,
-        enum: ["BOOKINGADMIN", "FACTORYADMIN"],
-        default: "BOOKINGADMIN"
+        enum: ["BOOKING-ADMIN", "FACTORY-ADMIN"],
+        default: "BOOKING-ADMIN"
     }
 });
 

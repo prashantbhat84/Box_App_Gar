@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 global.mongoose = mongoose;
 const MultichainConfig = require('./multichainConfig.json');
 const multichain = require("multichain-node")(MultichainConfig);
+global.multichain = multichain;
 
 
 const connectdb = async () => {

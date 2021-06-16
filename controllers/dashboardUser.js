@@ -69,6 +69,7 @@ class dashBoardUser {
                 , res
             });
         } catch (error) {
+            console.log(error);
             return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }

@@ -1,3 +1,4 @@
+const multichainNode = require('multichain-node')
 const boxModel = require('../models/box')
 
 // const response = new Response();
@@ -18,6 +19,12 @@ class Box {
 
             const newBox = await boxModel.create(req.body);
 
+            await multichain.issue({
+                address: process.env.blockchainaddress, qty: 1, units: 1, details: req.body, asset: {
+                    name: req.body.boxid,
+                    open: true
+                }
+            })
             response.successReponse({ status: 201, result: newBox, res })
         } catch (error) {
             response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })

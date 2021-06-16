@@ -8,7 +8,7 @@ async function protect(req, res, next,) {
 
     try {
         let auth_token;
-        console.log(req.headers.authorization);
+
         if (req.headers.authorization === "" || req.headers.authorization === undefined || req.headers.authorization === null) {
             throw new Error("Not authorised")
 
@@ -42,7 +42,7 @@ async function protect(req, res, next,) {
         return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
     }
 }
-function authorize(...roles) {
+function authorize(roles) {
     return (req, res, next) => {
 
         try {
