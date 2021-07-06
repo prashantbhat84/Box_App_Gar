@@ -32,7 +32,8 @@ const userschema = mongoose.Schema({
         type: Boolean,
         enum: [true, false],
         default: false
-    }
+    },
+    address: String
 
 });
 

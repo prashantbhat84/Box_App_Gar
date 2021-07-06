@@ -7,6 +7,8 @@ const pug = require('pug')
 const path = require('path')
 const connectdb = require('./config/db')
 const router1 = require('./routes/routes')
+// const crypto = require('crypto');
+// const hash = crypto.createHash('A')
 
 const response = new Response()
 global.response = response;
@@ -37,7 +39,7 @@ app.use((req, res, next) => {
 app.set("views", path.join(__dirname, 'views'));
 app.set('view engine', pug);
 app.get("/", (req, res) => {
-    res.send('')
+    res.send('Server is Running')
 })
 
 app.use("/api", router1);
@@ -47,11 +49,11 @@ app.use("/api", router1);
 
 process.on("uncaughtException", (req, res) => {
 
-    process.exit(1);
+    // process.exit(1);
     errorResponse({ status: 400, result: "Process exited due to unhandled exception", res })
 });
-app.listen(port, () => {
-    console.log(`Server is listening on port ${port}`);
-})
+// app.listen(port, () => {
+//     console.log(`Server is listening on port ${port}`);
+// })
 
 module.exports = app;

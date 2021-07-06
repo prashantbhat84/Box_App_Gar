@@ -2,6 +2,7 @@ const DashboardUser = require('../models/dashusers');
 const jwt = require('jsonwebtoken');
 const Response = require('../utils/Response');
 const response = new Response();
+const fs = require('fs')
 let user;
 
 async function protect(req, res, next,) {
@@ -43,6 +44,7 @@ async function protect(req, res, next,) {
     }
 }
 function authorize(roles) {
+
     return (req, res, next) => {
 
         try {
@@ -58,6 +60,7 @@ function authorize(roles) {
         }
 
     };
+
 
 }
 

@@ -1,15 +1,17 @@
 const express = require('express');
 const orderManagementRouter = express.Router();
-const Box = require('../controllers/box.js');
-const boxController = new Box();
+const Orders = require("../controllers/order")
+
+const orderController = new Orders();
+const { protect, authorize } = require("../middleware/dashboardAuth")
 
 
 
-orderManagementRouter.post("/create", boxController.createBox)
-orderManagementRouter.get("/list", boxController.listBoxes)
-orderManagementRouter.put("/update", boxController.updateBox)
-orderManagementRouter.get("/fetch", boxController.getBox)
+orderManagementRouter.post("/create", protect, authorize(["BOOKING-ADMIN"]), orderController.createOrder)
+orderManagementRouter.get("/list", protect, authorize(["BOOKING-ADMIN", "FACTORY-ADMIN"]), orderController.listOrders)
+// orderManagementRouter.put("/update", boxController.updateBox)
+// orderManagementRouter.get("/fetch", boxController.getBox)
 
 
 
-module.exports = boxRouter;
+module.exports = orderManagementRouter;
