@@ -1,12 +1,14 @@
-const userModel = require('../models/user');
+const UserModel = require('../models/user');
 
 
 class User {
 
     async createUser(req, res, next) {
-        try {
 
-            response.successReponse({ status: 201, result: "User Created", res })
+        try {
+            const newUser = await UserModel.create(req.body);
+
+            response.successReponse({ status: 201, result: newUser, res })
         } catch (error) {
 
         }

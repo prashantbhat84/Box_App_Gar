@@ -21,22 +21,23 @@ const userschema = mongoose.Schema({
     },
     primarybox: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: Box
+        ref: 'Box'
     }],
     secondarybox: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: Box
+        ref: 'Box'
     }],
 
     userverified: {
         type: Boolean,
         enum: [true, false],
         default: false
-    }
+    },
+    address: String
 
 });
 
-userschema.indexes({ email: 1, phonenumber: 1 }, { unique: true, sparse: true })
+userschema.indexes({ phonenumber: 1 }, { unique: true, sparse: true })
 userschema.pre('save', function () {
 
 })

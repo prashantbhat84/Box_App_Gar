@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const User = require('./user')
+
 
 const boxschema = mongoose.Schema({
     boxid: {
@@ -7,20 +7,34 @@ const boxschema = mongoose.Schema({
         required: true,
         unique: true
     },
-    qrcode: {
-        type: String,
-        required: true,
-        unqiue: true
+
+    orderid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Order'
     },
+    primaryOwner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    secondaryOwner: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
 
     registrationStatus: {
         type: String,
         default: "UNREGISTERED",
         enum: ["UNREGISTERED", "REGISTERED"]
     },
-    lastUpdated: {
-        type: String
-    }
+    boxStatus: {
+        type: String,
+        default: "WAREHOUSE",
+        enum: ["WAREHOUSE", "DISPATCHED"]
+    },
+    lastUpdatedAt: String,
+
 
 
 }, { timestamps: true });
