@@ -77,9 +77,16 @@ class Orders {
         try {
             const pageNo = +req.query.pageNo || 0;
             const itemsPerPage = +req.query.itemsPerPage || 1;
-            const orderCOunt = await Order.countDocuments();
-            const filteredOrder = await Order.find().skip(pageNo * itemsPerPage).limit(itemsPerPage)
-            response.successReponse({ status: 200, result: { count: orderCOunt, Orders: filteredOrder }, res })
+            let orderCount, filteredOrder;
+            if (req.user.role === "BOOKING-ADMIN") {
+                filteredOrder = await Order.find({ orderStatus: "WAREHOUSE" }).skip(pageNo * itemsPerPage).limit(itemsPerPage)
+                orderCount = await Order.countDocuments({ orderStatus: "WAREHOUSE" });
+            } else {
+
+                orderCount = await Order.countDocuments();
+                filteredOrder = await Order.find().skip(pageNo * itemsPerPage).limit(itemsPerPage)
+            }
+            response.successReponse({ status: 200, result: { count: orderCount, Orders: filteredOrder }, res })
         } catch (error) {
             response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
