@@ -84,6 +84,25 @@ class Orders {
             response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+    async dispatchOrder(req, res, next) {
+        try {
+
+            const order = await Order.findOne({ OrderID: req.body.OrderID });
+
+            if (!order) {
+                throw new Error(`Order with ID ${req.body.OrderID} does not exist`)
+            }
+            if (order.orderStatus === "DISPATCHED") {
+                throw new Error(`Order with ID ${req.body.OrderID} has been dispatched`)
+            }
+            const dispatch = await Order.updateOne({ OrderID: req.body.OrderID }, { orderStatus: "DISPATCHED", courierName: req.body.courierName, docketNo: req.body.docketNo }, { new: true, runValidators: true })
+            response.successReponse({ status: 200, result: dispatch, res })
+
+
+        } catch (error) {
+            response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
+        }
+    }
 }
 
 

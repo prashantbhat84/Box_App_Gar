@@ -14,6 +14,8 @@ const OrderSchema = mongoose.Schema({
         default: "WAREHOUSE",
         enum: ["WAREHOUSE", "DISPATCHED"]
     },
+    courierName: String,
+    docketNo: String
 
 });
 
