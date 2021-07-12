@@ -2,8 +2,8 @@ const DashboardUser = require('../models/dashusers');
 const jwt = require('jsonwebtoken');
 const Response = require('../utils/Response');
 const response = new Response();
-const fs = require('fs')
-let user;
+
+
 
 async function protect(req, res, next,) {
 

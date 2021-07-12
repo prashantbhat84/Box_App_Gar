@@ -5,7 +5,8 @@ const { protect, authorize } = require('../middleware/dashboardAuth')
 const User = require("../controllers/user");
 const user = new User();
 
-userRouter.post("/create", protect, authorize("BOOKING ADMIN"), user.createUser);
+userRouter.post("/signup", user.signupUser);
+userRouter.put('/verifyUser', user.verifyUser)
 
 
 

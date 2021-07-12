@@ -5,10 +5,12 @@ const userschema = mongoose.Schema({
 
     email: {
         type: String,
+        unique: true
 
     },
     phonenumber: {
         type: String,
+        unique: true
 
     },
     name: {
@@ -33,7 +35,9 @@ const userschema = mongoose.Schema({
         enum: [true, false],
         default: false
     },
-    address: String
+    address: String,
+    phoneVerify: String,
+    emailVerify: String
 
 });
 
