@@ -12,6 +12,7 @@ orderManagementRouter.get("/list", protect, authorize(["FACTORY-ADMIN", "BOOKING
 orderManagementRouter.put("/cancelOrder", protect, authorize(["FACTORY-ADMIN"]), orderController.cancelOrder)
 orderManagementRouter.put("/dispatchOrder", protect, authorize(["BOOKING-ADMIN", "FACTORY-ADMIN"]), orderController.dispatchOrder)
 orderManagementRouter.get("/getCardInfo", protect, authorize(["FACTORY-ADMIN"]), orderController.getCardInfo)
+orderManagementRouter.get("/listDropDown", protect, authorize(["FACTORY-ADMIN", "BOOKING-ADMIN"]), orderController.getOrderDropDown)
 
 
 

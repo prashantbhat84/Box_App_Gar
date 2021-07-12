@@ -156,6 +156,16 @@ class Orders {
         }
 
     }
+    async getOrderDropDown(req, res, next) {
+        try {
+
+            const resultObj = await Order.find({ orderStatus: "DISPATCHED" }).select('OrderID -_id')
+            response.successReponse({ status: 200, result: resultObj, res })
+
+        } catch (error) {
+            response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
+        }
+    }
 }
 
 
