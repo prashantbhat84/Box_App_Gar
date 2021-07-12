@@ -92,12 +92,34 @@ class Orders {
             if (!order) {
                 throw new Error(`Order with ID ${req.body.OrderID} does not exist`)
             }
-            if (order.orderStatus === "DISPATCHED") {
-                throw new Error(`Order with ID ${req.body.OrderID} has been dispatched`)
+            if (order.orderStatus === "DISPATCHED" || order.orderStatus === "CANCELLED") {
+                throw new Error(`Order with ID ${req.body.OrderID} has been dispatched or cancelled`)
             }
             const dispatch = await Order.updateOne({ OrderID: req.body.OrderID }, { orderStatus: "DISPATCHED", courierName: req.body.courierName, docketNo: req.body.docketNo }, { new: true, runValidators: true })
             dispatch.OrderID = req.body.OrderID
             response.successReponse({ status: 200, result: dispatch, res })
+
+
+        } catch (error) {
+            response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
+        }
+    }
+    async cancelOrder(req, res, next) {
+        try {
+
+            const order = await Order.findOne({ OrderID: req.body.OrderID });
+
+            if (!order) {
+                throw new Error(`Order with ID ${req.body.OrderID} does not exist`)
+            }
+            if (order.orderStatus === "DISPATCHED" || order.orderStatus === "CANCELLED") {
+                throw new Error(`Order with ID ${req.body.OrderID} has been dispatched or cancelled`)
+            }
+            const cancel = await Order.updateOne({ OrderID: req.body.OrderID }, { orderStatus: "CANCELLED" }, { new: true, runValidators: true })
+            await Box.findOneAndUpdate({ boxid: order.Box }, { orderid: undefined }, { new: true, runValidators: true })
+            cancel.OrderID = req.body.OrderID
+
+            response.successReponse({ status: 200, result: { cancel }, res })
 
 
         } catch (error) {

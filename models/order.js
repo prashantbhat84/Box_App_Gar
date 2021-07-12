@@ -12,7 +12,7 @@ const OrderSchema = mongoose.Schema({
     orderStatus: {
         type: String,
         default: "WAREHOUSE",
-        enum: ["WAREHOUSE", "DISPATCHED"]
+        enum: ["WAREHOUSE", "DISPATCHED", "CANCELLED"]
     },
     courierName: String,
     docketNo: String
