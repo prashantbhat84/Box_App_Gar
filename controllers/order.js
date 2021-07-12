@@ -103,6 +103,7 @@ class Orders {
                 throw new Error(`Order with ID ${req.body.OrderID} has been dispatched or cancelled`)
             }
             const dispatch = await Order.updateOne({ OrderID: req.body.OrderID }, { orderStatus: "DISPATCHED", courierName: req.body.courierName, docketNo: req.body.docketNo }, { new: true, runValidators: true })
+            await Box.findOneAndUpdate({ boxid: order.Box }, { boxStatus: "DISPATCHED" }, { new: true, runValidators: true })
             dispatch.OrderID = req.body.OrderID
             response.successReponse({ status: 200, result: dispatch, res })
 
@@ -132,6 +133,28 @@ class Orders {
         } catch (error) {
             response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
+    }
+    async getCardInfo(req, res, next) {
+
+        try {
+
+            const totalBoxes = await Box.countDocuments();
+
+            const warehouseBoxes = await Box.countDocuments({ boxStatus: "WAREHOUSE" });
+            const dispatchedBoxes = totalBoxes - warehouseBoxes;
+            const totalOrders = await Order.countDocuments();
+            const dispatchedOrders = await Order.countDocuments({ orderStatus: "DISPATCHED" })
+            const wareHouseOrders = await Order.countDocuments({ orderStatus: "WAREHOUSE" })
+            const cancelledOrders = await Order.countDocuments({ orderStatus: "CANCELLED" })
+            const resultObj = {
+                totalBoxes, warehouseBoxes, dispatchedBoxes, totalOrders, dispatchedOrders, wareHouseOrders, cancelledOrders
+            }
+            response.successReponse({ status: 200, result: resultObj, res })
+
+        } catch (error) {
+            response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
+        }
+
     }
 }
 

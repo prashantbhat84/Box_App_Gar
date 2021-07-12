@@ -10,9 +10,8 @@ const { protect, authorize } = require("../middleware/dashboardAuth")
 orderManagementRouter.post("/create", protect, authorize(["BOOKING-ADMIN", "FACTORY-ADMIN"]), orderController.createOrder)
 orderManagementRouter.get("/list", protect, authorize(["FACTORY-ADMIN", "BOOKING-ADMIN"]), orderController.listOrders)
 orderManagementRouter.put("/cancelOrder", protect, authorize(["FACTORY-ADMIN"]), orderController.cancelOrder)
-// orderManagementRouter.put("/update", boxController.updateBox)
 orderManagementRouter.put("/dispatchOrder", protect, authorize(["BOOKING-ADMIN", "FACTORY-ADMIN"]), orderController.dispatchOrder)
-// orderManagementRouter.get("/fetch", boxController.getBox)
+orderManagementRouter.get("/getCardInfo", protect, authorize(["FACTORY-ADMIN"]), orderController.getCardInfo)
 
 
 
