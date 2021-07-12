@@ -159,7 +159,7 @@ class Orders {
     async getOrderDropDown(req, res, next) {
         try {
 
-            const resultObj = await Order.find({ orderStatus: "DISPATCHED" }).select('OrderID -_id')
+            const resultObj = await Order.find({ orderStatus: "WAREHOUSE" }).select('OrderID -_id')
             response.successReponse({ status: 200, result: resultObj, res })
 
         } catch (error) {
