@@ -96,6 +96,7 @@ class Orders {
                 throw new Error(`Order with ID ${req.body.OrderID} has been dispatched`)
             }
             const dispatch = await Order.updateOne({ OrderID: req.body.OrderID }, { orderStatus: "DISPATCHED", courierName: req.body.courierName, docketNo: req.body.docketNo }, { new: true, runValidators: true })
+            dispatch.OrderID = req.body.OrderID
             response.successReponse({ status: 200, result: dispatch, res })
 
 
