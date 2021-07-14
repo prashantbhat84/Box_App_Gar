@@ -9,7 +9,7 @@ dashboardRouter.post("/createDashboardUser", protect, authorize("FACTORY-ADMIN")
 dashboardRouter.post("/loginDashboardUser", dashboard.LoginUser);
 dashboardRouter.get("/logoutDashboardUser", protect, dashboard.LogoutUser);
 dashboardRouter.get("/dashboardUser", protect, authorize("FACTORY-ADMIN"), dashboard.getDashboardUser)
-
+dashboardRouter.put("/deleteUser", protect, authorize("FACTORY-ADMIN"), dashboard.deleteDashboardUser)
 
 
 module.exports = dashboardRouter;

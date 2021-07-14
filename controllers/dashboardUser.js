@@ -3,7 +3,8 @@ const bcrypt = require('bcryptjs')
 const Response = require('../utils/Response');
 const response = new Response();
 const jwt = require('jsonwebtoken')
-const { authorize } = require('../middleware/dashboardAuth')
+const { authorize } = require('../middleware/dashboardAuth');
+const { convertToObjectID } = require('../utils/misc');
 
 
 
@@ -83,6 +84,26 @@ class dashBoardUser {
                     users
                 , res
             });
+        } catch (error) {
+            console.log(error);
+            return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
+        }
+    }
+    async deleteDashboardUser(req, res, next) {
+        try {
+            const { id } = req.body;
+            const objectid = convertToObjectID(id);
+            const dashboardUser = await DashboardUser.findById(objectid);
+            if (!dashboardUser) {
+                throw new Error(`User does not exist`)
+            }
+            await DashboardUser.deleteOne({ "_id": objectid });
+            response.successReponse({
+                status: 200, result:
+                    "User Deletion Successful"
+                , res
+            })
+
         } catch (error) {
             console.log(error);
             return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
