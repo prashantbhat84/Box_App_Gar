@@ -7,6 +7,7 @@ const user = new User();
 
 userRouter.post("/signup", user.signupUser);
 userRouter.put('/verifyUser', user.verifyUser)
+userRouter.post("/login")
 
 
 

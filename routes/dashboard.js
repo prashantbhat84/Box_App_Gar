@@ -8,6 +8,7 @@ const { protect, authorize } = require('../middleware/dashboardAuth')
 dashboardRouter.post("/createDashboardUser", protect, authorize("FACTORY-ADMIN"), dashboard.createUser);
 dashboardRouter.post("/loginDashboardUser", dashboard.LoginUser);
 dashboardRouter.get("/logoutDashboardUser", protect, dashboard.LogoutUser);
+dashboardRouter.get("/dashboardUser", protect, authorize("FACTORY-ADMIN"), dashboard.getDashboardUser)
 
 
 

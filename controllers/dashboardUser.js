@@ -73,6 +73,21 @@ class dashBoardUser {
             return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+    async getDashboardUser(req, res, next) {
+        try {
+
+            const users = await DashboardUser.find({ role: "BOOKING-ADMIN" })
+
+            response.successReponse({
+                status: 200, result:
+                    users
+                , res
+            });
+        } catch (error) {
+            console.log(error);
+            return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
+        }
+    }
 
 
 }

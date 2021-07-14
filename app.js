@@ -3,12 +3,16 @@ const cors = require('cors')
 const dotenv = require('dotenv')
 const Response = require('./utils/Response')
 const morgan = require('morgan');
-const pug = require('pug')
+// const pug = require('pug')
+const hbs = require('express-handlebars')
+const pdf = require('html-pdf')
 const path = require('path')
 const connectdb = require('./config/db')
 const router1 = require('./routes/routes')
+
 // const crypto = require('crypto');
 // const hash = crypto.createHash('A')
+
 
 const response = new Response()
 global.response = response;
@@ -25,6 +29,9 @@ const corsOptions = {
 const app = express();
 app.use(express.json())
 app.use(cors(corsOptions));
+app.engine('hbs', hbs({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layouts' }))
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'hbs')
 app.use((req, res, next) => {
     // console.log(req.hostname, req.headers, req.path);
 
@@ -36,10 +43,13 @@ app.use((req, res, next) => {
     next();
 })
 
-app.set("views", path.join(__dirname, 'views'));
-app.set('view engine', pug);
 app.get("/", (req, res) => {
-    res.send('Server is Running')
+    const fs = require('fs')
+    const handlebars = require('handlebars')
+    const template = handlebars.compile(__dirname + '\views\home.hbs');
+    const html = template({ title: "My title", condition: true });
+    console.log(html);
+    res.render('home', { title: "My Title", condition: false })
 })
 
 app.use("/api", router1);

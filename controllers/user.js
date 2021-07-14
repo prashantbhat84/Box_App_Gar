@@ -14,7 +14,8 @@ class User {
             }
             let phoneVerify = Math.floor(100000 + Math.random() * 900000);
             let emailVerify = Math.floor(100000 + Math.random() * 900000);
-            await UserModel.updateOne({ phonenumber: user.phonenumber }, { phoneVerify, emailVerify });
+
+            await UserModel.updateOne({ phonenumber: user.phonenumber }, { phoneVerify, emailVerify, password: 'password123' });
 
             // sms  and email to be sent
 
@@ -39,6 +40,9 @@ class User {
         } catch (error) {
             response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
+    }
+    async userLogin(req, res, next) {
+
     }
 }
 
