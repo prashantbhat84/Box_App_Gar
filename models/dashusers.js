@@ -17,7 +17,8 @@ const dashUserSchema = mongoose.Schema({
         type: String,
         enum: ["BOOKING-ADMIN", "FACTORY-ADMIN"],
         default: "BOOKING-ADMIN"
-    }
+    },
+    forgotPasswordCode: String
 });
 
 

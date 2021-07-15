@@ -77,7 +77,7 @@ class dashBoardUser {
     async getDashboardUser(req, res, next) {
         try {
 
-            const users = await DashboardUser.find({ role: "BOOKING-ADMIN" })
+            const users = await DashboardUser.find({ role: "BOOKING-ADMIN" }).select('-token -password')
 
             response.successReponse({
                 status: 200, result:
@@ -101,6 +101,78 @@ class dashBoardUser {
             response.successReponse({
                 status: 200, result:
                     "User Deletion Successful"
+                , res
+            })
+
+        } catch (error) {
+            console.log(error);
+            return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
+        }
+    }
+    async forgotPasswordRequest(req, res, next) {
+        try {
+            const user = await DashboardUser.findOne({ email: req.body.email });
+            if (!user) {
+                throw new Error("User with this email does not exist")
+            }
+            if (user.role === "FACTORY-ADMIN") {
+                throw new Error("Password Reset not available for this email")
+            }
+            const code = (Math.floor(100000 + Math.random() * 900000))
+            const updatedUser = await DashboardUser.updateOne({ email: req.body.email }, { forgotPasswordCode: code, token: undefined, password: null });
+            //send email to user 
+            response.successReponse({
+                status: 200, result:
+                    "Please enter the  code sent to your email"
+                , res
+            })
+
+        } catch (error) {
+            console.log(error);
+            return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
+        }
+    }
+    async checkResetCode(req, res, next) {
+        try {
+            const { email, code } = req.body;
+            const user = await DashboardUser.findOne({ email: req.body.email });
+            if (!user) {
+                throw new Error("User with this email does not exist")
+            }
+            if (code !== user.forgotPasswordCode) {
+                throw new Error("Invalid Code. Please Retry...")
+            }
+            await DashboardUser.updateOne({ email }, { forgotPasswordCode: "" });
+            response.successReponse({
+                status: 200, result:
+                    "Please enter new password"
+                , res
+            })
+
+        } catch (error) {
+            console.log(error);
+            return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
+        }
+    }
+    async changePassword(req, res, next) {
+        try {
+            const { email, password, confirmPassword } = req.body;
+            const user = await DashboardUser.findOne({ email: req.body.email });
+            if (!user) {
+                throw new Error("User with this email does not exist")
+            }
+            if (password !== confirmPassword) {
+                throw new Error("Password and confirm password must be same")
+            }
+            if (user.password !== null) {
+                throw new Error("Please follow proper password reset steps")
+            }
+            const salt = await bcrypt.genSalt(10);
+            const password1 = await bcrypt.hash(password, salt);
+            await DashboardUser.updateOne({ email }, { password: password1 });
+            response.successReponse({
+                status: 200, result:
+                    "Password Changed Successfully"
                 , res
             })
 
