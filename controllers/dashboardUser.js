@@ -164,7 +164,7 @@ class dashBoardUser {
             if (password !== confirmPassword) {
                 throw new Error("Password and confirm password must be same")
             }
-            if (user.password !== null) {
+            if (user.password !== null && (user.forgotPasswordCode !== "")) {
                 throw new Error("Please follow proper password reset steps")
             }
             const salt = await bcrypt.genSalt(10);

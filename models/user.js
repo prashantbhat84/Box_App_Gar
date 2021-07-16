@@ -29,6 +29,8 @@ const userschema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Box'
     }],
+    token: String,
+    forgotPasswordCode: String,
 
     userverified: {
         type: Boolean,
