@@ -115,9 +115,9 @@ class dashBoardUser {
             if (!user) {
                 throw new Error("User with this email does not exist")
             }
-            if (user.role === "FACTORY-ADMIN") {
-                throw new Error("Password Reset not available for this email")
-            }
+            // if (user.role === "FACTORY-ADMIN") {
+            //     throw new Error("Password Reset not available for this email")
+            // }
             const code = (Math.floor(100000 + Math.random() * 900000))
             const updatedUser = await DashboardUser.updateOne({ email: req.body.email }, { forgotPasswordCode: code, token: undefined, password: null });
             //send email to user 
