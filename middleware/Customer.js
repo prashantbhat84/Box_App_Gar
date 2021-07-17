@@ -18,7 +18,7 @@ async function protect(req, res, next,) {
 
             auth_token = req.headers.authorization.split(" ")
 
-            auth_token = auth_token[1]
+            auth_token = auth_token[1] || auth_token[2]
 
         } else {
 

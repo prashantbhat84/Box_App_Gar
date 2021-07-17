@@ -1,6 +1,9 @@
 const multichainNode = require('multichain-node')
 const boxModel = require('../models/box')
 const logger = require('../utils/logger');
+const Utils = require("./utils");
+const utils = new Utils();
+
 
 
 
@@ -23,7 +26,11 @@ class Box {
 
             req.body.lastUpdated = `${dt.getHours()}:${dt.getMinutes()}`
 
+            const secret = utils.getSecret(req.body.boxid)
+            req.body.AESKEY = secret.aeskey;
+            req.body.HMAC = secret.hmac
             const newBox = await boxModel.create(req.body);
+
 
 
             // await multichain.issue({
@@ -112,6 +119,7 @@ class Box {
         }
 
     }
+
 
 
 

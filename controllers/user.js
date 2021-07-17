@@ -1,6 +1,8 @@
 const UserModel = require('../models/user');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const Orders = require('../models/order')
+const Box = require("../models/box")
 
 
 class User {
@@ -160,6 +162,56 @@ class User {
         } catch (error) {
             console.log(error);
             return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
+        }
+    }
+    async addBoxToCustomer(req, res, next) {
+        try {
+            let user = req.user._id;
+
+            const order = await Orders.findOne({ Box: req.body.boxid });
+            const box = await Box.findOne({ boxid: req.body.boxid })
+            if (!order) {
+                throw new Error("Order details not found . Please contact customer care")
+            }
+            if (order.customer.toString() !== user.toString()) {
+                throw new Error("This box has not been assigned to you. Please contact customer care")
+            }
+            if (box.primaryOwner) {
+                throw new Error("Primary owner for box exists")
+            }
+            await UserModel.updateOne({ "_id": user }, {
+                $addToSet: {
+                    box: box.boxid
+                }
+            });
+
+            await Box.updateOne({ "_id": box._id }, { primaryOwner: user })
+
+            response.successReponse({
+                status: 200, result:
+                {
+                    AES: box.AESKEY,
+                    HMAC: box.HMAC
+                }
+                , res
+            })
+        } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
+        }
+    }
+    async getCustomerBoxList(req, res, next) {
+        try {
+            let user = req.user._id;
+            const customer = await UserModel.findById(user);
+            response.successReponse({
+                status: 200, result:
+                {
+                    list: customer.box
+                }
+                , res
+            })
+        } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
         }
     }
 }

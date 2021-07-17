@@ -42,16 +42,16 @@ const getEncryptedAESKey = (input, arraylength) => {
 class Utils {
 
 
-    getSecret(req, res, next) {
-        const str = req.query.boxid
+    getSecret(boxid) {
+        const str = boxid
         const strarray1 = Array.from(str);
         const arraylength = strarray1.length;
         if (arraylength === 8) {
             const hmac = getHmacKeyArray(strarray1, arraylength)
             const aeskey = getEncryptedAESKey(strarray1, arraylength);
-            response.successReponse({ status: 200, result: { encryptedKey: aeskey, hmac, outputsize: aeskey.length, inputsize: arraylength }, res })
+            return { hmac, aeskey }
         } else {
-            response.errorResponse({ status: 400, result: "Input Data Byte size should be 8" })
+            throw new Error("Boxid length should be 8")
         }
 
     }

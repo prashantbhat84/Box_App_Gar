@@ -21,14 +21,8 @@ const userschema = mongoose.Schema({
         type: String,
 
     },
-    primarybox: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Box'
-    }],
-    secondarybox: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Box'
-    }],
+    box: ["String"],
+
     token: String,
     forgotPasswordCode: String,
 

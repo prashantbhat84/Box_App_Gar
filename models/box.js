@@ -22,6 +22,8 @@ const boxschema = mongoose.Schema({
             ref: 'User'
         }
     ],
+    AESKEY: ['String'],
+    HMAC: ['String'],
 
     registrationStatus: {
         type: String,
@@ -34,6 +36,7 @@ const boxschema = mongoose.Schema({
         enum: ["WAREHOUSE", "DISPATCHED"]
     },
     lastUpdatedAt: String,
+
 
 
 

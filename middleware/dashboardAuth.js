@@ -10,6 +10,7 @@ async function protect(req, res, next,) {
     try {
         let auth_token;
 
+
         if (req.headers.authorization === "" || req.headers.authorization === undefined || req.headers.authorization === null) {
             throw new Error("Not authorised")
 
@@ -18,18 +19,21 @@ async function protect(req, res, next,) {
 
             auth_token = req.headers.authorization.split(" ")
 
-            auth_token = auth_token[2]
+            auth_token = auth_token[1] || auth_token[2]
 
         } else {
 
             auth_token = req.headers.authorization;
         }
 
+
         const tokenVerify = await jwt.verify(auth_token, process.env.sharedkey);
+
         if (tokenVerify.id) {
             req.user = await DashboardUser.findById(tokenVerify.id)
 
         }
+
         if (!req.user.token) {
             throw new Error("Please relogin")
         }
