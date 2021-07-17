@@ -101,7 +101,7 @@ class User {
                 throw new Error("Verification Incomplete. Please verify email and mobile number")
             }
             const code = (Math.floor(100000 + Math.random() * 900000))
-            const updatedUser = await UserModel.updateOne({ email: req.body.email }, { forgotPasswordCode: code, token: undefined, password: null });
+            const updatedUser = await UserModel.updateOne({ email: req.body.email }, { forgotPasswordCode: code, token: undefined, });
             //send email to user 
             response.successReponse({
                 status: 200, result:

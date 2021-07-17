@@ -119,7 +119,7 @@ class dashBoardUser {
             //     throw new Error("Password Reset not available for this email")
             // }
             const code = (Math.floor(100000 + Math.random() * 900000))
-            const updatedUser = await DashboardUser.updateOne({ email: req.body.email }, { forgotPasswordCode: code, token: undefined, password: null });
+            const updatedUser = await DashboardUser.updateOne({ email: req.body.email }, { forgotPasswordCode: code, token: undefined, });
             //send email to user 
             response.successReponse({
                 status: 200, result:
