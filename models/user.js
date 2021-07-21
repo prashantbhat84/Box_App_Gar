@@ -23,6 +23,13 @@ const userschema = mongoose.Schema({
     },
     box: ["String"],
 
+    userlist: [{
+        name: String,
+        email: String,
+        phonenumber: String,
+        address: String
+    }],
+
     token: String,
     forgotPasswordCode: String,
 

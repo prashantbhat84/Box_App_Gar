@@ -15,6 +15,9 @@ userRouter.put("/verifyCode", user.verifyPasswordCode)
 userRouter.put("/changePassword", user.changePassword)
 userRouter.put("/addBox", protect, user.addBoxToCustomer)
 userRouter.get("/boxList", protect, user.getCustomerBoxList)
+userRouter.post("/createUserList", protect, user.createUserList);
+userRouter.get("/getUserList", protect, user.getUserList)
+userRouter.put("/removeUserFromList", protect, user.removeUserFromList)
 
 
 

@@ -214,6 +214,70 @@ class User {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
+    async createUserList(req, res, next) {
+        try {
+            let newUser = await UserModel.findOne({ email: req.body.email, phonenumber: req.body.phonenumber });
+            if (!newUser) {
+                newUser = await UserModel.create(req.body);
+            }
+
+            const updateUser = await UserModel.updateOne({ "_id": req.user._id }, {
+                $addToSet: {
+                    userlist: newUser
+                }
+            }, { new: true, runValidators: true })
+            //send sms to newuser
+
+            response.successReponse({
+                status: 200, result:
+                    "User Added Succesfully"
+                , res
+            })
+
+        } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
+        }
+    }
+    async getUserList(req, res, next) {
+        try {
+            const user = await UserModel.findById(req.user._id);
+
+            const list = user.userlist;
+            response.successReponse({
+                status: 200, result:
+                {
+                    userList: list
+                }
+                , res
+            })
+
+        } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
+        }
+    }
+    async removeUserFromList(req, res, next) {
+        try {
+            const user = await UserModel.findOne(req.user._id);
+            const id = req.body.id;
+            const updatedUser = await UserModel.updateOne({ "_id": user._id }, {
+                $pull: {
+                    userlist: {
+                        "_id": id
+                    }
+                }
+            });
+            const user1 = await UserModel.findOne({ email: user.email }, { token: -1, password: -1, forgotPasswordCode: -1 });
+
+            response.successReponse({
+                status: 200, result:
+                    "User Removed Successfully"
+                , res
+            })
+        } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
+        }
+
+    }
 }
 
 module.exports = User;
