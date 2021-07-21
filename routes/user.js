@@ -22,6 +22,7 @@ userRouter.post("/addAsSecondaryOwner", protect, user.addSecondaryOwner)
 userRouter.get("/getUserNotification", protect, user.getUserNotifications)
 userRouter.put("/acceptOwnershipRequest", protect, user.acceptOwnershipRequest)
 userRouter.get("/listSecondaryOwner", protect, user.listSecondaryOwner)
+userRouter.put("/deleteSecondaryOwner", protect, user.deleteSecondaryOwner)
 
 
 

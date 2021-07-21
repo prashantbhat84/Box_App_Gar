@@ -386,6 +386,45 @@ class User {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
+    async deleteSecondaryOwner(req, res, next) {
+        try {
+            const boxid = req.body.boxid;
+            const id = convertToObjectID(req.body.ownerid);
+            const user = await UserModel.findById(id);
+            if (!user) {
+                throw new Error("Secondary owner not found")
+            }
+            const box = await Box.findOne({ boxid });
+            if (!box) {
+                throw new Error("Box Not found")
+            }
+
+            if (box.primaryOwner.toString() !== req.user._id.toString()) {
+                throw new Error("Only primary owner can remove secondary  owner's")
+            }
+
+            await Box.updateOne({ "_id": box.id }, {
+                $pull: {
+                    secondaryOwner: {
+                        "_id": id
+                    }
+                }
+            });
+            await UserModel.updateOne({ "_id": user._id }, {
+                $pull: {
+                    box: boxid
+                }
+            })
+            response.successReponse({
+                status: 200, result:
+                    "Secondary Owner Deletion Process Complete"
+                , res
+            })
+
+        } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
+        }
+    }
 }
 
 module.exports = User;
