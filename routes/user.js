@@ -18,6 +18,10 @@ userRouter.get("/boxList", protect, user.getCustomerBoxList)
 userRouter.post("/createUserList", protect, user.createUserList);
 userRouter.get("/getUserList", protect, user.getUserList)
 userRouter.put("/removeUserFromList", protect, user.removeUserFromList)
+userRouter.post("/addAsSecondaryOwner", protect, user.addSecondaryOwner)
+userRouter.get("/getUserNotification", protect, user.getUserNotifications)
+userRouter.put("/acceptOwnershipRequest", protect, user.acceptOwnershipRequest)
+userRouter.get("/listSecondaryOwner", protect, user.listSecondaryOwner)
 
 
 

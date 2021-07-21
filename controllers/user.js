@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const Orders = require('../models/order')
 const Box = require("../models/box")
+const { convertToObjectID } = require("../utils/misc");
+const Notification = require('../models/Notification');
 
 
 class User {
@@ -185,7 +187,7 @@ class User {
                 }
             });
 
-            await Box.updateOne({ "_id": box._id }, { primaryOwner: user })
+            await Box.updateOne({ "_id": box._id }, { primaryOwner: user, registrationStatus: "REGISTERED" })
 
             response.successReponse({
                 status: 200, result:
@@ -221,7 +223,7 @@ class User {
                 newUser = await UserModel.create(req.body);
             }
 
-            const updateUser = await UserModel.updateOne({ "_id": req.user._id }, {
+            await UserModel.updateOne({ "_id": req.user._id }, {
                 $addToSet: {
                     userlist: newUser
                 }
@@ -259,14 +261,14 @@ class User {
         try {
             const user = await UserModel.findOne(req.user._id);
             const id = req.body.id;
-            const updatedUser = await UserModel.updateOne({ "_id": user._id }, {
+            await UserModel.updateOne({ "_id": user._id }, {
                 $pull: {
                     userlist: {
                         "_id": id
                     }
                 }
             });
-            const user1 = await UserModel.findOne({ email: user.email }, { token: -1, password: -1, forgotPasswordCode: -1 });
+
 
             response.successReponse({
                 status: 200, result:
@@ -277,6 +279,112 @@ class User {
             response.errorResponse({ status: 400, result: error.message, res })
         }
 
+    }
+    async addSecondaryOwner(req, res, next) {
+        try {
+            const boxid = req.body.boxid;
+
+            const userBox = await Box.findOne({ boxid });
+            if (!userBox) {
+                throw new Error("Box Not Found")
+            }
+            if (req.user._id.toString() !== userBox.primaryOwner.toString()) {
+                throw new Error("Only Primary owners  can add additional owners")
+            }
+            const userId = convertToObjectID(req.body.id);
+
+            const user = await UserModel.findById(userId)
+            if (!user) {
+                throw new Error("User not found")
+            }
+
+            await Notification.create({ userid: userId, description: `${req.user.name} has  requested you to become his box secondary owner`, boxid, senderid: req.user._id })
+
+            response.successReponse({
+                status: 200, result:
+                    `Have notified ${user.name} of your request to become secondary owner`
+                , res
+            })
+        } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
+        }
+    }
+    async getUserNotifications(req, res, next) {
+        try {
+            const notification = await Notification.find({ userid: req.user._id, expired: false }).select(' -userid -senderid  -createdAt -updatedAt -expired -__v')
+            response.successReponse({
+                status: 200, result: { notifications: notification }
+
+                , res
+            })
+        } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
+        }
+    }
+    async acceptOwnershipRequest(req, res, next) {
+        try {
+            const response1 = req.body.response;
+            const boxid = req.body.boxid;
+            const user = await UserModel.findById(req.user._id)
+
+
+            const notification = await Notification.findOne({ boxid });
+            if (!notification) {
+                throw new Error(`Request not found. Please retry ....`)
+            }
+            if (req.user._id.toString() !== notification.userid.toString()) {
+                throw new Error("This request is not for you. Please Verify ....")
+            }
+            if (!response1) {
+                await Notification.updateOne({ "_id": notification._id }, { expired: true, response: "REJECTED" });
+                // maybe send sms
+
+
+            } else {
+                await Notification.updateOne({ "_id": notification._id }, { expired: true, response: "ACCEPTED" });
+                await Box.updateOne({ boxid }, {
+                    $addToSet: {
+                        secondaryOwner: user
+                    }
+                });
+                await UserModel.findByIdAndUpdate(req.user._id, {
+                    $addToSet: {
+                        box: boxid
+                    }
+                })
+
+            }
+            response.successReponse({
+                status: 200, result:
+                    "Accept Ownership Process Complete"
+                , res
+            })
+
+        } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
+        }
+    }
+    async listSecondaryOwner(req, res, next) {
+        try {
+            const boxid = req.query.boxid;
+            const box = await Box.findOne({ boxid });
+            if (!box) {
+                throw new Error("Box not found")
+            }
+            if (box.primaryOwner.toString() !== req.user._id.toString()) {
+                throw new Error("Secondary Owner List access unauthorised")
+            }
+            response.successReponse({
+                status: 200, result:
+                {
+                    list: box.secondaryOwner
+                }
+                , res
+            })
+
+        } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
+        }
     }
 }
 

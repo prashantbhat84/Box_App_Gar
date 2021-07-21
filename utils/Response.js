@@ -30,7 +30,7 @@ class Response {
         const res = params.res
         return res.status(200).json(this.response)
 
-        return res.status(200).json(this.response)
+
     }
 
 

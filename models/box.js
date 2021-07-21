@@ -18,8 +18,9 @@ const boxschema = mongoose.Schema({
     },
     secondaryOwner: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
+            name: String,
+            email: String,
+            phonenumber: String
         }
     ],
     AESKEY: ['String'],
