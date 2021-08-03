@@ -69,7 +69,7 @@ class User {
 
                 token, apptoBoxID
 
-            }, { new: true, runValidators: true, fields: { password: 0, __v: 0, _id: 0, emailVerify: 0, phoneVerify: 0 } });
+            }, { new: true, runValidators: true, fields: { password: 0, __v: 0, _id: 0, emailVerify: 0, phoneVerify: 0, userlist: 0, primarybox: 0, secondarybox: 0, forgotPasswordCode: 0 } });
 
 
             response.successReponse({
