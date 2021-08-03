@@ -37,6 +37,7 @@ const boxschema = mongoose.Schema({
         enum: ["WAREHOUSE", "DISPATCHED"]
     },
     lastUpdatedAt: String,
+    aggregatorList: ['String']
 
 
 

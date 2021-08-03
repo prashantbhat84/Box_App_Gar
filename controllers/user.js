@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const Orders = require('../models/order')
 const Box = require("../models/box")
-const { convertToObjectID } = require("../utils/misc");
+const { convertToObjectID, convertPhoneToID } = require("../utils/misc");
 const Notification = require('../models/Notification');
 
 
@@ -63,12 +63,14 @@ class User {
             if (!comparePassword) {
                 throw new Error("Password Mismatch")
             }
+            const apptoBoxID = convertPhoneToID(user.phonenumber);
             let token = await jwt.sign({ id: user._id }, process.env.sharedkey, { expiresIn: process.env.tokenExpiry });
             const updatedUser = await UserModel.findByIdAndUpdate(user._id, {
 
-                token
+                token, apptoBoxID
 
             }, { new: true, runValidators: true, fields: { password: 0, __v: 0, _id: 0, emailVerify: 0, phoneVerify: 0 } });
+
 
             response.successReponse({
                 status: 200, result: { user: updatedUser }

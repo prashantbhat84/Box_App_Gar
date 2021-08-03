@@ -40,7 +40,8 @@ const userschema = mongoose.Schema({
     },
     address: String,
     phoneVerify: String,
-    emailVerify: String
+    emailVerify: String,
+    apptoBoxID: [Number]
 
 });
 
