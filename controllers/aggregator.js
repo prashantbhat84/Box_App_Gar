@@ -5,6 +5,7 @@ class Aggregator {
 
     async updateAggregator(req, res, next) {
         try {
+            console.log("Aggregator updated")
             console.log(req.body);
             response.successReponse({ status: 200, result: req.body, res })
 
