@@ -15,7 +15,7 @@ class Aggregator {
     }
     async updateAggregatorAndBox(req, res, next) {
         try {
-
+            console.log(req.body)
             response.successReponse({ status: 200, result: req.body, res })
 
         } catch (error) {
