@@ -222,6 +222,7 @@ class User {
         try {
             let newUser = await UserModel.findOne({ email: req.body.email, phonenumber: req.body.phonenumber });
             if (!newUser) {
+                req.body.apptoBoxID = convertPhoneToID(req.body.phonenumber.toString());
                 newUser = await UserModel.create(req.body);
             }
 

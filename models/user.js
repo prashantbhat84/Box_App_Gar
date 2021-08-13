@@ -27,7 +27,8 @@ const userschema = mongoose.Schema({
         name: String,
         email: String,
         phonenumber: String,
-        address: String
+        address: String,
+        apptoBoxID: [Number]
     }],
 
     token: String,

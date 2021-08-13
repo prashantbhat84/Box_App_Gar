@@ -13,6 +13,15 @@ class Aggregator {
             response.errorResponse({ status: 400, result: "Failure", res })
         }
     }
+    async updateAggregatorAndBox(req, res, next) {
+        try {
+
+            response.successReponse({ status: 200, result: req.body, res })
+
+        } catch (error) {
+            response.errorResponse({ status: 400, result: "Failure", res })
+        }
+    }
 }
 
 module.exports = Aggregator
