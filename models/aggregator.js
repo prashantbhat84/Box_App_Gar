@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-const boxschema = mongoose.Schema({
+const aggregatorSchema = mongoose.Schema({
     aggregatorID: String,
     installationStatus: {
         type: Boolean,
@@ -15,5 +15,5 @@ const boxschema = mongoose.Schema({
 
 }, { timestamps: true });
 
-module.exports = mongoose.model("Box", boxschema);
+module.exports = mongoose.model("Aggregator", aggregatorSchema);
 
