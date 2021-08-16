@@ -10,11 +10,11 @@ class Aggregator {
             console.log("Aggregator updated")
             console.log(req.body);
             const date = new Date();
-            const time = `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}:${date.getHours()}-${date.getMinutes()}`
+            const time = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}:${date.getHours()}-${date.getMinutes()}`
 
-            const aggregator = await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time })
+            const aggregator = await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time }, { new: true, runValidators: true })
 
-            response.successReponse({ status: 200, result: req.body, res })
+            response.successReponse({ status: 200, result: aggregator, res })
 
         } catch (error) {
             response.errorResponse({ status: 400, result: "Failure", res })
