@@ -22,9 +22,7 @@ class Aggregator {
     }
     async updateAggregatorAndBox(req, res, next) {
         try {
-            const result = JSON.parse(req.body);
-            const id = result.slice(4, 11);
-
+            console.log(req.body)
 
             response.successReponse({ status: 200, result: req.body, res })
 
