@@ -22,13 +22,9 @@ class Aggregator {
     }
     async updateAggregatorAndBox(req, res, next) {
         try {
-            const { data } = req.body;
-            console.log(data)
-            // const array1 = JSON.parse(data);
-            // console.log(typeof array);
-            // const boxid = data.splice(4, 11);
-            // console.log(boxid);
-
+            // const data = [14, 30, 59, 20, 224, 2, 36, 0, 2, 112, 164, 224, 79, 88, 75, 24, 35, 12, 77, 98, 43, 21, 79, 34, 83, 70, 50, 70, 50, 22, 23, 153, 10, 32, 21, 755, 'dca632b8f170']
+            //  const command= data[12];
+            console.log(req.body);
             response.successReponse({ status: 200, result: req.body, res })
 
         } catch (error) {
