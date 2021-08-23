@@ -10,7 +10,7 @@ let lastCommand;
 
 async function sendSms(phonenumber, phonenumber1,smsdata){
       
-    await sms.sms(phonenumber, smsdata)
+    await sms.smsaws(phonenumber, smsdata)
             await sms.smsaws(phonenumber1, smsdata)
 }
 function convertToStringVal(phone){
