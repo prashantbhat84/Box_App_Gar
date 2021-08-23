@@ -57,18 +57,13 @@ class Aggregator {
                   box+=temp
               }
                             
-           })
-          
+           })          
            const primaryuser=data.slice(13,18)
            const secondaryuser= data.slice(18,23)
            const phonenumber= convertToStringVal(primaryuser);
            const phonenumber1=convertToStringVal(secondaryuser);
            const aggid= data[data.length-1];
-           let temp;
-          boxid.forEach(item=>{
-                 temp+=String.fromCharCode(item)
-          });  
-          boxid=temp;
+           
         let smsdata;       
             let command = (data[12]);
             if(lastCommand!==command){
