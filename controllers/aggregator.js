@@ -45,7 +45,7 @@ class Aggregator {
     async updateAggregatorAndBox(req, res, next) {
         try {
         //    const data=[14,30,59,20,224, 2, 36, 0, 2, 112, 164, 224,79,88,84,70,11,97,90,8,48,38,8,79,0,83,70,50,21,22,17,14,11,46,13,'dc632b8f170']
-         
+          console.log(req.body)
            const data=(req.body.body.data);
             let boxid= data.slice(4,12)
             let box=""
