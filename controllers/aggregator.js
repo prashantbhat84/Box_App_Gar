@@ -2,7 +2,7 @@ const Response = require('../utils/Response');
 const response = new Response();
 const logger = require('../utils/logger');
 const AggregatorModel = require("../models/aggregator")
-const sms2 = require("../utils/sms2");
+// const sms2 = require("../utils/sms2");
 const sms = require("../utils/sms");
 const email = require("../utils/sendMail")
 let lastCommand;

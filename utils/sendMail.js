@@ -1,18 +1,30 @@
-export default function sendMail() {
-    let transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        auth: {
-            user: "prashant.work.1984@gmail.com",
-            password: "()Blore560001"
-        }
-    });
-    let mailOptions = {
-        from: "Gariyasi Contact <contact@gariyasi.com>",
-        to: "prashant.work.1984@gmail.com",
-        bcc: "contact@gariyasi.com",
-        subject: "test",
-        text: "This is working"
-    }
-    await transporter.sendMail(mailOptions)
+const aws = require('aws-sdk');
+const nodemailer = require('nodemailer');
+
+const ses = new aws.SES();
+async function sendEmail(email, body) {
+
+    // var mailOptions = {
+    //     from: 'contact@gariyasi.com',
+    //     subject: 'Your OTP for signup',
+
+    //     to: email,
+    //     // bcc: Any BCC address you want here in an array,
+    //     html: 
+
+    // };
+    // console.log('Creating SES transporter');
+    // // create Nodemailer SES transporter
+    // const transporter = nodemailer.createTransport({
+    //     SES: ses
+    // });
+    // // send email
+    // try {
+
+    //     await transporter.sendMail(mailOptions);
+    //     return;
+    // } catch (error) {
+    //     console.log(error.message);
+    // }
 }
+module.exports = { sendEmail }
