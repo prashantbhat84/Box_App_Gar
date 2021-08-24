@@ -10,8 +10,8 @@ let lastCommand;
 
 async function sendSms(phonenumber, phonenumber1,smsdata){
       console.log(phonenumber,phonenumber1)
-    await sms.smsaws(phonenumber, smsdata)
-            await sms.smsaws(phonenumber1, smsdata)
+    // await sms.smsaws(phonenumber, smsdata)
+    //         await sms.smsaws(phonenumber1, smsdata)
 }
 function convertToStringVal(phone){
     let temp="";
@@ -65,7 +65,7 @@ class Aggregator {
            const phonenumber= convertToStringVal(primaryuser);
            const phonenumber1=convertToStringVal(secondaryuser);
            
-           console.log({BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid)})       
+           console.log({BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:boxlid.toString(16)})       
         let smsdata;       
             let command = (data[12]);
            console.log({boxcommand:String.fromCharCode(command)})
