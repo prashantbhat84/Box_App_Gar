@@ -57,16 +57,17 @@ class Aggregator {
                   box+=temp
               }
                             
-           })          
+           })  ;
+           const aggid= data[data.length-1];
            const primaryuser=data.slice(13,18)
            const secondaryuser= data.slice(18,23)
            const phonenumber= convertToStringVal(primaryuser);
            const phonenumber1=convertToStringVal(secondaryuser);
-           const aggid= data[data.length-1];
            
+           console.log({boxid:box,aggregatorID:aggid,primaryPhoneNumber:phonenumber,secondaryPhoneNumber:phonenumber1})       
         let smsdata;       
             let command = (data[12]);
-            console.log({command}),
+           
             console.log(lastCommand!==command)
             if(lastCommand!==command){
                 switch(command){
