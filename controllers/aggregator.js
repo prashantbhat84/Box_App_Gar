@@ -61,10 +61,11 @@ class Aggregator {
            const aggid= data[data.length-1];
            const primaryuser=data.slice(13,18)
            const secondaryuser= data.slice(18,23)
+           const boxlid= data[24];
            const phonenumber= convertToStringVal(primaryuser);
            const phonenumber1=convertToStringVal(secondaryuser);
            
-           console.log({BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber})       
+           console.log({BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid)})       
         let smsdata;       
             let command = (data[12]);
            console.log({boxcommand:String.fromCharCode(command)})
