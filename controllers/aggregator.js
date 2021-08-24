@@ -9,9 +9,9 @@ let lastCommand;
 
 
 async function sendSms(phonenumber, phonenumber1,smsdata){
-      
-    await sms.smsaws(phonenumber, smsdata)
-            await sms.smsaws(phonenumber1, smsdata)
+      console.log(phonenumber,phonenumber1)
+    // await sms.smsaws(phonenumber, smsdata)
+    //         await sms.smsaws(phonenumber1, smsdata)
 }
 function convertToStringVal(phone){
     let temp="";
