@@ -67,7 +67,7 @@ class Aggregator {
            console.log({boxid:box,aggregatorID:aggid,primaryPhoneNumber:phonenumber,secondaryPhoneNumber:phonenumber1})       
         let smsdata;       
             let command = (data[12]);
-           
+           console.log({boxcommand:String.fromCharCode(command)})
             console.log(lastCommand!==command)
             if(lastCommand!==command){
                 switch(command){
