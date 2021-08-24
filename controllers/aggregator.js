@@ -64,12 +64,12 @@ class Aggregator {
            const phonenumber= convertToStringVal(primaryuser);
            const phonenumber1=convertToStringVal(secondaryuser);
            
-           console.log({boxid:box,aggregatorID:aggid,primaryPhoneNumber:phonenumber,secondaryPhoneNumber:phonenumber1})       
+           console.log({BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber})       
         let smsdata;       
             let command = (data[12]);
            console.log({boxcommand:String.fromCharCode(command)})
             console.log(lastCommand!==command)
-            if(lastCommand!==command){
+           
                 switch(command){
                     case 79:   
                                console.log(`Box open`);
@@ -87,6 +87,7 @@ class Aggregator {
                     break;
                     case 83:                   
                             console.log(`Store User`);
+                            console.log({ADDED_USER:phonenumber1})
                             lastCommand=command;
                             smsdata=`User Added to box with id ${box}`
                             await sendSms(phonenumber,phonenumber1,smsdata)
@@ -94,6 +95,7 @@ class Aggregator {
                         break;
                     case 68:                       
                             console.log(`Remove  User`);
+                            console.log({REMOVED_USER:phonenumber1})
                             lastCommand=command;
                             smsdata=`User Removed from box with id ${box}`
                             await sendSms(phonenumber,phonenumber1,smsdata)
@@ -113,9 +115,7 @@ class Aggregator {
                         break;                 
                 }
                    
-            }else{
-               smsdata=('last command and present command are same');
-            } 
+            
                         response.successReponse({ status: 200, result: req.body, res })
 
         } catch (error) {
