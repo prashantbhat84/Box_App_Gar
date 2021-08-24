@@ -66,6 +66,7 @@ class Aggregator {
            
         let smsdata;       
             let command = (data[12]);
+            console.log({command})
             if(lastCommand!==command){
                 switch(command){
                     case 79:   
