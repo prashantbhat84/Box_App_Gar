@@ -65,7 +65,7 @@ class Aggregator {
            const phonenumber= convertToStringVal(primaryuser);
            const phonenumber1=convertToStringVal(secondaryuser);
            
-           console.log({BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:boxlid.toString(16)})       
+           console.log({BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid.toString(16))})       
         let smsdata;       
             let command = (data[12]);
            console.log({boxcommand:String.fromCharCode(command)})
