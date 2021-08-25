@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon  index.js | bunyan -o short -L ",
     "test": "mocha",
-    "start": "node index.js | bunyan -o"
+    "start": "node index.js "
   },
   "keywords": [],
   "author": "",
