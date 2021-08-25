@@ -1,7 +1,6 @@
 const DashboardUser = require('../models/dashusers');
 const bcrypt = require('bcryptjs')
-const Response = require('../utils/Response');
-const response = new Response();
+const response = require('../utils/Response');
 const jwt = require('jsonwebtoken')
 const { authorize } = require('../middleware/dashboardAuth');
 const { convertToObjectID } = require('../utils/misc');
@@ -9,6 +8,12 @@ const { convertToObjectID } = require('../utils/misc');
 
 
 class dashBoardUser {
+    constructor () {
+        if(!dashBoardUser.instance){
+            dashBoardUser.instance =this;
+        }
+           return dashBoardUser.instance;
+    }
 
     async createUser(req, res, next) {
         try {
@@ -184,4 +189,7 @@ class dashBoardUser {
 
 
 }
-module.exports = dashBoardUser;
+
+const dashboard = new dashBoardUser();
+Object.freeze(dashboard);
+module.exports = dashboard;

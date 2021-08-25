@@ -1,8 +1,8 @@
 const express = require('express');
 const orderManagementRouter = express.Router();
-const Orders = require("../controllers/order")
+const orderController = require("../controllers/order")
 
-const orderController = new Orders();
+
 const { protect, authorize } = require("../middleware/dashboardAuth")
 
 

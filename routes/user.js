@@ -2,8 +2,8 @@ const express = require('express');
 const userRouter = express.Router();
 const { protect, authorize } = require("../middleware/Customer")
 
-const User = require("../controllers/user");
-const user = new User();
+
+const user = require("../controllers/user");
 
 userRouter.post("/signup", user.signupUser);
 

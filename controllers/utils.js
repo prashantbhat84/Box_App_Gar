@@ -40,7 +40,13 @@ const getEncryptedAESKey = (input, arraylength) => {
     return aeskey
 }
 class Utils {
-
+  
+    constructor () {
+        if ( !Utils.instance ) {
+            Utils.instance = this;
+        }
+        return Utils.instance;
+    }
 
     getSecret(boxid) {
         const str = boxid
@@ -88,5 +94,8 @@ class Utils {
 
 }
 
+const utils = new Utils();
 
-module.exports = Utils
+Object.freeze(utils)
+
+module.exports =utils

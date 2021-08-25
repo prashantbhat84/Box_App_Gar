@@ -9,13 +9,13 @@ const pdf = require('html-pdf')
 const path = require('path')
 const connectdb = require('./config/db')
 const router1 = require('./routes/routes')
-
+const log= require('./utils/serverLogger');
+const response= require("./utils/Response")
 // const crypto = require('crypto');
 // const hash = crypto.createHash('A')
 
 
-const response = new Response()
-global.response = response;
+
 
 dotenv.config({ path: "./config/config.env" });
 const port = process.env.PORT;
@@ -28,6 +28,7 @@ const corsOptions = {
 }
 const app = express();
 app.use(express.json())
+
 app.use(cors(corsOptions));
 app.engine('hbs', hbs({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layouts' }))
 app.set('views', path.join(__dirname, 'views'))

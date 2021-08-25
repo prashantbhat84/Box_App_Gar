@@ -1,6 +1,7 @@
-const Response = require('../utils/Response');
-const response = new Response();
+const response = require('../utils/Response');
+
 const logger = require('../utils/logger');
+const log= require("../utils/serverLogger")
 const AggregatorModel = require("../models/aggregator")
 // const sms2 = require("../utils/sms2");
 const sms = require("../utils/sms");
@@ -9,14 +10,14 @@ let lastCommand;
 
 
 async function sendSms(phonenumber, phonenumber1,smsdata){
-      console.log(phonenumber,phonenumber1)
+ log.info({module:"Aggregator"})
     // await sms.smsaws(phonenumber, smsdata)
     //         await sms.smsaws(phonenumber1, smsdata)
 }
 function convertToStringVal(phone){
     let temp="";
    phone.forEach(item=>{
-        console.log(item);
+        
           if(item.toString().length===1){
                temp+="0"+item;
           }else{
@@ -26,20 +27,31 @@ function convertToStringVal(phone){
       return temp;
 }
 class Aggregator {
+    constructor ()  {
+        if(!Aggregator.instance){
+            Aggregator.instance=this;
+        }
+        return Aggregator.instance;
+    }
 
     async updateAggregator(req, res, next) {
         try {
-            console.log("Aggregator updated")
-            console.log(req.body);
+          
+         log.info({module:"Aggregator"},{url:req.url,function:"updateAggregator"})
+       
+        
+        
+                
             const date = new Date();
             const time = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}:${date.getHours() + 5}-${date.getMinutes() + 30}`
 
             const aggregator = await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time }, { new: true, runValidators: true })
 
-            response.successReponse({ status: 200, result: aggregator, res })
+            response.successReponse({ status: 200, result: time, res })
 
         } catch (error) {
-            response.errorResponse({ status: 400, result: "Failure", res })
+            log.error({module:"Aggregator"},{url:req.url,function:"updateAggregator",errorMessage:errror.message})
+            response.errorResponse({ status: 400, result: error.message, res })
         }
     }
     async updateAggregatorAndBox(req, res, next) {
@@ -65,7 +77,7 @@ class Aggregator {
            const phonenumber= convertToStringVal(primaryuser);
            const phonenumber1=convertToStringVal(secondaryuser);
            
-           console.log({BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid.toString(16))})       
+           log.info({module:"Aggregator"},{BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid.toString(16))})       
         let smsdata;       
             let command = (data[12]);
            console.log({boxcommand:String.fromCharCode(command)})
@@ -137,6 +149,7 @@ class Aggregator {
 };
 
 
+const aggregator= new Aggregator();
+Object.freeze(aggregator)
 
-
-module.exports = Aggregator
+module.exports = aggregator

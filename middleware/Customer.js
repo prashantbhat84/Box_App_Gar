@@ -1,7 +1,7 @@
 const DashboardUser = require('../models/user');
 const jwt = require('jsonwebtoken');
-const Response = require('../utils/Response');
-const response = new Response();
+const response = require('../utils/Response');
+
 
 
 

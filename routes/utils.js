@@ -1,7 +1,7 @@
 const express = require('express');
-const Utils = require('../controllers/utils');
+
 const customerRouter = require('./customer');
-const utils = new Utils();
+const utils = require('../controllers/utils');
 const utilsRouter = express.Router();
 
 

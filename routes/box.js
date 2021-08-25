@@ -1,8 +1,7 @@
 
 const express = require('express');
 const boxRouter = express.Router();
-const Box = require('../controllers/box.js');
-const boxController = new Box();
+const boxController= require('../controllers/box')
 const { protect, authorize } = require('../middleware/dashboardAuth')
 
 

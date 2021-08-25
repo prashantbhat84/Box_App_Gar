@@ -1,8 +1,8 @@
 const multichainNode = require('multichain-node')
 const boxModel = require('../models/box')
 const logger = require('../utils/logger');
-const Utils = require("./utils");
-const utils = new Utils();
+
+const utils = require("./utils");
 
 
 
@@ -14,7 +14,10 @@ const utils = new Utils();
 // const asyncDebugger = new AsyncDebugger();
 class Box {
     constructor() {
-
+        if(!Box.instance){
+            Box.instance =this;
+        }
+           return Box.instance;
     }
 
     async createBox(req, res, next) {
@@ -124,5 +127,7 @@ class Box {
 
 
 }
+const boxController= new Box();
+Object.freeze(boxController)
 
-module.exports = Box
+module.exports = boxController

@@ -1,13 +1,18 @@
 const Order = require('../models/order');
 const Customer = require('../models/user');
 const Box = require("../models/box")
-const Response = require('../utils/Response');
-const response = new Response();
+const response = require('../utils/Response');
 const { convertToObjectID } = require('../utils/misc')
 
 
 
 class Orders {
+    constructor () {
+        if(!Orders.instance){
+            Orders.instance =this;
+        }
+           return Orders.instance;
+    }
 
     async createOrder(req, res, next) {
 
@@ -167,6 +172,7 @@ class Orders {
         }
     }
 }
+const orderController= new Orders();
+Object.freeze(orderController);
 
-
-module.exports = Orders
+module.exports = orderController;

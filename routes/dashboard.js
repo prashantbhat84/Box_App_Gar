@@ -1,7 +1,7 @@
 const express = require('express');
 const dashboardRouter = express.Router();
-const DashboardUser = require('../controllers/dashboardUser');
-const dashboard = new DashboardUser();
+const dashboard = require('../controllers/dashboardUser');
+
 const { protect, authorize } = require('../middleware/dashboardAuth')
 
 

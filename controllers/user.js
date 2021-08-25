@@ -9,6 +9,14 @@ const Notification = require('../models/Notification');
 
 class User {
 
+    constructor () {
+        if( !User.instance ) {
+            User.instance = this;
+        }
+
+        return User.instance;
+    }
+
     async signupUser(req, res, next) {
 
         try {
@@ -430,4 +438,7 @@ class User {
     }
 }
 
-module.exports = User;
+const user= new User();
+Object.freeze(user);
+
+module.exports = user;
