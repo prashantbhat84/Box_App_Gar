@@ -5,13 +5,13 @@ AWS.config.update({
     secretAccessKey: 'FkCQfqpwZMYY98Eholrzqgvk8BZFClDc4aqYrJMm',
     region: 'us-west-2'
 });
-function sms(phonenumber, smsdata) {
+function smsaws(phonenumber, smsdata) {
   
     phonenumber = "+91" + phonenumber;
     console.log(phonenumber);
     const publishTextPromise = new AWS.SNS({ apiVersion: "2010-03-31" })
         .publish({
-            Message: "Box Opened",
+            Message: smsdata,
             PhoneNumber: phonenumber,
             MessageAttributes: {
                 "AWS.SNS.SMS.SMSType": {
@@ -34,4 +34,4 @@ function sms(phonenumber, smsdata) {
             console.log(err);
         });
 }
-module.exports = {sms};
+module.exports = {smsaws};

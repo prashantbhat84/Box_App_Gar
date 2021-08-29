@@ -4,6 +4,8 @@ const response = require('../utils/Response');
 const jwt = require('jsonwebtoken')
 const { authorize } = require('../middleware/dashboardAuth');
 const { convertToObjectID } = require('../utils/misc');
+const awsInstance = require('../utils/awsfunctions');
+const {forgotPassword}= require('../utils/mailcontent')
 
 
 
@@ -126,6 +128,7 @@ class dashBoardUser {
             const code = (Math.floor(100000 + Math.random() * 900000))
             const updatedUser = await DashboardUser.updateOne({ email: req.body.email }, { forgotPasswordCode: code, token: undefined, });
             //send email to user 
+            await forgotPassword(email,code);
             response.successReponse({
                 status: 200, result:
                     "Please enter the  code sent to your email"

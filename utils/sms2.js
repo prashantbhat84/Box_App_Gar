@@ -1,3 +1,4 @@
+const log= require('./serverLogger')
 const Nexmo = require("nexmo");
 const nexmo = new Nexmo({
   apiKey: "8dff901e",
@@ -7,17 +8,16 @@ const nexmo = new Nexmo({
 var result = "";
 function smsaws(phonenumber,  smsdata) {
   
-
-  
+ 
 
   return new Promise(function (resolve, reject) {
     nexmo.message.sendSms("918884701197", phonenumber, smsdata, (err, data) => {
       if (err) {
-        return console.log(err);
+        return log.error({module:'SMS2'},err.message)
       }
 
       resolve(data);
     });
   });
 }
-module.exports.sms = smsaws;
+module.exports = {smsaws};

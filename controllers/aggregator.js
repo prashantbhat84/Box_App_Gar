@@ -1,18 +1,31 @@
 const response = require('../utils/Response');
-
+const { forgotPassword,boxUpdates }= require('../utils/mailcontent')
 const logger = require('../utils/logger');
 const log= require("../utils/serverLogger")
 const AggregatorModel = require("../models/aggregator")
-// const sms2 = require("../utils/sms2");
+const sms2 = require("../utils/sms2");
 const sms = require("../utils/sms");
-const email = require("../utils/sendMail")
+const awsInstance = require("../utils/awsfunctions")
 let lastCommand;
+const mobileToEmail=[{
+    phonenumber:'8884701197',email:'prashantbhat91@gmail.com'},
+{phonenumber:'9632349451',email:'prashantbhat84@gmail.com'},
+{phonenumber:'9652437698',email:'mrkodi@gmail.com'},
+{phonenumber:'9008483808',email:'ksmadhu01@gmail.com'},
+{phonenumber:'',email:'raghu@gariyasi.com'}]
+
+async function sendSms(phonenumber,phonenumber1,boxid,data){
+    log.info({module:"Aggregator"},'sendsms called')
+//  const {body,subject}= smsdata;
+ const email1= mobileToEmail.find(item=>item['phonenumber']===phonenumber).email;
+ 
+ const email2= mobileToEmail.find(item=>item['phonenumber']===phonenumber1).email ;
 
 
-async function sendSms(phonenumber, phonenumber1,smsdata){
- log.info({module:"Aggregator"})
-    // await sms.smsaws(phonenumber, smsdata)
-    //         await sms.smsaws(phonenumber1, smsdata)
+await boxUpdates(email1,email2,boxid,data);
+
+
+   
 }
 function convertToStringVal(phone){
     let temp="";
@@ -38,8 +51,7 @@ class Aggregator {
         try {
           
          log.info({module:"Aggregator"},{url:req.url,function:"updateAggregator"})
-       
-        
+                 
         
                 
             const date = new Date();
@@ -50,7 +62,7 @@ class Aggregator {
             response.successReponse({ status: 200, result: time, res })
 
         } catch (error) {
-            log.error({module:"Aggregator"},{url:req.url,function:"updateAggregator",errorMessage:errror.message})
+            log.error({module:"Aggregator"},{url:req.url,function:"updateAggregator",errorMessage:error.message})
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
@@ -77,56 +89,60 @@ class Aggregator {
            const phonenumber= convertToStringVal(primaryuser);
            const phonenumber1=convertToStringVal(secondaryuser);
            
+           
            log.info({module:"Aggregator"},{BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid.toString(16))})       
         let smsdata;       
             let command = (data[12]);
-           console.log({boxcommand:String.fromCharCode(command)})
-            console.log(lastCommand!==command)
-           
-                switch(command){
-                    case 79:   
-                               console.log(`Box open`);
-                               lastCommand=command;
-                                 smsdata=`Box with id ${box} Opened`                                 
-                               await sendSms(phonenumber,phonenumber1,smsdata)
-                         
-                           break;
-                    case 67:                    
-                        console.log(`Box close`);
-                        lastCommand=command;
-                        smsdata=`Box with id ${box} Closed`
-                        await sendSms(phonenumber,phonenumber1,smsdata)
-                                    
-                    break;
-                    case 83:                   
-                            console.log(`Store User`);
-                            console.log({ADDED_USER:phonenumber1})
+         
+              
+                if(lastCommand!==command){
+                    switch(command){
+                        case 79:   
+                                   log.info(`Box open`);
+                                   lastCommand=command;
+                                     smsdata=`Box with id ${box} Opened`                                 
+                                   await sendSms(phonenumber,phonenumber1,box,smsdata)
+                             
+                               break;
+                        case 67:                    
+                            log.info(`Box close`);
                             lastCommand=command;
-                            smsdata=`User Added to box with id ${box}`
-                            await sendSms(phonenumber,phonenumber1,smsdata)
-                      
+                            smsdata=`Box with id ${box} Closed`
+                            await sendSms(phonenumber,phonenumber1,box,smsdata)
+                                        
                         break;
-                    case 68:                       
-                            console.log(`Remove  User`);
-                            console.log({REMOVED_USER:phonenumber1})
+                        case 83:                   
+                                log.info(`Store User`);
+                                log.info({ADDED_USER:phonenumber1})
+                                lastCommand=command;
+                                smsdata=`User  with mobile # ${phonenumber1}Added to box with id ${box}`
+                                await sendSms(phonenumber,phonenumber1,box,smsdata)
+                          
+                            break;
+                        case 68:                       
+                                log.info(`Remove  User`);
+                                log.info({REMOVED_USER:phonenumber1})
+                                lastCommand=command;
+                                smsdata=`User with mobile # ${phonenumber1}  Removed from box with id ${box}`
+                                await sendSms(phonenumber,phonenumber1,box,smsdata)
+                            
+                            break;
+                        case 82:                   
+                            log.info(`Box Reset`);
                             lastCommand=command;
-                            smsdata=`User Removed from box with id ${box}`
-                            await sendSms(phonenumber,phonenumber1,smsdata)
-                        
-                        break;
-                    case 82:                   
-                        console.log(`Box Reset`);
-                        lastCommand=command;
-                        smsdata=`Box with id ${box} Reset`
-                        await sendSms(phonenumber1,phonenumber1,smsdata)
-                        break;
-                    case 84:
-                        console.log(`Box Tamper`);
-                        lastCommand=command;
-                        smsdata=`Box with id ${box} Tampered`
-                        await sendSms(phonenumber,phonenumber1,smsdata)
-                        break;                 
+                            smsdata=`Box with id ${box} Reset`
+                            await sendSms(phonenumber1,phonenumber1,box,smsdata)
+                            break;
+                        case 84:
+                            log.info(`Box Tamper`);
+                            lastCommand=command;
+                            smsdata=`Box with id ${box} Tampered`
+                            await sendSms(phonenumber,phonenumber1,box,smsdata)
+                            break;                 
+                    }
+
                 }
+               
                    
             
                         response.successReponse({ status: 200, result: req.body, res })
