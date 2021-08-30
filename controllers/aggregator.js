@@ -6,7 +6,7 @@ const AggregatorModel = require("../models/aggregator")
 const sms2 = require("../utils/sms2");
 const sms = require("../utils/sms");
 const awsInstance = require("../utils/awsfunctions")
-let lastCommand;
+let lastCommand,lastBoxLidStatus;
 const mobileToEmail=[{
     phonenumber:'8884701197',email:'prashantbhat91@gmail.com'},
 {phonenumber:'9632349451',email:'sudarshana.rd@gariyasi.com'},
@@ -86,11 +86,15 @@ class Aggregator {
            const aggid= data[data.length-1];
            const primaryuser=data.slice(13,18)
            const secondaryuser= data.slice(18,23)
-           const boxlid= data[23];
+           const boxlid= data[24];
            const phonenumber= convertToStringVal(primaryuser);
            const phonenumber1=convertToStringVal(secondaryuser);
            log.info({module:"Aggregator"},{phonenumber,phonenumber1})
-           
+           if(lastBoxLidStatus!==boxlid &&(boxlid===84)){
+               lastBoxLidStatus=boxlid;
+               const email=  mobileToEmail.find(item=>item['phonenumber']===phonenumber).email;
+               await boxUpdates(email,'prashantbhat91@gmail.com',box,`Box with ${box} tampered`)
+           }
            let smsdata;       
            let command = (data[12]);
            log.info({module:"Aggregator"},{BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid.toString(16)),command,lastCommand})       
