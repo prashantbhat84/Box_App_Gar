@@ -86,7 +86,7 @@ class Aggregator {
            const aggid= data[data.length-1];
            const primaryuser=data.slice(13,18)
            const secondaryuser= data.slice(18,23)
-           const boxlid= data[24];
+           const boxlid= data[23];
            const phonenumber= convertToStringVal(primaryuser);
            const phonenumber1=convertToStringVal(secondaryuser);
            log.info({module:"Aggregator"},{phonenumber,phonenumber1})
