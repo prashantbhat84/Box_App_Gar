@@ -93,8 +93,8 @@ class Aggregator {
            
            let smsdata;       
            let command = (data[12]);
-           log.info({module:"Aggregator"},{BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid.toString(16)),command})       
-        
+           log.info({module:"Aggregator"},{BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid.toString(16)),command,lastCommand})       
+                   
               
                 if(lastCommand!==command){
                     switch(command){
