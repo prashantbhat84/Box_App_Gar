@@ -92,6 +92,7 @@ class Aggregator {
            log.info({module:"Aggregator"},{phonenumber,phonenumber1})
            if(boxlid===84){
                if(lastBoxLidStatus!==boxlid){
+                   lastBoxLidStatus=boxlid
                 const email=  mobileToEmail.find(item=>item['phonenumber']===phonenumber).email;
                 await boxUpdates(email,'prashantbhat91@gmail.com',box,`Box with ${box} tampered`)
                }
