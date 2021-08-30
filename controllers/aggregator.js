@@ -13,15 +13,16 @@ const mobileToEmail=[{
 {phonenumber:'9652437698',email:'mrkodi@gmail.com'},
 {phonenumber:'9008483808',email:'ksmadhu01@gmail.com'},
 {phonenumber:'9845544304',email:'raghu@gariyasi.com'},
-{phonenumber:'7975265399',email:'raghu@gariyasi.com'}]
+{phonenumber:'7975265399',email:'raghu@gariyasi.com'},
+{phonenumber:"0000000000",email:"prashantbhat84@gmail.com"}]
 
 async function sendSms(phonenumber,phonenumber1,boxid,data){
     log.info({module:"Aggregator"},'sendsms called')
 //  const {body,subject}= smsdata;
  const email1= mobileToEmail.find(item=>item['phonenumber']===phonenumber).email;
  
-//  const email2= mobileToEmail.find(item=>item['phonenumber']===phonenumber1).email ;
-const email2="prashantbhat84@gmail.com";
+ const email2= mobileToEmail.find(item=>item['phonenumber']===phonenumber1).email ;
+
 
 await boxUpdates(email1,email2,boxid,data);
 
