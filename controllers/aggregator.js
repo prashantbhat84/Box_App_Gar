@@ -9,10 +9,11 @@ const awsInstance = require("../utils/awsfunctions")
 let lastCommand;
 const mobileToEmail=[{
     phonenumber:'8884701197',email:'prashantbhat91@gmail.com'},
-{phonenumber:'9632349451',email:'prashantbhat84@gmail.com'},
+{phonenumber:'9632349451',email:'sudarshana.rd@gariyasi.com'},
 {phonenumber:'9652437698',email:'mrkodi@gmail.com'},
 {phonenumber:'9008483808',email:'ksmadhu01@gmail.com'},
-{phonenumber:'',email:'raghu@gariyasi.com'}]
+{phonenumber:'9845544304',email:'raghu@gariyasi.com'},
+{phonenumber:'7975265399',email:'raghu@gariyasi.com'}]
 
 async function sendSms(phonenumber,phonenumber1,boxid,data){
     log.info({module:"Aggregator"},'sendsms called')
