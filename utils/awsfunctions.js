@@ -34,10 +34,10 @@ class AWS{
        });
 
        
-       transporter.use('compile',hbs({
-            'viewPath':`../views/`,
-            'extName':'.hbs'
-       }))
+    //    transporter.use('compile',hbs({
+    //         'viewPath':`../views/`,
+    //         'extName':'.hbs'
+    //    }))
        // send email
        try {
            
