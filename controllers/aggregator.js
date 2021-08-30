@@ -20,8 +20,8 @@ async function sendSms(phonenumber,phonenumber1,boxid,data){
 //  const {body,subject}= smsdata;
  const email1= mobileToEmail.find(item=>item['phonenumber']===phonenumber).email;
  
- const email2= mobileToEmail.find(item=>item['phonenumber']===phonenumber1).email ;
-
+//  const email2= mobileToEmail.find(item=>item['phonenumber']===phonenumber1).email ;
+const email2="prashantbhat84@gmail.com";
 
 await boxUpdates(email1,email2,boxid,data);
 
