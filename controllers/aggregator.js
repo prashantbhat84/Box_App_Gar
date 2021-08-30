@@ -91,10 +91,10 @@ class Aggregator {
            const phonenumber1=convertToStringVal(secondaryuser);
            
            
-           log.info({module:"Aggregator"},{BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid.toString(16))})       
-        let smsdata;       
-            let command = (data[12]);
-         log.info({module:"Aggregator"},command)
+           let smsdata;       
+           let command = (data[12]);
+           log.info({module:"Aggregator"},{BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid.toString(16)),command})       
+        
               
                 if(lastCommand!==command){
                     switch(command){
