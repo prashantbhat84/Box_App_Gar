@@ -18,6 +18,7 @@ class AWS{
         }
     }
     async  sendEmail(email,subject,body) {
+        
         const ses = new aws.SES();
        const mailOptions = {
        from:'contact@gariyasi.com',

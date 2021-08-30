@@ -59,7 +59,7 @@ class Aggregator {
             const time = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}:${date.getHours() + 5}-${date.getMinutes() + 30}`
 
             // const aggregator = await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time }, { new: true, runValidators: true })
-
+                // await sendSms('8884701197','9008483808','12345','box opened')
             response.successReponse({ status: 200, result: time, res })
 
         } catch (error) {
@@ -89,7 +89,7 @@ class Aggregator {
            const boxlid= data[23];
            const phonenumber= convertToStringVal(primaryuser);
            const phonenumber1=convertToStringVal(secondaryuser);
-           
+           log.info({module:"Aggregator"},{phonenumber,phonenumber1})
            
            let smsdata;       
            let command = (data[12]);
@@ -99,45 +99,51 @@ class Aggregator {
                 if(lastCommand!==command){
                     switch(command){
                         case 79:   
-                                   log.info(`Box open`);
+                                   
                                    lastCommand=command;
-                                     smsdata=`Box with id ${box} Opened`                                 
+                                     smsdata=`Box with id ${box} Opened` 
+                                     log.info({module:"Aggregator"},smsdata)                                
                                    await sendSms(phonenumber,phonenumber1,box,smsdata)
                              
                                break;
                         case 67:                    
-                            log.info(`Box close`);
+                            
                             lastCommand=command;
                             smsdata=`Box with id ${box} Closed`
+                            log.info({module:"Aggregator"},smsdata) 
                             await sendSms(phonenumber,phonenumber1,box,smsdata)
                                         
                         break;
                         case 83:                   
-                                log.info(`Store User`);
+                                
                                 log.info({ADDED_USER:phonenumber1})
                                 lastCommand=command;
                                 smsdata=`User  with mobile # ${phonenumber1}Added to box with id ${box}`
+                                log.info({module:"Aggregator"},smsdata) 
                                 await sendSms(phonenumber,phonenumber1,box,smsdata)
                           
                             break;
                         case 68:                       
-                                log.info(`Remove  User`);
+                                
                                 log.info({REMOVED_USER:phonenumber1})
                                 lastCommand=command;
                                 smsdata=`User with mobile # ${phonenumber1}  Removed from box with id ${box}`
+                                log.info({module:"Aggregator"},smsdata) 
                                 await sendSms(phonenumber,phonenumber1,box,smsdata)
                             
                             break;
                         case 82:                   
-                            log.info(`Box Reset`);
+                            
                             lastCommand=command;
                             smsdata=`Box with id ${box} Reset`
+                            log.info({module:"Aggregator"},smsdata) 
                             await sendSms(phonenumber1,phonenumber1,box,smsdata)
                             break;
                         case 84:
-                            log.info(`Box Tamper`);
+                            
                             lastCommand=command;
                             smsdata=`Box with id ${box} Tampered`
+                            log.info({module:"Aggregator"},smsdata) 
                             await sendSms(phonenumber,phonenumber1,box,smsdata)
                             break;                 
                     }
