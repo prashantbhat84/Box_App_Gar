@@ -2,7 +2,7 @@
 const aws = require('aws-sdk');
 
 const nodemailer = require('nodemailer');
-// const hbs= require('nodemailer-express-handlebars')
+const hbs= require('express-handlebars')
 const log= require('./serverLogger')
 
 
@@ -24,7 +24,7 @@ class AWS{
        to:email,
        bcc:'prashanth.b@gariyasi.com',
        subject:subject,
-       html:body   
+       html:body
        };
        
       
@@ -32,11 +32,12 @@ class AWS{
        const transporter = nodemailer.createTransport({
            SES: ses
        });
+
        
-       // transporter.use('compile',hbs({
-       //     'viewEngine':'express-handlebars',
-       //     'viewPath':`../views/home.handlebars`
-       // }))
+       transporter.use('compile',hbs({
+            'viewPath':`../views/`,
+            'extName':'.hbs'
+       }))
        // send email
        try {
            

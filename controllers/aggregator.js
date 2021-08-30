@@ -53,12 +53,12 @@ class Aggregator {
           
          log.info({module:"Aggregator"},{url:req.url,function:"updateAggregator"})
                  
-        
+        //   await awsInstance.sendEmail('prashantbhat84@gmail.com',"ForgotPassword",'forgotPassword')
                 
             const date = new Date();
             const time = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}:${date.getHours() + 5}-${date.getMinutes() + 30}`
 
-            const aggregator = await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time }, { new: true, runValidators: true })
+            // const aggregator = await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time }, { new: true, runValidators: true })
 
             response.successReponse({ status: 200, result: time, res })
 
@@ -94,7 +94,7 @@ class Aggregator {
            log.info({module:"Aggregator"},{BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid.toString(16))})       
         let smsdata;       
             let command = (data[12]);
-         
+         log.info({module:"Aggregator"},command)
               
                 if(lastCommand!==command){
                     switch(command){
