@@ -90,12 +90,14 @@ class Aggregator {
            const phonenumber= convertToStringVal(primaryuser);
            const phonenumber1=convertToStringVal(secondaryuser);
            log.info({module:"Aggregator"},{phonenumber,phonenumber1})
-           if((lastBoxLidStatus!==boxlid) &&(boxlid===84)){
-            log.info({module:"Aggregator"},'inside lid tamper')
-               lastBoxLidStatus=boxlid;
-               const email=  mobileToEmail.find(item=>item['phonenumber']===phonenumber).email;
-               await boxUpdates(email,'prashantbhat91@gmail.com',box,`Box with ${box} tampered`)
+           if(boxlid===84){
+               if(lastBoxLidStatus!==boxlid){
+                const email=  mobileToEmail.find(item=>item['phonenumber']===phonenumber).email;
+                await boxUpdates(email,'prashantbhat91@gmail.com',box,`Box with ${box} tampered`)
+               }
+
            }
+          
            let smsdata;       
            let command = (data[12]);
            log.info({module:"Aggregator"},{BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid.toString(16)),command,lastCommand})       
