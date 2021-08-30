@@ -90,9 +90,11 @@ class Aggregator {
            const phonenumber= convertToStringVal(primaryuser);
            const phonenumber1=convertToStringVal(secondaryuser);
            log.info({module:"Aggregator"},{phonenumber,phonenumber1})
-           if(boxlid===84){
-               if(lastBoxLidStatus!==boxlid){
-                   lastBoxLidStatus=boxlid
+           
+           if(lastBoxLidStatus!==boxlid){
+                  lastBoxLidStatus=boxlid
+               if(boxlid===84){
+                   
                 const email=  mobileToEmail.find(item=>item['phonenumber']===phonenumber).email;
                 await boxUpdates(email,'prashantbhat91@gmail.com',box,`Box with ${box} tampered`)
                }
