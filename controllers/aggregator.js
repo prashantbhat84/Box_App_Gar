@@ -148,12 +148,12 @@ class Aggregator {
                             lastCommand=command;
                             smsdata=`Box with id ${box} Reset`
                             log.info({module:"Aggregator"},smsdata) 
-                            await sendSms(phonenumber1,phonenumber1,box,smsdata)
+                            await sendSms(phonenumber,phonenumber1,box,smsdata)
                             break;
                         case 84:
                             
                             lastCommand=command;
-                            smsdata=`Box with id ${box} Tampered`
+                            smsdata=`Box with id ${box} Tampered state has been reset`
                             log.info({module:"Aggregator"},smsdata) 
                             await sendSms(phonenumber,phonenumber1,box,smsdata)
                             break;                 
