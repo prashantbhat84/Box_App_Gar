@@ -8,6 +8,7 @@ const Notification = require('../models/Notification');
 const awsInstance= require('../utils/awsfunctions');
 const response= require('../utils/Response')
 const {forgotPassword}= require('../utils/mailcontent')
+const log= require('../utils/serverLogger')
 
 
 class User {
@@ -136,6 +137,7 @@ class User {
         try {
             const { email, code } = req.body;
             const user = await UserModel.findOne({ email: req.body.email });
+            log.info({module:"USER"},user)
             if (!user) {
                 throw new Error("User with this email does not exist")
             }
