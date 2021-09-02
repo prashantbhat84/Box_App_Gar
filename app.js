@@ -45,11 +45,7 @@ app.use((req, res, next) => {
 })
 
 app.get("/", (req, res) => {
-    const fs = require('fs')
-    const handlebars = require('handlebars')
-    const template = handlebars.compile(__dirname + '\views\home.hbs');
-    const html = template({ title: "My title", condition: true });
-    console.log(html);
+   
     res.render('home', { title: "My Title", condition: false })
 })
 
