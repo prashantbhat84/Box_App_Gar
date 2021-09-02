@@ -210,15 +210,15 @@ class Aggregator {
         }
     }
     async updateStaleAggregatorAndBox(req,res,next) {
-        const data=[14,30,59,20,224, 2, 36, 0, 2, 112, 164, 224,79,88,84,70,11,97,90,8,48,38,8,79,0,83,70,50,70,22,17,14,11,46,13,'dc632b8f170'];
+        // const data=[14,30,59,20,224, 2, 36, 0, 2, 112, 164, 224,79,88,84,70,11,97,90,8,48,38,8,79,0,83,70,50,70,22,17,14,11,46,13,'dc632b8f170'];
+        const data= req.body.body.data
+          log.info({module:"Aggregator"},data)
     
           let boxid=getdetails(data)
-               
-       
+                  
          log.info({module:"Aggregator"},boxid)
           
-    //   boxid= getBoxId(boxid);
-    //   log.info({module:"Aggregator",boxid})
+ 
       response.successReponse({ status: 200, result: boxid,res })
     
     }
