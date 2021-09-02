@@ -43,4 +43,5 @@ class Response {
 
 }
 const response=  new Response();
+Object.freeze(response);
 module.exports =response;
