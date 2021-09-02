@@ -7,6 +7,7 @@ const { convertToObjectID, convertPhoneToID } = require("../utils/misc");
 const Notification = require('../models/Notification');
 const awsInstance= require('../utils/awsfunctions');
 const response= require('../utils/Response')
+const {forgotPassword}= require('../utils/mailcontent')
 
 
 class User {
@@ -120,6 +121,7 @@ class User {
             const code = (Math.floor(100000 + Math.random() * 900000))
             const updatedUser = await UserModel.updateOne({ email: req.body.email }, { forgotPasswordCode: code, token: undefined, });
             //send email to user 
+               await forgotPassword(req.body.email,code)
             response.successReponse({
                 status: 200, result:
                     "Please enter the  code sent to your email"
