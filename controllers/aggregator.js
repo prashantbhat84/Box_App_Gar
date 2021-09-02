@@ -41,6 +41,45 @@ function convertToStringVal(phone){
       });
       return temp;
 }
+function getdetails(data){
+    let box=""
+    let boxid= data.slice(4,12)
+    boxid.forEach(item=>{
+        let temp= item.toString(16);
+        if(temp.length===1){
+        
+            box+="0"+temp;
+        }else{
+           box+=temp;
+        }                      
+     });
+     const primaryuser=data.slice(13,18)
+     const secondaryuser= data.slice(18,23)
+     const boxlid= String.fromCharCode(data[23]);
+     const command= String.fromCharCode(data[12])
+     const temperature=data[24];
+     const motion= String.fromCharCode(data[25]);
+     const boxBatteryStatus=String.fromCharCode(data[26]);
+     const boxBatteryVoltage=data[27]/10;
+     const aggregatorBatteryStatus= String.fromCharCode(data[28]);
+     const aggregatorBatteryVoltage=data[29]/10;
+     const phonenumber= convertToStringVal(primaryuser);
+     const phonenumber1=convertToStringVal(secondaryuser);
+     return {
+         box,
+        phonenumber,
+        phonenumber1,
+        boxlid,
+        aggid:data[data.length-1],
+        command,
+        temperature,
+        motion,
+         BoxBatteryStatus:boxBatteryStatus,
+        BoxBatteryVoltage:boxBatteryVoltage,
+    AggregatorBatteryStatus:aggregatorBatteryStatus,
+AggregatorBatteryVoltage:aggregatorBatteryVoltage
+};
+}
 class Aggregator {
     constructor ()  {
         if(!Aggregator.instance){
@@ -53,15 +92,20 @@ class Aggregator {
         try {
           
          log.info({module:"Aggregator"},{url:req.url,function:"updateAggregator"})
-                 
-        //   await awsInstance.sendEmail('prashantbhat84@gmail.com',"ForgotPassword",'forgotPassword')
-                
-            const date = new Date();
-            const time = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}:${date.getHours() + 5}-${date.getMinutes() + 30}`
+         let res;
+         const aggregator= await AggregatorModel.findOne({aggregatorID:req.body.id});
+         const date = new Date();
+         const time = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}:${date.getHours() + 5}-${date.getMinutes() + 30}`
+         if(!aggregator){
+             res=await AggregatorModel.create({aggregatorID:req.body.id,lastUpdatedAt:time})
+           
+         }else{
 
-            // const aggregator = await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time }, { new: true, runValidators: true })
-                // await sendSms('8884701197','9008483808','12345','box opened')
-            response.successReponse({ status: 200, result: time, res })
+            res= await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time }, { new: true, runValidators: true })
+         }                
+
+                
+            response.successReponse({ status: 200, result: res })
 
         } catch (error) {
             log.error({module:"Aggregator"},{url:req.url,function:"updateAggregator",errorMessage:error.message})
@@ -73,97 +117,82 @@ class Aggregator {
         //    const data=[14,30,59,20,224, 2, 36, 0, 2, 112, 164, 224,79,88,84,70,11,97,90,8,48,38,8,79,0,83,70,50,21,22,17,14,11,46,13,'dc632b8f170']
           console.log(req.body)
            const data=(req.body.body.data);
-            let boxid= data.slice(4,12)
-            let box=""
-           boxid.forEach(item=>{
-              let temp= item.toString(16);
-              if(temp.length===1){
-                  box+="0"+temp;
-              }else{
-                  box+=temp
-              }
-                            
-           })  ;
-           const aggid= data[data.length-1];
-           const primaryuser=data.slice(13,18)
-           const secondaryuser= data.slice(18,23)
-           const boxlid= data[23];
-           const phonenumber= convertToStringVal(primaryuser);
-           const phonenumber1=convertToStringVal(secondaryuser);
-           log.info({module:"Aggregator"},{phonenumber,phonenumber1})
+            const details= getdetails(data);
+         
+           log.info({module:"Aggregator"},details)
            
-           if(lastBoxLidStatus!==boxlid){
-                  lastBoxLidStatus=boxlid
-               if(boxlid===84){
+        //    if(lastBoxLidStatus!==boxlid){
+        //           lastBoxLidStatus=boxlid
+        //        if(boxlid===84){
                    
-                const email=  mobileToEmail.find(item=>item['phonenumber']===phonenumber).email;
-                await boxUpdates(email,'prashantbhat91@gmail.com',box,`Box with ${box} tampered`)
-               }
+        //         const email=  mobileToEmail.find(item=>item['phonenumber']===phonenumber).email;
+        //         await boxUpdates(email,'prashantbhat91@gmail.com',box,`Box with ${box} tampered`)
+        //        }
 
-           }
+        //    }
           
-           let smsdata;       
-           let command = (data[12]);
-           log.info({module:"Aggregator"},{BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid.toString(16)),command,lastCommand})       
+        //    let smsdata;       
+        //    let command = (data[12]);
+        //    log.info({module:"Aggregator"},{BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid.toString(16)),command,lastCommand})       
                    
               
-                if(lastCommand!==command){
-                    switch(command){
-                        case 79:   
+        //         if(lastCommand!==command){
+        //             switch(command){
+        //                 case 79:   
                                    
-                                   lastCommand=command;
-                                     smsdata=`Box with id ${box} Opened` 
-                                     log.info({module:"Aggregator"},smsdata)                                
-                                   await sendSms(phonenumber,phonenumber1,box,smsdata)
+        //                            lastCommand=command;
+        //                              smsdata=`Box with id ${box} Opened` 
+        //                              log.info({module:"Aggregator"},smsdata)                                
+        //                            await sendSms(phonenumber,phonenumber1,box,smsdata)
                              
-                               break;
-                        case 67:                    
+        //                        break;
+        //                 case 67:                    
                             
-                            lastCommand=command;
-                            smsdata=`Box with id ${box} Closed`
-                            log.info({module:"Aggregator"},smsdata) 
-                            await sendSms(phonenumber,phonenumber1,box,smsdata)
+        //                     lastCommand=command;
+        //                     smsdata=`Box with id ${box} Closed`
+        //                     log.info({module:"Aggregator"},smsdata) 
+        //                     await sendSms(phonenumber,phonenumber1,box,smsdata)
                                         
-                        break;
-                        case 83:                   
+        //                 break;
+        //                 case 83:                   
                                 
-                                log.info({ADDED_USER:phonenumber1})
-                                lastCommand=command;
-                                smsdata=`User  with mobile # ${phonenumber1}Added to box with id ${box}`
-                                log.info({module:"Aggregator"},smsdata) 
-                                await sendSms(phonenumber,phonenumber1,box,smsdata)
+        //                         log.info({ADDED_USER:phonenumber1})
+        //                         lastCommand=command;
+        //                         smsdata=`User  with mobile # ${phonenumber1}Added to box with id ${box}`
+        //                         log.info({module:"Aggregator"},smsdata) 
+        //                         await sendSms(phonenumber,phonenumber1,box,smsdata)
                           
-                            break;
-                        case 68:                       
+        //                     break;
+        //                 case 68:                       
                                 
-                                log.info({REMOVED_USER:phonenumber1})
-                                lastCommand=command;
-                                smsdata=`User with mobile # ${phonenumber1}  Removed from box with id ${box}`
-                                log.info({module:"Aggregator"},smsdata) 
-                                await sendSms(phonenumber,phonenumber1,box,smsdata)
+        //                         log.info({REMOVED_USER:phonenumber1})
+        //                         lastCommand=command;
+        //                         smsdata=`User with mobile # ${phonenumber1}  Removed from box with id ${box}`
+        //                         log.info({module:"Aggregator"},smsdata) 
+        //                         await sendSms(phonenumber,phonenumber1,box,smsdata)
                             
-                            break;
-                        case 82:                   
+        //                     break;
+        //                 case 82:                   
                             
-                            lastCommand=command;
-                            smsdata=`Box with id ${box} Reset`
-                            log.info({module:"Aggregator"},smsdata) 
-                            await sendSms(phonenumber,phonenumber1,box,smsdata)
-                            break;
-                        case 84:
+        //                     lastCommand=command;
+        //                     smsdata=`Box with id ${box} Reset`
+        //                     log.info({module:"Aggregator"},smsdata) 
+        //                     await sendSms(phonenumber,phonenumber1,box,smsdata)
+        //                     break;
+        //                 case 84:
                             
-                            lastCommand=command;
-                            smsdata=`Box with id ${box} Tampered state has been reset`
-                            log.info({module:"Aggregator"},smsdata) 
-                            await sendSms(phonenumber,phonenumber1,box,smsdata)
-                            break;                 
-                    }
+        //                     lastCommand=command;
+        //                     smsdata=`Box with id ${box} Tampered state has been reset`
+        //                     log.info({module:"Aggregator"},smsdata) 
+        //                     await sendSms(phonenumber,phonenumber1,box,smsdata)
+        //                     break;                 
+        //             }
 
-                }
+        //         }
                
                    
             
-                        response.successReponse({ status: 200, result: req.body, res })
+                        response.successReponse({ status: 200, result: details, res })
 
         } catch (error) {
             response.errorResponse({ status: 400, result: error.message, res })
@@ -180,6 +209,20 @@ class Aggregator {
             response.errorResponse({ status: 400, result: "Failure", res })
         }
     }
+    async updateStaleAggregatorAndBox(req,res,next) {
+        const data=[14,30,59,20,224, 2, 36, 0, 2, 112, 164, 224,79,88,84,70,11,97,90,8,48,38,8,79,0,83,70,50,70,22,17,14,11,46,13,'dc632b8f170'];
+    
+          let boxid=getdetails(data)
+               
+       
+         log.info({module:"Aggregator"},boxid)
+          
+    //   boxid= getBoxId(boxid);
+    //   log.info({module:"Aggregator",boxid})
+      response.successReponse({ status: 200, result: boxid,res })
+    
+    }
+    
 };
 
 

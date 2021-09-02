@@ -24,7 +24,7 @@ class Response {
         this.response.result = params.result
         this.response.errors = params.errors;
         const res = params.res;
-        log.error({module:"Response"},{res:this.response});
+        
         return res.status(200).json(this.response)
     }
     successReponse(params) {
@@ -34,7 +34,7 @@ class Response {
             this.response.status = params.status;
         this.response.result = params.result
         const res = params.res
-        log.info({module:"Response"},{res:this.response});
+       
         return res.status(200).json(this.response)
 
 
