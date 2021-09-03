@@ -7,8 +7,8 @@ const { convertToObjectID, convertPhoneToID } = require("../utils/misc");
 const Notification = require('../models/Notification');
 const awsInstance= require('../utils/awsfunctions');
 const response= require('../utils/Response')
-const {forgotPassword}= require('../utils/mailcontent')
-const log= require('../utils/serverLogger')
+const {forgotPassword,verifyemail}= require('../utils/mailcontent')
+const log= require("../utils/serverLogger")
 
 
 class User {
@@ -24,9 +24,9 @@ class User {
     async signupUser(req, res, next) {
 
         try {
-
+            log.info({module:"USER"},req.body)
             const user = await UserModel.findOne({ email: req.body.email, phonenumber: req.body.phonenumber });
-
+               
             if (!user) {
                 throw new Error("Please Enter the email & phonenumber submitted during order placement")
             }
@@ -35,7 +35,7 @@ class User {
             const salt = await bcrypt.genSalt(10);
             req.body.password = await bcrypt.hash(req.body.password, salt);
             await UserModel.updateOne({ phonenumber: user.phonenumber }, { phoneVerify, emailVerify, password: req.body.password });
-               await awsInstance.sendEmail();
+              await verifyemail(req.body.email,emailVerify)
                await awsInstance.smsaws(user.phonenumber,`Please enter the code ${phoneVerify} to verify your phone`)
             // sms  and email to be sent
 
@@ -137,7 +137,7 @@ class User {
         try {
             const { email, code } = req.body;
             const user = await UserModel.findOne({ email: req.body.email });
-            log.info({module:"USER"},user)
+          
             if (!user) {
                 throw new Error("User with this email does not exist")
             }

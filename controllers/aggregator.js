@@ -119,7 +119,7 @@ class Aggregator {
            const data=(req.body.body.data);
             const details= getdetails(data);
          
-           log.info({module:"Aggregator"},details)
+           log.info({module:"Aggregator Update"},details)
            
         //    if(lastBoxLidStatus!==boxlid){
         //           lastBoxLidStatus=boxlid

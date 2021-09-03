@@ -6,6 +6,8 @@ const log = bunyan.createLogger({
         level: 'info',
         stream: process.stdout            // log INFO and above to stdout
       },
+     
+     
       {
         level: 'error',
         stream:process.stdout}],
