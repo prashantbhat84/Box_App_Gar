@@ -28,7 +28,12 @@ class AWS{
        to:email,
        bcc:'prashanth.b@gariyasi.com',
        subject:subject,
-        html:template({code:body.code})
+        html:template({code:body.code}),
+        attachments:[{
+            filename:'logo.jpg',
+            path:process.cwd()+'/views/logo.jpg',
+            cid:'logo'
+        }]
        };       
          
       

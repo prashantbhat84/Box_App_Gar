@@ -3,7 +3,7 @@ const cors = require('cors')
 const dotenv = require('dotenv')
 
 const morgan = require('morgan');
-
+const hbs= require('handlebars')
 const pdf = require('html-pdf')
 const path = require('path')
 const connectdb = require('./config/db')

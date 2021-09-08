@@ -5,15 +5,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify Email</title>
+    <link rel="stylesheet" href="/test.css">
 </head>
-<body>
-     <h2>Greetings,</h2>
-           <p>Your code to verify your email is {{code}}.<br/>
-               
-               Please ignore this email if verfication code not requested
-           </p>
-
-                <h3> Warm Regards</h3>
-                     <p> Gariyasi Support</p>
-</body>
+<body style="box-sizing: border-box">
+     <div style="display:flex;justify-content:space-between;" >
+       
+        <div style=" display:block;">
+            <h4>Greetings,</h4>
+      
+        <p style=" color:blue;">Code to verify your email is <span style="color:green;font-weight:bolder">{{code}}</span>.</p>
+            
+          <p style="color:red">
+            Please ignore this email if verfication code not requested
+          </p> 
+      
+    
+             <h3> Warm Regards</h3>
+                  <p> Gariyasi Support</p>
+        </div>
+        <img src="cid:logo" alt="Hello there" style="left: 500px;">
+    </div>
+    </body>
 </html>
