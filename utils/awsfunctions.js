@@ -2,8 +2,9 @@
 const aws = require('aws-sdk');
 
 const nodemailer = require('nodemailer');
-const hbs= require('express-handlebars')
-const log= require('./serverLogger')
+
+const log= require('./serverLogger');
+
 
 
 class AWS{
@@ -18,32 +19,30 @@ class AWS{
         }
     }
     async  sendEmail(email,subject,body) {
-        
+    
         const ses = new aws.SES();
+        const template= body.template;
+       
        const mailOptions = {
        from:'contact@gariyasi.com',
        to:email,
        bcc:'prashanth.b@gariyasi.com',
        subject:subject,
-       html:body
-       };
-       
+        html:template({code:body.code})
+       };       
+         
       
        // // create Nodemailer SES transporter
        const transporter = nodemailer.createTransport({
            SES: ses
-       });
-
-       
-    //    transporter.use('compile',hbs({
-    //         'viewPath':`../views/`,
-    //         'extName':'.hbs'
-    //    }))
+       }); 
+          
+    
        // send email
        try {
-           
+      
            const emailresult=await transporter.sendMail(mailOptions);
-           log.info({module:"Email"},emailresult)
+           
            return emailresult
        } catch (error) {
            log.error({module:"Email"},error.message)

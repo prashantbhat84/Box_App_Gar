@@ -1,5 +1,5 @@
 const response = require('../utils/Response');
-const { forgotPassword,boxUpdates }= require('../utils/mailcontent')
+const { forgotPassword,boxUpdates,verifyemail }= require('../utils/mailcontent')
 const logger = require('../utils/logger');
 const log= require("../utils/serverLogger")
 const AggregatorModel = require("../models/aggregator")
@@ -95,7 +95,7 @@ class Aggregator {
          let res;
          const aggregator= await AggregatorModel.findOne({aggregatorID:req.body.id});
          const date = new Date();
-         const time = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}:${date.getHours() + 5}-${date.getMinutes() + 30}`
+         const time = `${date.getUTCDate()}/${date.getUTCMonth() + 1}/${date.getUTCFullYear()}:${date.getUTCHours()}-${date.getUTCMinutes()}`
          if(!aggregator){
              res=await AggregatorModel.create({aggregatorID:req.body.id,lastUpdatedAt:time})
            
@@ -103,9 +103,10 @@ class Aggregator {
 
             res= await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time }, { new: true, runValidators: true })
          }                
-
+     
+          
                 
-            response.successReponse({ status: 200, result: res })
+            response.successReponse({ status: 200, result:"Success", res })
 
         } catch (error) {
             log.error({module:"Aggregator"},{url:req.url,function:"updateAggregator",errorMessage:error.message})

@@ -28,7 +28,7 @@ class Response {
         return res.status(200).json(this.response)
     }
     successReponse(params) {
-
+           
         delete this.response.errors
         this.response.message = "Success",
             this.response.status = params.status;
