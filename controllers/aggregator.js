@@ -91,19 +91,19 @@ class Aggregator {
     async updateAggregator(req, res, next) {
         try {
           
-         log.info({module:"Aggregator"},{url:req.url,function:"updateAggregator"})
-         let res;
-         const aggregator= await AggregatorModel.findOne({aggregatorID:req.body.id});
-         const date = new Date();
-         const time = `${date.getUTCDate()}/${date.getUTCMonth() + 1}/${date.getUTCFullYear()}:${date.getUTCHours()}-${date.getUTCMinutes()}`
-         if(!aggregator){
-             res=await AggregatorModel.create({aggregatorID:req.body.id,lastUpdatedAt:time})
+        //  log.info({module:"Aggregator"},{url:req.url,function:"updateAggregator"})
+        //  let res;
+        //  const aggregator= await AggregatorModel.findOne({aggregatorID:req.body.id});
+        //  const date = new Date();
+        //  const time = `${date.getUTCDate()}/${date.getUTCMonth() + 1}/${date.getUTCFullYear()}:${date.getUTCHours()}-${date.getUTCMinutes()}`
+        //  if(!aggregator){
+        //      res=await AggregatorModel.create({aggregatorID:req.body.id,lastUpdatedAt:time})
            
-         }else{
+        //  }else{
 
-            res= await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time }, { new: true, runValidators: true })
-         }                
-               
+        //     res= await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time }, { new: true, runValidators: true })
+        //  }                
+               await forgotPassword('prashantbhat84@gmail.com','bcabf')
           
                 
             response.successReponse({ status: 200, result:"Success", res })
