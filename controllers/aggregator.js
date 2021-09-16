@@ -41,7 +41,40 @@ function convertToStringVal(phone){
       });
       return temp;
 }
+function getCommandMessage(command,phonenumber,phonenumber1,boxid){
+  let message=`Box with id ${boxid}`
+  let message2 =` by user with phonenumber ${phonenumber}`
+  switch(command){
+      case 'O':return  `${message} Opened ${message2} `;
+      case 'C':return `${message} Closed ${message2}`;
+      case  'T': return `${message} Reset ${message2}`;
+      case 'S': return `New User with phonenumber ${phonenumber1} Added to ${message} ${message2} `
+      case 'D': return  ` User with phonenumber ${phonenumber1} Removed from ${message} ${message2} `
+      case 'R': return `${message} Reset ${message2}`
+      case 'N': return 'No Command'
+      default: return `Command not  matched`
+  }
+
+}
+function getLidMessage(boxlid){
+    switch(boxlid){
+        case 'O': return "Lid  is Opened";
+        case 'C': return 'Lid is Closed';
+        case 'T': return 'Lid is Tampered';
+        default: return "No Lid Status"
+    }
+
+}
+function getMotion(motion){
+    if(motion==="M"){
+        return "Box has  been moved"
+    }
+    return "Box  has not  been moved"
+}
+
+
 function getdetails(data){
+  
     let box=""
     let boxid= data.slice(4,12)
     boxid.forEach(item=>{
@@ -57,6 +90,8 @@ function getdetails(data){
      const secondaryuser= data.slice(18,23)
      const boxlid= String.fromCharCode(data[23]);
      const command= String.fromCharCode(data[12])
+     const dt= data.slice(32,39)
+    const timestamp= `${dt[0]}/${dt[1]}/${dt[2]},${dt[3]}:${dt[4]}`
      const temperature=data[24];
      const motion= String.fromCharCode(data[25]);
      const boxBatteryStatus=String.fromCharCode(data[26]);
@@ -77,7 +112,8 @@ function getdetails(data){
          BoxBatteryStatus:boxBatteryStatus,
         BoxBatteryVoltage:boxBatteryVoltage,
     AggregatorBatteryStatus:aggregatorBatteryStatus,
-AggregatorBatteryVoltage:aggregatorBatteryVoltage
+AggregatorBatteryVoltage:aggregatorBatteryVoltage,
+date:timestamp
 };
 }
 class Aggregator {
@@ -96,6 +132,7 @@ class Aggregator {
          const aggregator= await AggregatorModel.findOne({aggregatorID:req.body.id});
          const date = new Date();
          const time = `${date.getUTCDate()}/${date.getUTCMonth() + 1}/${date.getUTCFullYear()}:${date.getUTCHours()}-${date.getUTCMinutes()}`
+        
          if(!aggregator){
              result=await AggregatorModel.create({aggregatorID:req.body.id,lastUpdatedAt:time})
            
@@ -115,87 +152,21 @@ class Aggregator {
     }
     async updateAggregatorAndBox(req, res, next) {
         try {
-        //    const data=[14,30,59,20,224, 2, 36, 0, 2, 112, 164, 224,79,88,84,70,11,97,90,8,48,38,8,79,0,83,70,50,21,22,17,14,11,46,13,'dc632b8f170']
-         log.info({module:"Aggregator"},req.body.body.data)
+        //    const data=[14,30,59,20,224, 2, 36, 0, 2, 112, 164, 224,79,88,84,70,11,97,90,8,48,38,8,79,0,83,70,50,21,22,17,15,9,2021,14,11,46,13,'dc632b8f170']
+    
+                  
            const data=(req.body.body.data);
+           log.info({module:"UpdateAggregatorAndBox"},data)
             const details= getdetails(data);
-         
-           log.info({module:"Aggregator Update"},details)
+            const commandMessage= getCommandMessage(details.command,details.phonenumber,details.phonenumber1,details.box)
+            const lidStatusMessage=getLidMessage(details.boxlid);
+              const motionStatus=getMotion(details.motion)
+            log.info({module:"Aggregator Update"},details)
+            const message=commandMessage + ","+lidStatusMessage + " "+"&"+ motionStatus;
+            log.info({module:"Aggregator Update"},message)
+            response.successReponse({ status: 200, result: {message,details}, res })      
            
-        //    if(lastBoxLidStatus!==boxlid){
-        //           lastBoxLidStatus=boxlid
-        //        if(boxlid===84){
-                   
-        //         const email=  mobileToEmail.find(item=>item['phonenumber']===phonenumber).email;
-        //         await boxUpdates(email,'prashantbhat91@gmail.com',box,`Box with ${box} tampered`)
-        //        }
-
-        //    }
-          
-        //    let smsdata;       
-        //    let command = (data[12]);
-        //    log.info({module:"Aggregator"},{BOXID:box,AGGREGATORID:aggid,SENDERID:phonenumber,BOXLID:String.fromCharCode(boxlid.toString(16)),command,lastCommand})       
-                   
-              
-        //         if(lastCommand!==command){
-        //             switch(command){
-        //                 case 79:   
-                                   
-        //                            lastCommand=command;
-        //                              smsdata=`Box with id ${box} Opened` 
-        //                              log.info({module:"Aggregator"},smsdata)                                
-        //                            await sendSms(phonenumber,phonenumber1,box,smsdata)
-                             
-        //                        break;
-        //                 case 67:                    
-                            
-        //                     lastCommand=command;
-        //                     smsdata=`Box with id ${box} Closed`
-        //                     log.info({module:"Aggregator"},smsdata) 
-        //                     await sendSms(phonenumber,phonenumber1,box,smsdata)
-                                        
-        //                 break;
-        //                 case 83:                   
-                                
-        //                         log.info({ADDED_USER:phonenumber1})
-        //                         lastCommand=command;
-        //                         smsdata=`User  with mobile # ${phonenumber1}Added to box with id ${box}`
-        //                         log.info({module:"Aggregator"},smsdata) 
-        //                         await sendSms(phonenumber,phonenumber1,box,smsdata)
-                          
-        //                     break;
-        //                 case 68:                       
-                                
-        //                         log.info({REMOVED_USER:phonenumber1})
-        //                         lastCommand=command;
-        //                         smsdata=`User with mobile # ${phonenumber1}  Removed from box with id ${box}`
-        //                         log.info({module:"Aggregator"},smsdata) 
-        //                         await sendSms(phonenumber,phonenumber1,box,smsdata)
-                            
-        //                     break;
-        //                 case 82:                   
-                            
-        //                     lastCommand=command;
-        //                     smsdata=`Box with id ${box} Reset`
-        //                     log.info({module:"Aggregator"},smsdata) 
-        //                     await sendSms(phonenumber,phonenumber1,box,smsdata)
-        //                     break;
-        //                 case 84:
-                            
-        //                     lastCommand=command;
-        //                     smsdata=`Box with id ${box} Tampered state has been reset`
-        //                     log.info({module:"Aggregator"},smsdata) 
-        //                     await sendSms(phonenumber,phonenumber1,box,smsdata)
-        //                     break;                 
-        //             }
-
-        //         }
-               
-                   
-            
-                        response.successReponse({ status: 200, result: details, res })
-
-        } catch (error) {
+            } catch (error) {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
