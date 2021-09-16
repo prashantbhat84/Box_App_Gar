@@ -156,14 +156,14 @@ class Aggregator {
     
                   
            const data=(req.body.body.data);
-           log.info({module:"UpdateAggregatorAndBox"},data)
+           
             const details= getdetails(data);
             const commandMessage= getCommandMessage(details.command,details.phonenumber,details.phonenumber1,details.box)
             const lidStatusMessage=getLidMessage(details.boxlid);
               const motionStatus=getMotion(details.motion)
-            log.info({module:"Aggregator Update"},details)
+            log.info({module:"AggregatorAnd Box Update"},details)
             const message=commandMessage + ","+lidStatusMessage + " "+"&"+ motionStatus;
-            log.info({module:"Aggregator Update"},message)
+            log.info({module:"Aggregator And Box Update"},message)
             response.successReponse({ status: 200, result: {message,details}, res })      
            
             } catch (error) {
