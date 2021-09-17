@@ -42,15 +42,15 @@ function convertToStringVal(phone){
       return temp;
 }
 function getCommandMessage(command,phonenumber,phonenumber1,boxid){
-  let message=`Box with id ${boxid}`
-  let message2 =` by user with phonenumber ${phonenumber}`
+ 
+  let message2 =` user: ${phonenumber}`
   switch(command){
-      case 'O':return  `${message} Opened ${message2} `;
-      case 'C':return `${message} Closed ${message2}`;
-      case  'T': return `${message} Tamper Reset ${message2}`;
-      case 'S': return `New User with phonenumber ${phonenumber1} Added to ${message} ${message2} `
-      case 'D': return  ` User with phonenumber ${phonenumber1} Removed from ${message} ${message2} `
-      case 'R': return `${message} Reset ${message2}`
+      case 'O':return  ` Opened ${message2} `;
+      case 'C':return ` Closed ${message2}`;
+      case  'T': return ` Tamper Reset ${message2}`;
+      case 'S': return `New User with phonenumber ${phonenumber1} Added ${message2} `
+      case 'D': return  ` User with phonenumber ${phonenumber1} Removed  ${message2} `
+      case 'R': return ` Reset ${message2}`
       case 'N': return 'No Command'
       default: return `Command not  matched`
   }
