@@ -2,7 +2,8 @@ const Order = require('../models/order');
 const Customer = require('../models/user');
 const Box = require("../models/box")
 const response = require('../utils/Response');
-const { convertToObjectID } = require('../utils/misc')
+const { convertToObjectID } = require('../utils/misc');
+const log = require('../utils/serverLogger');
 
 
 
@@ -82,20 +83,53 @@ class Orders {
         try {
             const pageNo = +req.query.pageNo || 0;
             const itemsPerPage = +req.query.itemsPerPage || 1;
+            const filterOrderBy=req.query.filterOrder;
             let orderCount, filteredOrder;
             if (req.user.role === "BOOKING-ADMIN") {
-                filteredOrder = await Order.find({ orderStatus: "WAREHOUSE" }).skip(pageNo * itemsPerPage).limit(itemsPerPage)
+                filteredOrder = await Order.find({ orderStatus: "WAREHOUSE" }).populate('customer','name -_id').skip(pageNo * itemsPerPage).limit(itemsPerPage)
                 orderCount = await Order.countDocuments({ orderStatus: "WAREHOUSE" });
-            } else {
-
-                orderCount = await Order.countDocuments();
-                filteredOrder = await Order.find().skip(pageNo * itemsPerPage).limit(itemsPerPage)
             }
+            if(req.user.role="FACTORY-ADMIN"){
+               switch(filterOrderBy){
+                   case "DISPATCHED":
+                        filteredOrder = await Order.find({ orderStatus: "DISPATCHED" }).populate('customer','name -_id').skip(pageNo * itemsPerPage).limit(itemsPerPage)
+                        orderCount = await Order.countDocuments({ orderStatus: "DISPATCHED" });
+                        break;
+                   case "CANCELLED":
+                        filteredOrder = await Order.find({ orderStatus: "CANCELLED" }).populate('customer','name -_id').skip(pageNo * itemsPerPage).limit(itemsPerPage)
+                        orderCount = await Order.countDocuments({ orderStatus: "CANCELLED" });
+                        break; 
+                    case "WAREHOUSE": 
+                        filteredOrder = await Order.find({ orderStatus: "WAREHOUSE" }).populate('customer','name -_id').skip(pageNo * itemsPerPage).limit(itemsPerPage)
+                        orderCount = await Order.countDocuments({ orderStatus: "WAREHOUSE" });
+                        break;
+                    default:
+                        filteredOrder = await Order.find().populate('customer','name -_id').skip(pageNo * itemsPerPage).limit(itemsPerPage)
+                        orderCount = await Order.countDocuments();
+               }
+            } 
+          
+         
             response.successReponse({ status: 200, result: { count: orderCount, Orders: filteredOrder }, res })
         } catch (error) {
             response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+    async getOrderDetails(req,res,next){
+        try {
+            if(!req.query.order){
+                throw new Error("Order ID is mandatory");               
+            }
+            const orderDetail=  await Order.findOne({orderid:req.param.order}).populate('customer','name email address phonenumber address -_id');
+            response.successReponse({ status: 200, result: orderDetail, res })
+
+        } catch (error) {
+            response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
+        }
+    }
+
+ 
+    
     async dispatchOrder(req, res, next) {
         try {
 

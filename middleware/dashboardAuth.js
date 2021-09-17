@@ -27,6 +27,7 @@ async function protect(req, res, next,) {
 
 
         const tokenVerify = await jwt.verify(auth_token, process.env.sharedkey);
+        
 
         if (tokenVerify.id) {
             req.user = await DashboardUser.findById(tokenVerify.id)
