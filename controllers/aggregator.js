@@ -49,7 +49,7 @@ function getCommandMessage(command,phonenumber,phonenumber1,boxid){
       case 'C':return ` Closed ${message2}`;
       case  'T': return ` Tamper Reset ${message2}`;
       case 'S': return `New User id ${phonenumber1} Added    ${message2} `
-      case 'D': return  ` User with  id  ${phonenumber1} Removed  ${message2} `
+      case 'D': return  ` User  id  ${phonenumber1} Removed  ${message2} `
       case 'R': return ` Reset ${message2}`
       case 'N': return 'No Command'
       default: return `Command not  matched`
@@ -163,13 +163,13 @@ class Aggregator {
               const motionStatus=getMotion(details.motion)
             log.info({module:"AggregatorAnd Box Update"},details)
             const message=commandMessage + ","+lidStatusMessage + " "+"&"+ motionStatus + " "+ `on ${details.date}`;
-            log.info({module:"Aggregator And Box Update"},`Date:${details.date}`)
-            log.info({module:"Aggregator And Box Update"},`BoxID:${details.box}`)
-            log.info({module:"Aggregator And Box Update"},`AggID:${details.aggid}`);
-            log.info({module:"Aggregator And Box Update"},`BoxLid:${lidStatusMessage}`)
-            log.info({module:"Aggregator And Box Update"},` Motion:${motionStatus}`)
-            log.info({module:"Aggregator And Box Update"},`Temperature:${details.temperature}`);
-            log.info({module:"Aggregator And Box Update"},`Command:${commandMessage}`);
+            log.info({module:"Aggregator And Box Update"},`Date: ${details.date}`)
+            log.info({module:"Aggregator And Box Update"},`BoxID: ${details.box}`)
+            log.info({module:"Aggregator And Box Update"},`AggID: ${details.aggid}`);
+            log.info({module:"Aggregator And Box Update"},`BoxLid: ${lidStatusMessage}`)
+            log.info({module:"Aggregator And Box Update"},`Motion: ${motionStatus}`)
+            log.info({module:"Aggregator And Box Update"},`Temperature: ${details.temperature}`);
+            log.info({module:"Aggregator And Box Update"},`Command: ${commandMessage}`);
             
             response.successReponse({ status: 200, result: {message,details}, res })      
            
