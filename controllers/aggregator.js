@@ -47,7 +47,7 @@ function getCommandMessage(command,phonenumber,phonenumber1,boxid){
   switch(command){
       case 'O':return  `${message} Opened ${message2} `;
       case 'C':return `${message} Closed ${message2}`;
-      case  'T': return `${message} Reset ${message2}`;
+      case  'T': return `${message} Tamper Reset ${message2}`;
       case 'S': return `New User with phonenumber ${phonenumber1} Added to ${message} ${message2} `
       case 'D': return  ` User with phonenumber ${phonenumber1} Removed from ${message} ${message2} `
       case 'R': return `${message} Reset ${message2}`
@@ -162,7 +162,7 @@ class Aggregator {
             const lidStatusMessage=getLidMessage(details.boxlid);
               const motionStatus=getMotion(details.motion)
             log.info({module:"AggregatorAnd Box Update"},details)
-            const message=commandMessage + ","+lidStatusMessage + " "+"&"+ motionStatus;
+            const message=commandMessage + ","+lidStatusMessage + " "+"&"+ motionStatus + " "+ 'on ${details.date}';
             log.info({module:"Aggregator And Box Update"},message)
             response.successReponse({ status: 200, result: {message,details}, res })      
            
