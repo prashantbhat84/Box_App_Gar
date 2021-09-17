@@ -67,9 +67,9 @@ function getLidMessage(boxlid){
 }
 function getMotion(motion){
     if(motion==="M"){
-        return "Box has  been moved"
+        return "MOVED"
     }
-    return "Box  has not  been moved"
+    return "STATIONERY"
 }
 
 
@@ -165,7 +165,7 @@ class Aggregator {
             const message=commandMessage + ","+lidStatusMessage + " "+"&"+ motionStatus + " "+ `on ${details.date}`;
             log.info({module:"Aggregator And Box Update"},`Date:${details.date}`)
             log.info({module:"Aggregator And Box Update"},`BoxID:${details.box}`)
-            log.info({module:"Aggregator And Box Update"},`BoxLid:${lidStatusMessage} motion:${motionStatus}`)
+            log.info({module:"Aggregator And Box Update"},`BoxLid:${lidStatusMessage}`)
             log.info({module:"Aggregator And Box Update"},` Motion:${motionStatus}`)
             log.info({module:"Aggregator And Box Update"},`Temperature:${details.temperature}`);
             log.info({module:"Aggregator And Box Update"},`Command:${commandMessage}`);
