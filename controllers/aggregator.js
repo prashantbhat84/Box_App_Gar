@@ -58,9 +58,9 @@ function getCommandMessage(command,phonenumber,phonenumber1,boxid){
 }
 function getLidMessage(boxlid){
     switch(boxlid){
-        case 'O': return " Opened";
+        case 'O': return " OPEN";
         case 'C': return ' Closed';
-        case 'T': return ' Tampered';
+        case 'T': return ' TAMPERED';
         default: return "No Lid Status"
     }
 
