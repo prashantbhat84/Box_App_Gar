@@ -162,8 +162,13 @@ class Aggregator {
             const lidStatusMessage=getLidMessage(details.boxlid);
               const motionStatus=getMotion(details.motion)
             log.info({module:"AggregatorAnd Box Update"},details)
-            const message=commandMessage + ","+lidStatusMessage + " "+"&"+ motionStatus + " "+ 'on ${details.date}';
-            log.info({module:"Aggregator And Box Update"},message)
+            const message=commandMessage + ","+lidStatusMessage + " "+"&"+ motionStatus + " "+ `on ${details.date}`;
+            log.info({module:"Aggregator And Box Update"},`date:${details.date}`)
+            log.info({module:"Aggregator And Box Update"},`BoxID:${details.box}`)
+            log.info({module:"Aggregator And Box Update"},`BoxLid:${lidStatusMessage} motion:${motionStatus}`)
+            log.info({module:"Aggregator And Box Update"},`temperature:${details.temperature}`);
+            log.info({module:"Aggregator And Box Update"},`command:${commandMessage}`);
+            
             response.successReponse({ status: 200, result: {message,details}, res })      
            
             } catch (error) {
