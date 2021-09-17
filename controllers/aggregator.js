@@ -58,9 +58,9 @@ function getCommandMessage(command,phonenumber,phonenumber1,boxid){
 }
 function getLidMessage(boxlid){
     switch(boxlid){
-        case 'O': return "Lid  is Opened";
-        case 'C': return 'Lid is Closed';
-        case 'T': return 'Lid is Tampered';
+        case 'O': return " Opened";
+        case 'C': return ' Closed';
+        case 'T': return ' Tampered';
         default: return "No Lid Status"
     }
 
@@ -163,11 +163,12 @@ class Aggregator {
               const motionStatus=getMotion(details.motion)
             log.info({module:"AggregatorAnd Box Update"},details)
             const message=commandMessage + ","+lidStatusMessage + " "+"&"+ motionStatus + " "+ `on ${details.date}`;
-            log.info({module:"Aggregator And Box Update"},`date:${details.date}`)
+            log.info({module:"Aggregator And Box Update"},`Date:${details.date}`)
             log.info({module:"Aggregator And Box Update"},`BoxID:${details.box}`)
             log.info({module:"Aggregator And Box Update"},`BoxLid:${lidStatusMessage} motion:${motionStatus}`)
-            log.info({module:"Aggregator And Box Update"},`temperature:${details.temperature}`);
-            log.info({module:"Aggregator And Box Update"},`command:${commandMessage}`);
+            log.info({module:"Aggregator And Box Update"},` Motion:${motionStatus}`)
+            log.info({module:"Aggregator And Box Update"},`Temperature:${details.temperature}`);
+            log.info({module:"Aggregator And Box Update"},`Command:${commandMessage}`);
             
             response.successReponse({ status: 200, result: {message,details}, res })      
            
