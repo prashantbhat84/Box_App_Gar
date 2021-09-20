@@ -9,10 +9,14 @@ const path = require('path')
 const connectdb = require('./config/db')
 const router1 = require('./routes/routes')
 const log= require('./utils/serverLogger');
-const response= require("./utils/Response")
+const response= require("./utils/Response");
+const cron= require('node-cron');
+const {boxJob,aggregatorJob}= require('./jobs/Jobs')
 // const crypto = require('crypto');
 // const hash = crypto.createHash('A')
 
+cron.schedule('*/1 * * * *',boxJob)
+cron.schedule('*/1 * * * *',aggregatorJob)
 
 
 
