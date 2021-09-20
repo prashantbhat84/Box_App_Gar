@@ -74,9 +74,9 @@ async function aggregatorJob() {
 
     if (aggids.length > 0) {
         let message = `Aggregators which have not been updated are ${aggids}`
-        log.info({ module: "Box job" }, message)
+        log.info({ module: "Aggregator job" }, message)
     } else {
-        log.info({ module: "Box job" }, "All Aggregators Updated")
+        log.info({ module: "Aggregator job" }, "All Aggregators Updated")
     }
 }
 
