@@ -17,7 +17,7 @@ function compareTimeStamp(dt, tm) {
     if (tm[0] < hours) {
         return false;
     }
-    if (tm[1] < min) {
+    if (tm[1] <= min+2) {
         return false
     }
     return true;
