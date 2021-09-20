@@ -22,7 +22,7 @@ class Box {
     }
 
     async createBox(req, res, next) {
-        console.log('box');
+       
         let customerID;
 
         try {

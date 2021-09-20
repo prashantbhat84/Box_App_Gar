@@ -49,10 +49,11 @@ class Utils {
     }
 
     getSecret(boxid) {
+      
         const str = boxid
         const strarray1 = Array.from(str);
         const arraylength = strarray1.length;
-        if (arraylength === 8) {
+        if (arraylength === 16) {
             const hmac = getHmacKeyArray(strarray1, arraylength)
             const aeskey = getEncryptedAESKey(strarray1, arraylength);
             return { hmac, aeskey }

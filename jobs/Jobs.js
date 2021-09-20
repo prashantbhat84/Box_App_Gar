@@ -1,3 +1,4 @@
+const { Lightsail } = require('aws-sdk');
 const AggregatorModel = require('../models/aggregator');
 const BoxModel = require('../models/box');
 
@@ -17,7 +18,7 @@ function compareTimeStamp(dt, tm) {
     if (tm[0] < hours) {
         return false;
     }
-    if (min-tm[1]>2 ||(min-tm[1]<0)) {
+    if ((min-tm[1]>2) ||(min-tm[1]<0)) {
         return false
     }
     return true;
@@ -31,19 +32,22 @@ async function boxJob() {
     boxes.forEach(box => {
         
         const lastUpdated = box.lastUpdatedAt;
-        const splitTimeStamp = lastUpdated.split(",");
-        const date = splitTimeStamp[0].split("/");
-        const time = splitTimeStamp[1].split(':');
+        if(lastUpdated){
 
-        const result = compareTimeStamp(date, time);
-        if (!result) {
-            boxids.push(box.boxid)
+            const splitTimeStamp = lastUpdated.split(",");
+            const date = splitTimeStamp[0].split("/");
+            const time = splitTimeStamp[1].split(':');
+    
+            const result = compareTimeStamp(date, time);
+            if (!result) {
+                boxids.push(box.boxid)
+            }
         }
 
     });
 
     if (boxids.length > 0) {
-        let message = `Boxes which have not been updated are ${boxids}`
+        let message = `Boxes which have not been updated : ${boxids}`
         log.info({ module: "Box job" }, message)
     } else {
         log.info({ module: "Box job" }, "All Boxes Updated")
@@ -61,25 +65,38 @@ async function aggregatorJob() {
     aggregators.forEach(aggregator => {
       
         const lastUpdated = aggregator.lastUpdatedAt;
-        const splitTimeStamp = lastUpdated.split(",");
-        const date = splitTimeStamp[0].split("/");
-        const time = splitTimeStamp[1].split(':');
+        if(lastUpdated){
 
-        const result = compareTimeStamp(date, time);
-        if (!result) {
-            aggids.push(aggregator.aggregatorID)
+            const splitTimeStamp = lastUpdated.split(",");
+            const date = splitTimeStamp[0].split("/");
+            const time = splitTimeStamp[1].split(':');
+    
+            const result = compareTimeStamp(date, time);
+            if (!result) {
+                aggids.push(aggregator.aggregatorID)
+            }
         }
 
     });
 
     if (aggids.length > 0) {
-        let message = `Aggregators which have not been updated are ${aggids}`
+        let message = `Aggregators which have not been updated : ${aggids}`
         log.info({ module: "Aggregator job" }, message)
     } else {
         log.info({ module: "Aggregator job" }, "All Aggregators Updated")
     }
 }
+async function updateBoxAndAggregator(){
+   
+    const boxid="e00224000270a4e1";
+    const aggregatorID="dca632b8f172";
+    const dt= new Date();
+    const timestamp=`${dt.getUTCDate()}/${dt.getUTCMonth()+1}/${dt.getUTCFullYear()},${dt.getUTCHours()}:${dt.getUTCMinutes()}`;
+    await BoxModel.updateOne({boxid},{lastUpdatedAt:timestamp});
+   await AggregatorModel.updateOne({aggregatorID},{lastUpdatedAt:timestamp})
+      
+}
 
 
-module.exports = { boxJob, aggregatorJob }
+module.exports = { boxJob, aggregatorJob,updateBoxAndAggregator }
 

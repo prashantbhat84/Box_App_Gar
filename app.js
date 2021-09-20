@@ -11,7 +11,7 @@ const router1 = require('./routes/routes')
 const log= require('./utils/serverLogger');
 const response= require("./utils/Response");
 const cron= require('node-cron');
-const {boxJob,aggregatorJob}= require('./jobs/Jobs')
+const {boxJob,aggregatorJob,updateBoxAndAggregator}= require('./jobs/Jobs')
 // const crypto = require('crypto');
 // const hash = crypto.createHash('A')
 
@@ -23,6 +23,7 @@ cron.schedule('*/1 * * * *',aggregatorJob)
 dotenv.config({ path: "./config/config.env" });
 const port = process.env.PORT;
 connectdb();
+updateBoxAndAggregator();
 global.express = express;
 const { errorResponse } = response
 const corsOptions = {
