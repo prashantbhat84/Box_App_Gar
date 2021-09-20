@@ -160,6 +160,7 @@ class Aggregator {
             const data = (req.body.body.data);
 
             const details = getdetails(data);
+         
             const commandMessage = getCommandMessage(details.command, details.phonenumber, details.phonenumber1, details.box)
             const lidStatusMessage = getLidMessage(details.boxlid);
             const motionStatus = getMotion(details.motion)
@@ -173,37 +174,57 @@ class Aggregator {
             log.info({ module: "Aggregator And Box Update" }, `Temperature: ${details.temperature}`);
             log.info({ module: "Aggregator And Box Update" }, `Command: ${commandMessage}`);
             const boxDetails = await BoxModel.findOne({ boxid: details.box });
+           
             if (!boxDetails) {
                 const newBox = await BoxModel.create(
                     {
                         boxid: details.box,
                         lastUpdatedAt: details.date,
                         $addToSet: {
-                            aggregatorList: details.aggid
+                            aggregatorList: [details.aggid]
                         },
                         lid: lidStatusMessage,
                         motion: motionStatus,
-                        temperature,
-                        battery: details.boxBatteryStatus
+                        temperature: details.temperature,
+                        battery: details.BoxBatteryStatus
                     });
             } else {
-                await BoxModel.updateOne({ _id: boxDetails._id }, { lastUpdatedAt: details.date,
+                await BoxModel.updateOne({ _id: boxDetails._id }, {
+                    lastUpdatedAt: details.date,
                     lid: lidStatusMessage,
                     motion: motionStatus,
-                    temperature,
-                    battery: details.boxBatteryStatus,
+                    temperature: details.temperature,
+                    battery: details.BoxBatteryStatus,
                     $addToSet: {
-                        aggregatorList: details.aggid
-                    },
+                        aggregatorList: [details.aggid]
+                    }
+
                 })
             }
-            await AggregatorModel.findOneAndUpdate({ aggregatorID: details.aggid },
-                {
-                    lastUpdatedAt: details.date,
-                    battery:details.AggregatorBatteryStatus
-                   
-                    
-                })
+            const aggregator =await  AggregatorModel.findOne({
+                aggregatorID: details.aggid,
+            });
+            log.info({ module: "UpdateBoxAndAggregator" }, aggregator)
+            if (!aggregator) {
+                log.info({ module: "UpdateBoxAndAggregator" }, 'inside agg create')
+               const newAGG= await AggregatorModel.create({
+                    aggregatorID: details.aggid,
+                     lastUpdatedAt: details.date,
+                    battery: details.AggregatorBatteryStatus
+                });
+                log.info({ module: "UpdateBoxAndAggregator" }, newAGG)
+            } else {
+                log.info({ module: "UpdateBoxAndAggregator" }, 'inside agg update')
+                await AggregatorModel.updateOne({ aggregatorID: details.aggid },
+                    {
+                        lastUpdatedAt: details.date,
+                        battery: details.AggregatorBatteryStatus
+
+
+                    })
+
+            }
+
 
 
             response.successReponse({ status: 200, result: { message, details }, res })

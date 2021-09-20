@@ -42,6 +42,7 @@ const boxschema = mongoose.Schema({
     temperature: String,
     battery: String,
     aggregatorList: [String]
+                
 
 
 
