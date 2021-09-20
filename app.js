@@ -56,13 +56,11 @@ app.use("/api", router1);
 
 
 
-// process.on("uncaughtException", (req, res) => {
+process.on("uncaughtException", (req, res) => {
 
-//     // process.exit(1);
-//     errorResponse({ status: 400, result: "Process exited due to unhandled exception", res })
-// });
-// app.listen(port, () => {
-//     console.log(`Server is listening on port ${port}`);
-// })
+    // process.exit(1);
+    errorResponse({ status: 400, result: "Process exited due to unhandled exception", res })
+});
+
 
 module.exports = app;
