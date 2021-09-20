@@ -186,7 +186,8 @@ class Aggregator {
                         lid: lidStatusMessage,
                         motion: motionStatus,
                         temperature: details.temperature,
-                        battery: details.BoxBatteryStatus
+                        battery: details.BoxBatteryStatus,
+                        voltage:details.BoxBatteryVoltage,
                     });
             } else {
                 await BoxModel.updateOne({ _id: boxDetails._id }, {
@@ -195,6 +196,7 @@ class Aggregator {
                     motion: motionStatus,
                     temperature: details.temperature,
                     battery: details.BoxBatteryStatus,
+                    voltage:details.BoxBatteryVoltage,
                     $addToSet: {
                         aggregatorList: [details.aggid]
                     }
@@ -210,7 +212,8 @@ class Aggregator {
                const newAGG= await AggregatorModel.create({
                     aggregatorID: details.aggid,
                      lastUpdatedAt: details.date,
-                    battery: details.AggregatorBatteryStatus
+                    battery: details.AggregatorBatteryStatus,
+                    voltage:details.AggregatorBatteryVoltage
                 });
                
             } else {
@@ -218,7 +221,8 @@ class Aggregator {
                 await AggregatorModel.updateOne({ aggregatorID: details.aggid },
                     {
                         lastUpdatedAt: details.date,
-                        battery: details.AggregatorBatteryStatus
+                        battery: details.AggregatorBatteryStatus,
+                        voltage:details.AggregatorBatteryVoltage
 
 
                     })
