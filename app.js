@@ -48,7 +48,7 @@ app.use((req, res, next) => {
 
 app.get("/", (req, res) => {
    
-    res.render('home', { title: "My Title", condition: false })
+    res.send('home', { title: "My Title", condition: false })
 })
 
 app.use("/api", router1);
