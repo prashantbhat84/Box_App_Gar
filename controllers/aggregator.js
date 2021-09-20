@@ -177,6 +177,7 @@ class Aggregator {
               }else{
                   await BoxModel.updateOne({_id:boxDetails._id},{lastUpdatedAt:details.date})
               }
+              await AggregatorModel.findOneAndUpdate({aggregatorID:details.aggid},{lastUpdatedAt:details.date})
               
             
             response.successReponse({ status: 200, result: {message,details}, res })      
