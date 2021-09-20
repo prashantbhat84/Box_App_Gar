@@ -37,6 +37,10 @@ const boxschema = mongoose.Schema({
         enum: ["WAREHOUSE", "DISPATCHED"]
     },
     lastUpdatedAt: String,
+    lid: String,
+    motion: String,
+    temperature: String,
+    battery: String,
     aggregatorList: ['String']
 
 

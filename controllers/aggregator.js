@@ -173,11 +173,22 @@ class Aggregator {
             log.info({module:"Aggregator And Box Update"},`Command: ${commandMessage}`);
             const boxDetails= await BoxModel.findOne({boxid:details.box});
               if(!boxDetails){
-                  const newBox= await BoxModel.create({boxid:details.box,lastUpdatedAt:details.date});
+                  const newBox= await BoxModel.create(
+                      {boxid:details.box,
+                    lastUpdatedAt:details.date,
+                   $addToSet:{
+                    aggregatorList:details.aggid
+                    }
+                });
               }else{
                   await BoxModel.updateOne({_id:boxDetails._id},{lastUpdatedAt:details.date})
               }
-              await AggregatorModel.findOneAndUpdate({aggregatorID:details.aggid},{lastUpdatedAt:details.date})
+              await AggregatorModel.findOneAndUpdate({aggregatorID:details.aggid},
+                {lastUpdatedAt:details.date,
+                    $addToSet:{
+                        aggregatorList:details.aggid
+                        }
+                })
               
             
             response.successReponse({ status: 200, result: {message,details}, res })      
