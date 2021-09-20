@@ -1,6 +1,7 @@
 const response = require('../utils/Response');
 const { forgotPassword,boxUpdates,verifyemail }= require('../utils/mailcontent')
 const logger = require('../utils/logger');
+const BoxModel=  require('../models/box')
 const log= require("../utils/serverLogger")
 const AggregatorModel = require("../models/aggregator")
 const sms2 = require("../utils/sms2");
@@ -170,6 +171,13 @@ class Aggregator {
             log.info({module:"Aggregator And Box Update"},`Motion: ${motionStatus}`)
             log.info({module:"Aggregator And Box Update"},`Temperature: ${details.temperature}`);
             log.info({module:"Aggregator And Box Update"},`Command: ${commandMessage}`);
+            const boxDetails= await BoxModel.findOne({boxid:details.box});
+              if(!boxDetails){
+                  const newBox= await BoxModel.create({boxid:details.box,lastUpdatedAt:details.date});
+              }else{
+                  await BoxModel.updateOne({_id:boxDetails._id},{lastUpdatedAt:details.date})
+              }
+              
             
             response.successReponse({ status: 200, result: {message,details}, res })      
            

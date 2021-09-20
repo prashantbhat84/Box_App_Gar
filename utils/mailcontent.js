@@ -41,6 +41,22 @@ const  verifyemail= async(email,code)=>{
     }
 
 }
+const  OrderInfo= async(email,code)=>{
+    try {
+        const subject="Your Order Details";
+        const filename=`views\/verifyEmail.hbs`
+       const template= helper(filename)
+     const body={
+       template,
+       code
+     }
+
+    await awsInstance.sendEmail(email,subject,body)
+    } catch (error) {
+        throw new Error(error.message)
+    }
+
+}
 const boxUpdates=async(email,email1,box,data)=>{
   try {
     const subject=`Box Updates for boxid ${box}`
