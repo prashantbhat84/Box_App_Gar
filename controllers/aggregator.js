@@ -239,9 +239,9 @@ class Aggregator {
     }
     async createAggregator(req, res, next) {
         try {
-            const date = new Date();
+           
             req.body.aggregatorID = req.body.id
-            req.body.lastUpdatedAt = `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}:${date.getHours()}-${date.getMinutes()}`
+           
             const aggregator = await AggregatorModel.create(req.body)
             response.successReponse({ status: 200, result: aggregator, res })
         } catch (error) {
