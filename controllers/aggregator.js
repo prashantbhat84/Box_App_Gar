@@ -204,17 +204,17 @@ class Aggregator {
             const aggregator =await  AggregatorModel.findOne({
                 aggregatorID: details.aggid,
             });
-            log.info({ module: "UpdateBoxAndAggregator" }, aggregator)
+           
             if (!aggregator) {
-                log.info({ module: "UpdateBoxAndAggregator" }, 'inside agg create')
+               
                const newAGG= await AggregatorModel.create({
                     aggregatorID: details.aggid,
                      lastUpdatedAt: details.date,
                     battery: details.AggregatorBatteryStatus
                 });
-                log.info({ module: "UpdateBoxAndAggregator" }, newAGG)
+               
             } else {
-                log.info({ module: "UpdateBoxAndAggregator" }, 'inside agg update')
+              
                 await AggregatorModel.updateOne({ aggregatorID: details.aggid },
                     {
                         lastUpdatedAt: details.date,
