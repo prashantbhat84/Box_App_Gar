@@ -15,7 +15,7 @@ const {boxJob,aggregatorJob,updateBoxAndAggregator}= require('./jobs/Jobs')
 // const crypto = require('crypto');
 // const hash = crypto.createHash('A')
 
-// cron.schedule('*/1 * * * *',boxJob)
+cron.schedule('*/1 * * * *',boxJob)
 // cron.schedule('*/1 * * * *',aggregatorJob)
 
 
