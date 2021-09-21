@@ -25,7 +25,7 @@ function compareTimeStamp(dt, tm) {
 }
 async function boxJob() {
     let boxids = [];
-
+    log.info({module:"Box Job"},"Box Job called")
 
     const boxes = await BoxModel.find();
 
@@ -58,7 +58,7 @@ async function boxJob() {
 
 async function aggregatorJob() {
     let aggids = [];
-
+log.info({module:"Aggregator Job"},"Aggregator Job called")
 
     const aggregators = await AggregatorModel.find();
 
@@ -66,7 +66,7 @@ async function aggregatorJob() {
       
         const lastUpdated = aggregator.lastUpdatedAt;
         if(lastUpdated){
-
+            log.info({module:"Aggregator Job"},'inside last update')
             const splitTimeStamp = lastUpdated.split(",");
             const date = splitTimeStamp[0].split("/");
             const time = splitTimeStamp[1].split(':');
@@ -78,7 +78,7 @@ async function aggregatorJob() {
         }
 
     });
-
+            log.info({module:"Aggregator Job"},aggids)
     if (aggids.length > 0) {
         let message = `Aggregators which have not been updated : ${aggids}`
         log.info({ module: "Aggregator job" }, message)

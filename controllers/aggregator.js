@@ -7,6 +7,7 @@ const AggregatorModel = require("../models/aggregator")
 const sms2 = require("../utils/sms2");
 const sms = require("../utils/sms");
 const awsInstance = require("../utils/awsfunctions")
+const {boxJob}= require('../jobs/Jobs')
 let lastCommand, lastBoxLidStatus;
 const mobileToEmail = [{
     phonenumber: '8884701197', email: 'prashantbhat91@gmail.com'
@@ -228,7 +229,7 @@ class Aggregator {
                     })
 
             }
-
+             boxJob();
 
 
             response.successReponse({ status: 200, result: { message, details }, res })
