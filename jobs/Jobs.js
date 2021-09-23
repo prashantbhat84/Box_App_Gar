@@ -58,27 +58,30 @@ async function boxJob() {
 
 async function aggregatorJob() {
     let aggids = [];
-log.info({module:"Aggregator Job"},"Aggregator Job called")
+
 
     const aggregators = await AggregatorModel.find();
+    
 
     aggregators.forEach(aggregator => {
       
         const lastUpdated = aggregator.lastUpdatedAt;
+        
         if(lastUpdated){
-            log.info({module:"Aggregator Job"},'inside last update')
+            
             const splitTimeStamp = lastUpdated.split(",");
             const date = splitTimeStamp[0].split("/");
             const time = splitTimeStamp[1].split(':');
-    
+            
             const result = compareTimeStamp(date, time);
+           
             if (!result) {
                 aggids.push(aggregator.aggregatorID)
             }
         }
 
     });
-            log.info({module:"Aggregator Job"},aggids)
+            
     if (aggids.length > 0) {
         let message = `Aggregators which have not been updated : ${aggids}`
         log.info({ module: "Aggregator job" }, message)
@@ -96,7 +99,25 @@ async function updateBoxAndAggregator(){
    await AggregatorModel.updateOne({aggregatorID},{lastUpdatedAt:timestamp})
       
 }
+async function updateAggregator(){
+    try {
+        const dt= new Date();
+        const timestamp=`${dt.getUTCDate()}/${dt.getUTCMonth()+1}/${dt.getUTCFullYear()},${dt.getUTCHours()}:${dt.getUTCMinutes()}`;
+       await AggregatorModel.updateOne({aggregatorID:'dca632b8f173'},{lastUpdatedAt:timestamp});
+    } catch (error) {
+        log.error({module:"Update Aggregator Job"},error,message)
+    }
+}
+async function updateBox(){
+    try {
+        const dt= new Date();
+        const timestamp=`${dt.getUTCDate()}/${dt.getUTCMonth()+1}/${dt.getUTCFullYear()},${dt.getUTCHours()}:${dt.getUTCMinutes()}`;
+       await BoxModel.updateOne({boxid:'e00224000270a4e1'},{lastUpdatedAt:timestamp});
+    } catch (error) {
+        log.error({module:"Update Aggregator Job"},error,message)
+    }
+}
 
 
-module.exports = { boxJob, aggregatorJob,updateBoxAndAggregator }
+module.exports = { boxJob, aggregatorJob,updateBoxAndAggregator,updateAggregator,updateBox }
 
