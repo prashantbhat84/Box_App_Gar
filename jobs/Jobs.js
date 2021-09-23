@@ -49,8 +49,10 @@ async function boxJob() {
     if (boxids.length > 0) {
         let message = `Boxes which have not been updated : ${boxids}`
         log.info({ module: "Box job" }, message)
+        log.info('')
     } else {
         log.info({ module: "Box job" }, "All Boxes Updated")
+        log.info('')
     }
 
 
@@ -85,8 +87,10 @@ async function aggregatorJob() {
     if (aggids.length > 0) {
         let message = `Aggregators which have not been updated : ${aggids}`
         log.info({ module: "Aggregator job" }, message)
+        log.info('')
     } else {
         log.info({ module: "Aggregator job" }, "All Aggregators Updated")
+        log.info('')
     }
 }
 async function updateBoxAndAggregator(){

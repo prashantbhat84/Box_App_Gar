@@ -17,6 +17,7 @@ const {boxJob,aggregatorJob,updateBoxAndAggregator,updateAggregator, updateBox}=
 
 cron.schedule('*/1 * * * *',boxJob)
 cron.schedule('*/1 * * * *',aggregatorJob)
+
 updateAggregator();
 updateBox();
 

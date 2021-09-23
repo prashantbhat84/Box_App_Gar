@@ -180,6 +180,7 @@ class Aggregator {
             log.info({ module: "Aggregator And Box Update" }, `Temperature: ${details.temperature}`);
             log.info("");
             log.info({ module: "Aggregator And Box Update" }, `Command: ${commandMessage}`);
+            log.info("");
             const boxDetails = await BoxModel.findOne({ boxid: details.box });
            
             if (!boxDetails) {
@@ -235,7 +236,7 @@ class Aggregator {
                     })
 
             }
-             boxJob();
+             
 
 
             response.successReponse({ status: 200, result: { message, details }, res })
