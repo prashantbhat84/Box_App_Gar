@@ -168,17 +168,17 @@ class Aggregator {
             log.info({ module: "AggregatorAnd Box Update" }, details)
             const message = commandMessage + "," + lidStatusMessage + " " + "&" + motionStatus + " " + `on ${details.date}`;
             log.info({ module: "Aggregator And Box Update" }, `Date: ${details.date}`)
-          
+            log.info()
             log.info({ module: "Aggregator And Box Update" }, `BoxID: ${details.box}`)
-
+            log.info()
             log.info({ module: "Aggregator And Box Update" }, `AggID: ${details.aggid}`);
-
+            log.info()
             log.info({ module: "Aggregator And Box Update" }, `BoxLid: ${lidStatusMessage}`)
-
+            log.info()
             log.info({ module: "Aggregator And Box Update" }, `Motion: ${motionStatus}`)
-
+            log.info()
             log.info({ module: "Aggregator And Box Update" }, `Temperature: ${details.temperature}`);
-            
+            log.info()
             log.info({ module: "Aggregator And Box Update" }, `Command: ${commandMessage}`);
             const boxDetails = await BoxModel.findOne({ boxid: details.box });
            
