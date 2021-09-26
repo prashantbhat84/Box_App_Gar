@@ -45,7 +45,7 @@ function convertToStringVal(phone) {
     return temp;
 }
 function getCommandMessage(command, phonenumber, phonenumber1, boxid) {
-
+           log.info({module:"Command Message Module"},command)
     let message2 = ` CommandSentBy: ${phonenumber}`
     switch (command) {
         case 'O': return ` Open ${message2} `;

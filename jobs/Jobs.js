@@ -61,20 +61,20 @@ async function boxJob() {
 async function aggregatorJob() {
     let aggids = [];
 
-
+    log.info({module:"Aggregator Job"},"Aggregator Job called")
     const aggregators = await AggregatorModel.find();
-    
+   
 
     aggregators.forEach(aggregator => {
       
         const lastUpdated = aggregator.lastUpdatedAt;
-        
-        if(lastUpdated){
+           
+        if(lastUpdated!==undefined && aggregator.aggregatorID!==undefined){
             
             const splitTimeStamp = lastUpdated.split(",");
             const date = splitTimeStamp[0].split("/");
             const time = splitTimeStamp[1].split(':');
-            
+                 
             const result = compareTimeStamp(date, time);
            
             if (!result) {
@@ -107,9 +107,25 @@ async function updateAggregator(){
     try {
         const dt= new Date();
         const timestamp=`${dt.getUTCDate()}/${dt.getUTCMonth()+1}/${dt.getUTCFullYear()},${dt.getUTCHours()}:${dt.getUTCMinutes()}`;
-       await AggregatorModel.updateOne({aggregatorID:'dca632b8f173'},{lastUpdatedAt:timestamp});
+       
+         const aggregator=await AggregatorModel.findOne({aggregatorID:'dca632b8f173'});
+        
+         if(!aggregator){
+            
+             await AggregatorModel.create({aggregatorID:'dca632b8f173',lastUpdatedAt:timestamp})
+         }else{
+            
+            const result= await AggregatorModel.findByIdAndUpdate({_id:aggregator._doc._id},{lastUpdatedAt:timestamp});
+           
+            const aggregators= await AggregatorModel.find();
+            aggregators.forEach(async item=>{
+                if(item.aggregatorID===undefined){
+                    await AggregatorModel.deleteOne({_id:item._doc._id})
+                }
+            })
+         }
     } catch (error) {
-        log.error({module:"Update Aggregator Job"},error,message)
+        log.error({module:"Update Aggregator Job"},error.message)
     }
 }
 async function updateBox(){
@@ -118,7 +134,7 @@ async function updateBox(){
         const timestamp=`${dt.getUTCDate()}/${dt.getUTCMonth()+1}/${dt.getUTCFullYear()},${dt.getUTCHours()}:${dt.getUTCMinutes()}`;
        await BoxModel.updateOne({boxid:'e00224000270a4e1'},{lastUpdatedAt:timestamp});
     } catch (error) {
-        log.error({module:"Update Aggregator Job"},error,message)
+        log.error({module:"Update Box Job"},error,message)
     }
 }
 
