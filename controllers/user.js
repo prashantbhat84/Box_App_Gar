@@ -234,6 +234,7 @@ class User {
         }
     }
     async createUserList(req, res, next) {
+        log.info({module:"Create User List"},"User List")
         try {
             let newUser = await UserModel.findOne({ email: req.body.email, phonenumber: req.body.phonenumber });
             if (!newUser) {
@@ -259,6 +260,7 @@ class User {
         }
     }
     async getUserList(req, res, next) {
+        log.info({module:"Get User List"},"User List ")
         try {
             const user = await UserModel.findById(req.user._id);
 
@@ -299,6 +301,7 @@ class User {
 
     }
     async addSecondaryOwner(req, res, next) {
+        log.info({module:"Add Secondary Owner"},"Secondary Owner")
         try {
             const boxid = req.body.boxid;
 
