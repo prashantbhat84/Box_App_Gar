@@ -53,7 +53,7 @@ function getCommandMessage(command, phonenumber, phonenumber1, boxid) {
         case 'T': return ` Tamper Reset ${message2}`;
         case 'S': return `New User id ${phonenumber1} Added    ${message2} `
         case 'D': return ` User  id  ${phonenumber1} Removed  ${message2} `
-        case 'R': return ` Reset ${message2}`
+        case 'R': return ` Reset(FACTORY RESET) ${message2}`
         case 'N': return 'No Command'
         default: return `Command not  matched`
     }
