@@ -64,6 +64,7 @@ function getLidMessage(boxlid) {
         case 'O': return " OPEN";
         case 'C': return ' CLOSED';
         case 'T': return ' TAMPERED';
+        case 'L': return ' LOCKED';
         default: return "No Lid Status"
     }
 
