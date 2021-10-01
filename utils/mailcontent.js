@@ -57,19 +57,19 @@ const  OrderInfo= async(email,code)=>{
     }
 
 }
-const boxUpdates=async(email,email1,box,data)=>{
+const boxUpdates=async(email,box)=>{
   try {
-    const subject=`Box Updates for boxid ${box}`
-  
+    const subject=`Unauthorised Box Access`
+    const code= `There has been an unauthorised access for your box with id ${box}`
     const filename=`views\/boxUpdates.hbs`
     const template=helper(filename)
     const body={
-      code:data,
+      code,
       template
     }
     
     await awsInstance.sendEmail(email,subject,body);
-    await awsInstance.sendEmail(email1,subject,body);
+    
   } catch (error) {
     throw new Error(error.message)
   }

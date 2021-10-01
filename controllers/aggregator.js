@@ -27,7 +27,7 @@ async function sendSms(phonenumber, phonenumber1, boxid, data) {
     const email2 = mobileToEmail.find(item => item['phonenumber'] === phonenumber1).email;
 
 
-    await boxUpdates(email1, email2, boxid, data);
+    await boxUpdates(email1,  boxid, data);
 
 
 
@@ -159,12 +159,31 @@ class Aggregator {
             //    const data=[14,30,59,20,224, 2, 36, 0, 2, 112, 164, 224,79,88,84,70,11,97,90,8,48,38,8,79,0,83,70,50,21,22,17,15,9,2021,14,11,46,13,'dc632b8f170']
 
      
-            const data = (req.body.body.data);
+            // const data = (req.body.body.data);
 
-            const details = getdetails(data);
+            // const details = getdetails(data);
+            const details=     {
+                       box: 'e00224000270a4e0',
+                       phonenumber: '9008483808',
+                       phonenumber1: '9008483808',
+                       boxlid: 'T',
+                       aggid: 'dca632b8f173',
+                       command: 'S',
+                       temperature: 34,
+                       motion: 'S',
+                       BoxBatteryStatus: 'F',
+                       BoxBatteryVoltage: 5,
+                       AggregatorBatteryStatus: 'F',
+                       AggregatorBatteryVoltage: 5,
+                       date: '29/9/2021,2:51'
+                     }
          
             const commandMessage = getCommandMessage(details.command, details.phonenumber, details.phonenumber1, details.box)
             const lidStatusMessage = getLidMessage(details.boxlid);
+            if(details.boxlid==="T"){
+               await boxUpdates('prashant.work.1984@gmail.com',details.box)
+               await awsInstance.smsaws('8884701197',`Unauthorised access for box with id ${details.box}`)
+            }
             const motionStatus = getMotion(details.motion)
             log.info({ module: "AggregatorAnd Box Update" }, details)
             const message = commandMessage + "," + lidStatusMessage + " " + "&" + motionStatus + " " + `on ${details.date}`;
