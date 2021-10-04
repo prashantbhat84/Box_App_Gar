@@ -5,16 +5,16 @@ const Orders = require('../models/order')
 const Box = require("../models/box")
 const { convertToObjectID, convertPhoneToID } = require("../utils/misc");
 const Notification = require('../models/Notification');
-const awsInstance= require('../utils/awsfunctions');
-const response= require('../utils/Response')
-const {forgotPassword,verifyemail}= require('../utils/mailcontent')
-const log= require("../utils/serverLogger")
+const awsInstance = require('../utils/awsfunctions');
+const response = require('../utils/Response')
+const { forgotPassword, verifyemail } = require('../utils/mailcontent')
+const log = require("../utils/serverLogger")
 
 
 class User {
 
-    constructor () {
-        if( !User.instance ) {
+    constructor() {
+        if (!User.instance) {
             User.instance = this;
         }
 
@@ -24,19 +24,10 @@ class User {
     async signupUser(req, res, next) {
 
         try {
-      
-                       
 
-            const user = await UserModel.findOne({  
-                phonenumber: req.body.phonenumber });
-              
-        
-             if(!user){
-                   log.info('not found')
-               }
-               if(!!user){
-                   log.info('some issue')
-               }
+            const user = await UserModel.findOne({
+                phonenumber: req.body.phonenumber
+            });
             if (!user) {
                 throw new Error("Please Enter the email & phonenumber submitted during order placement")
             }
@@ -45,8 +36,8 @@ class User {
             const salt = await bcrypt.genSalt(10);
             req.body.password = await bcrypt.hash(req.body.password, salt);
             await UserModel.updateOne({ phonenumber: user.phonenumber }, { phoneVerify, emailVerify, password: req.body.password });
-              await verifyemail(req.body.email,emailVerify)
-               await awsInstance.smsaws(user.phonenumber,`Please enter the code ${phoneVerify} to verify your phone`)
+            await verifyemail(req.body.email, emailVerify)
+            await awsInstance.smsaws(user.phonenumber, `Please enter the code ${phoneVerify} to verify your phone`)
             // sms  and email to be sent
 
             response.successReponse({ status: 201, result: "Please check your email and mobile for verification codes", res })
@@ -132,7 +123,7 @@ class User {
             const code = (Math.floor(100000 + Math.random() * 900000))
             const updatedUser = await UserModel.updateOne({ email: req.body.email }, { forgotPasswordCode: code, token: undefined, });
             //send email to user 
-               await forgotPassword(req.body.email,code)
+            await forgotPassword(req.body.email, code)
             response.successReponse({
                 status: 200, result:
                     "Please enter the  code sent to your email"
@@ -147,7 +138,7 @@ class User {
         try {
             const { email, code } = req.body;
             const user = await UserModel.findOne({ email: req.body.email });
-          
+
             if (!user) {
                 throw new Error("User with this email does not exist")
             }
@@ -244,7 +235,7 @@ class User {
         }
     }
     async createUserList(req, res, next) {
-        log.info({module:"Create User List"},"User List")
+        log.info({ module: "Create User List" }, "User List")
         try {
             let newUser = await UserModel.findOne({ email: req.body.email, phonenumber: req.body.phonenumber });
             if (!newUser) {
@@ -257,7 +248,7 @@ class User {
                     userlist: newUser
                 }
             }, { new: true, runValidators: true })
-           
+
 
             response.successReponse({
                 status: 200, result:
@@ -270,7 +261,7 @@ class User {
         }
     }
     async getUserList(req, res, next) {
-        log.info({module:"Get User List"},"User List ")
+        log.info({ module: "Get User List" }, "User List ")
         try {
             const user = await UserModel.findById(req.user._id);
 
@@ -311,7 +302,7 @@ class User {
 
     }
     async addSecondaryOwner(req, res, next) {
-        log.info({module:"Add Secondary Owner"},"Secondary Owner")
+        log.info({ module: "Add Secondary Owner" }, "Secondary Owner")
         try {
             const boxid = req.body.boxid;
 
@@ -458,7 +449,7 @@ class User {
     }
 }
 
-const user= new User();
+const user = new User();
 Object.freeze(user);
 
 module.exports = user;
