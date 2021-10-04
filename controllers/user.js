@@ -64,9 +64,10 @@ class User {
     }
     async userLogin(req, res, next) {
         try {
-
-            const user = await UserModel.findOne({ email: req.body.email });
-            if (!user) {
+           
+            const user = await UserModel.findOne({ phonenumber:req.body.email });
+            
+            if (user.length===0) {
                 throw new Error("Email or password does not match")
             }
 

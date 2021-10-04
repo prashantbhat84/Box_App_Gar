@@ -46,7 +46,7 @@ const userschema = mongoose.Schema({
 
 });
 
-userschema.indexes({ phonenumber: 1 }, { unique: true, sparse: true })
+userschema.indexes({ phonenumber: 1,email:1 }, { unique: true, sparse: true })
 userschema.pre('save', function () {
 
 })
