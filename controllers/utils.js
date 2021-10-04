@@ -55,7 +55,7 @@ class Utils {
         const str = boxid
         const arr2 = [];
         const arr = Array.from(str);
-        for (i = 0; i < arr.length;) {
+        for (let i = 0; i < arr.length;) {
             let var2 = '0x' + arr[i] + arr[i + 1];
             arr2.push(var2);
             i = i + 2
