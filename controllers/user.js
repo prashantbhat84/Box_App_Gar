@@ -24,9 +24,19 @@ class User {
     async signupUser(req, res, next) {
 
         try {
-            log.info({module:"USER"},req.body)
-            const user = await UserModel.findOne({ email: req.body.email, phonenumber: req.body.phonenumber });
-               
+      
+                       
+
+            const user = await UserModel.findOne({  
+                phonenumber: req.body.phonenumber });
+              
+        
+             if(!user){
+                   log.info('not found')
+               }
+               if(!!user){
+                   log.info('some issue')
+               }
             if (!user) {
                 throw new Error("Please Enter the email & phonenumber submitted during order placement")
             }
