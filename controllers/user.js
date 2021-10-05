@@ -26,7 +26,8 @@ class User {
         try {
 
             const user = await UserModel.findOne({
-                phonenumber: req.body.phonenumber
+                phonenumber: req.body.phonenumber,
+                email:req.body.email
             });
             if (!user) {
                 throw new Error("Please Enter the email & phonenumber submitted during order placement")
@@ -65,9 +66,9 @@ class User {
     async userLogin(req, res, next) {
         try {
            
-            const user = await UserModel.findOne({ phonenumber:req.body.email });
-            
-            if (user.length===0) {
+            const user = await UserModel.findOne({ email:req.body.email });
+           
+            if (!user) {
                 throw new Error("Email or password does not match")
             }
 
