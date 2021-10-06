@@ -449,6 +449,22 @@ class User {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
+    async fetchUser(req,res,next){
+        try {
+            if(!req.query.email){
+
+            throw new Error("Email is required");
+            }
+            const user=  await UserModel.findOne({email:req.query.email}).select('name email phonenumber address -_id');
+            response.successReponse({
+                status: 200, result:
+                        user
+                , res
+            })
+        } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
+        }
+    }
 }
 
 const user = new User();

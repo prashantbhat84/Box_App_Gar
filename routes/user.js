@@ -1,7 +1,7 @@
 const express = require('express');
 const userRouter = express.Router();
 const { protect, authorize } = require("../middleware/Customer")
-
+const { protect:dashboardProtect, authorize: dashboardAuth } = require("../middleware/dashboardAuth")
 
 const user = require("../controllers/user");
 
@@ -23,6 +23,8 @@ userRouter.get("/getUserNotification", protect, user.getUserNotifications)
 userRouter.put("/acceptOwnershipRequest", protect, user.acceptOwnershipRequest)
 userRouter.get("/listSecondaryOwner", protect, user.listSecondaryOwner)
 userRouter.put("/deleteSecondaryOwner", protect, user.deleteSecondaryOwner)
+userRouter.get("/fetchUser",dashboardProtect,dashboardAuth(["FACTORY-ADMIN", "BOOKING-ADMIN"]),user.fetchUser)
+
 
 
 
