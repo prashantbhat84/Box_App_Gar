@@ -189,59 +189,26 @@ class Aggregator {
             log.info("");
             const boxDetails = await BoxModel.findOne({ boxid: details.box });
            
-            if (!boxDetails) {
-                const newBox = await BoxModel.create(
-                    {
-                        boxid: details.box,
-                        lastUpdatedAt: details.date,
-                        $addToSet: {
-                            aggregatorList: [details.aggid]
-                        },
-                        lid: lidStatusMessage,
-                        motion: motionStatus,
-                        temperature: details.temperature,
-                        battery: details.BoxBatteryStatus,
-                        voltage:details.BoxBatteryVoltage,
-                    });
-            } else {
-                await BoxModel.updateOne({ _id: boxDetails._id }, {
-                    lastUpdatedAt: details.date,
-                    lid: lidStatusMessage,
-                    motion: motionStatus,
-                    temperature: details.temperature,
-                    battery: details.BoxBatteryStatus,
-                    voltage:details.BoxBatteryVoltage,
-                    $addToSet: {
-                        aggregatorList: [details.aggid]
-                    }
+            await BoxModel.findOneAndUpdate({ boxid: details.box }, {
+                lastUpdatedAt: details.date,
+                lid: lidStatusMessage,
+                motion: motionStatus,
+                temperature: details.temperature,
+                battery: details.BoxBatteryStatus,
+                voltage:details.BoxBatteryVoltage,
+                $addToSet: {
+                    aggregatorList: [details.aggid]
+                }
 
-                })
-            }
-            const aggregator =await  AggregatorModel.findOne({
-                aggregatorID: details.aggid,
-            });
-           
-            if (!aggregator) {
-               
-               const newAGG= await AggregatorModel.create({
-                    aggregatorID: details.aggid,
-                     lastUpdatedAt: details.date,
+            })
+            await AggregatorModel.findOneAndUpdate({ aggregatorID: details.aggid },
+                {
+                    lastUpdatedAt: details.date,
                     battery: details.AggregatorBatteryStatus,
                     voltage:details.AggregatorBatteryVoltage
-                });
-               
-            } else {
-              
-                await AggregatorModel.updateOne({ aggregatorID: details.aggid },
-                    {
-                        lastUpdatedAt: details.date,
-                        battery: details.AggregatorBatteryStatus,
-                        voltage:details.AggregatorBatteryVoltage
-
-
-                    })
-
-            }
+                                })
+           
+           
              
 
 

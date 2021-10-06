@@ -10,7 +10,8 @@ boxRouter.post("/create", protect, authorize(["BOOKING-ADMIN", "FACTORY-ADMIN"])
 boxRouter.get("/list", protect, authorize(["BOOKING-ADMIN", "FACTORY-ADMIN"]), boxController.listBoxes)
 boxRouter.put("/update", boxController.updateBox)
 boxRouter.get("/fetch", protect, authorize(["BOOKING-ADMIN", "FACTORY-ADMIN"]), boxController.getBox)
-boxRouter.post("/log", boxController.logBox)
+boxRouter.post("/log", boxController.logBox);
+
 
 
 
