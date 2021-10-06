@@ -120,7 +120,10 @@ class Orders {
             if(!req.query.order){
                 throw new Error("Order ID is mandatory");               
             }
-            const orderDetail=  await Order.findOne({orderid:req.param.order}).populate('customer','name email address phonenumber address -_id');
+           
+          
+            const orderDetail=  await Order.findOne({OrderID:req.query.order}).populate('customer','name email address phonenumber address -_id');
+
             response.successReponse({ status: 200, result: orderDetail, res })
 
         } catch (error) {

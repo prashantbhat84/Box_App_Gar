@@ -58,7 +58,7 @@ class Box {
             let boxList;
             if (!filter) {
 
-                boxList = await boxModel.find().populate('orderid',"OrderID -_id").skip(pageNo * itemsPerPage).limit(itemsPerPage)
+                boxList = await boxModel.find().populate('orderid',"OrderID -_id ").skip(pageNo * itemsPerPage).limit(itemsPerPage)
             } else {
                 boxList = await boxModel.find({ boxStatus: filter }).populate('orderid','OrderID -_id').skip(pageNo * itemsPerPage).limit(itemsPerPage)
             }
