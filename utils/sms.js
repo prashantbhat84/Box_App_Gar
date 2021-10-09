@@ -1,4 +1,5 @@
 const AWS = require("aws-sdk");
+const log= require('./serverLogger')
 
 AWS.config.update({
     accessKeyId: 'AKIAUCSZD7OQ6OYQSRFA',
@@ -24,14 +25,12 @@ function smsaws(phonenumber, smsdata) {
 
     publishTextPromise
         .then(function (data) {
-            console.log("SMS from aws sns");
-            console.log(data);
+               log.info({module:"SMS"},data)
             //res.end(JSON.stringify({ MessageID: data.MessageId }));
         })
         .catch(function (err) {
             // res.end(JSON.stringify({ Error: err }));
-            console.log("SMS aws error");
-            console.log(err);
+           log.error({module:"SMS"},err.message)
         });
 }
 module.exports = {smsaws};
