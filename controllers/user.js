@@ -37,8 +37,8 @@ class User {
             const salt = await bcrypt.genSalt(10);
             req.body.password = await bcrypt.hash(req.body.password, salt);
             await UserModel.updateOne({ phonenumber: user.phonenumber }, { phoneVerify, emailVerify, password: req.body.password });
-            // await verifyemail(req.body.email, emailVerify)
-            // await awsInstance.smsaws(user.phonenumber, `Please enter the code ${phoneVerify} to verify your phone`)
+            await verifyemail(req.body.email, emailVerify)
+            await awsInstance.smsaws(user.phonenumber, `Please enter the code ${phoneVerify} to verify your phone`)
             // sms  and email to be sent
 
             response.successReponse({ status: 201, result: "Please check your email and mobile for verification codes", res })
