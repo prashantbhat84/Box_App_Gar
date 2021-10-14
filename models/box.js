@@ -20,7 +20,8 @@ const boxschema = mongoose.Schema({
         {
             name: String,
             email: String,
-            phonenumber: String
+            phonenumber: String,
+            apptoBoxID: [Number]
         }
     ],
     AESKEY: ['String'],

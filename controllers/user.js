@@ -350,7 +350,9 @@ class User {
             const response1 = req.body.response;
             const boxid = req.body.boxid;
             const user = await UserModel.findById(req.user._id)
+            
                 user.apptoBoxID=convertPhoneToID(user.phonenumber);
+               
 
             const notification = await Notification.findOne({ boxid,userid:user._id });
             
