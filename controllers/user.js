@@ -350,9 +350,10 @@ class User {
             const response1 = req.body.response;
             const boxid = req.body.boxid;
             const user = await UserModel.findById(req.user._id)
+                user.apptoBoxID=convertPhoneToID(user.phonenumber);
 
-
-            const notification = await Notification.findOne({ boxid });
+            const notification = await Notification.findOne({ boxid,userid:user._id });
+            
             if (!notification) {
                 throw new Error(`Request not found. Please retry ....`)
             }
@@ -395,9 +396,11 @@ class User {
             if (!box) {
                 throw new Error("Box not found")
             }
-            if (box.primaryOwner.toString() !== req.user._id.toString()) {
+          log.info(box.primaryOwner)
+            if (box.primaryOwner.toString() !== req.user._doc._id.toString()) {
                 throw new Error("Secondary Owner List access unauthorised")
             }
+
             response.successReponse({
                 status: 200, result:
                 {
