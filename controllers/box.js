@@ -129,6 +129,9 @@ class Box {
             let userId = req.user._id;
             const boxid = req.body.boxid;
             const box = await boxModel.findOne({ boxid });
+            if(!box){
+                throw new Error("Box Not Found")
+            }
             if (box.primaryOwner.toString() !== userId.toString()) {
                 throw new Error("Only Primary owner can reset the box")
             };
