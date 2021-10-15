@@ -1,9 +1,9 @@
 const multichainNode = require('multichain-node')
 const boxModel = require('../models/box')
 const logger = require('../utils/logger');
-const userModel= require("../models/user")
+const userModel = require("../models/user")
 const utils = require("./utils");
-const response= require('../utils/Response');
+const response = require('../utils/Response');
 const { convertToObjectID } = require('../utils/misc');
 
 
@@ -16,14 +16,14 @@ const { convertToObjectID } = require('../utils/misc');
 // const asyncDebugger = new AsyncDebugger();
 class Box {
     constructor() {
-        if(!Box.instance){
-            Box.instance =this;
+        if (!Box.instance) {
+            Box.instance = this;
         }
-           return Box.instance;
+        return Box.instance;
     }
 
     async createBox(req, res, next) {
-       
+
         let customerID;
 
         try {
@@ -59,9 +59,9 @@ class Box {
             let boxList;
             if (!filter) {
 
-                boxList = await boxModel.find().populate('orderid',"OrderID -_id ").skip(pageNo * itemsPerPage).limit(itemsPerPage)
+                boxList = await boxModel.find().populate('orderid', "OrderID -_id ").skip(pageNo * itemsPerPage).limit(itemsPerPage)
             } else {
-                boxList = await boxModel.find({ boxStatus: filter }).populate('orderid','OrderID -_id').skip(pageNo * itemsPerPage).limit(itemsPerPage)
+                boxList = await boxModel.find({ boxStatus: filter }).populate('orderid', 'OrderID -_id').skip(pageNo * itemsPerPage).limit(itemsPerPage)
             }
             response.successReponse({ status: 200, result: { count: boxCount, Boxes: boxList }, res })
         } catch (error) {
@@ -124,35 +124,32 @@ class Box {
         }
 
     }
-    async boxFactoryReset(req,res,next){
+    async boxFactoryReset(req, res, next) {
         try {
-            let userId= req.user._id;
-            const boxid= req.body.boxid;
-            const box= await boxModel.findOne({boxid});
-            if(box.primaryOwner.toString()!==userId.toString()){
+            let userId = req.user._id;
+            const boxid = req.body.boxid;
+            const box = await boxModel.findOne({ boxid });
+            if (box.primaryOwner.toString() !== userId.toString()) {
                 throw new Error("Only Primary owner can reset the box")
             };
-            const primaryOwner=box.primaryOwner;
-            const secondaryOwner=box.secondaryOwner
-            const users= await userModel.find({box:{
-                $in:[boxid]
-            }});
-           
-            await userModel.updateMany({box:{
-                 $in:[boxid]
-            }},{
-                $pull:{
-                    box:boxid
+
+            await userModel.updateMany({
+                box: {
+                    $in: [boxid]
+                }
+            }, {
+                $pull: {
+                    box: boxid
                 }
             })
 
-           await boxModel.updateOne({_id:box._id},{
-                $unset:{primaryOwner:convertToObjectID(userId)},
-                $set:{secondaryOwner:[]},
-                boxStatus:"FACTORY-RESET"
+            await boxModel.updateOne({ _id: box._id }, {
+                $unset: { primaryOwner: convertToObjectID(userId) },
+                $set: { secondaryOwner: [] },
+                boxStatus: "FACTORY-RESET"
             });
             response.successReponse({ status: 200, result: "Box Factory Reset Complete", res })
-            
+
         } catch (error) {
             response.errorResponse({ status: 400, result: error.message, res })
         }
@@ -163,7 +160,7 @@ class Box {
 
 
 }
-const boxController= new Box();
+const boxController = new Box();
 Object.freeze(boxController)
 
 module.exports = boxController
