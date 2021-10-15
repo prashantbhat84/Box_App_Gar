@@ -1,7 +1,7 @@
 const multichainNode = require('multichain-node')
 const boxModel = require('../models/box')
 const logger = require('../utils/logger');
-
+const userModel= require("../models/user")
 const utils = require("./utils");
 const response= require('../utils/Response');
 const { convertToObjectID } = require('../utils/misc');
@@ -134,7 +134,19 @@ class Box {
             };
             const primaryOwner=box.primaryOwner;
             const secondaryOwner=box.secondaryOwner
-            const updatedBox=await boxModel.updateOne({_id:box._id},{
+            const users= await userModel.find({box:{
+                $in:[boxid]
+            }});
+           
+            await userModel.updateMany({box:{
+                 $in:[boxid]
+            }},{
+                $pull:{
+                    box:boxid
+                }
+            })
+
+           await boxModel.updateOne({_id:box._id},{
                 $unset:{primaryOwner:convertToObjectID(userId)},
                 $set:{secondaryOwner:[]},
                 boxStatus:"FACTORY-RESET"
