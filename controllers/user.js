@@ -204,10 +204,11 @@ class User {
             await UserModel.updateOne({ "_id": user }, {
                 $addToSet: {
                     box: box.boxid
-                }
+                },
+
             });
 
-            await Box.updateOne({ "_id": box._id }, { primaryOwner: user, registrationStatus: "REGISTERED" })
+            await Box.updateOne({ "_id": box._id }, { primaryOwner: user, registrationStatus: "REGISTERED",boxStatus:"DISPATCHED" })
 
             response.successReponse({
                 status: 200, result:
@@ -368,7 +369,7 @@ class User {
 
 
             } else {
-                await Notification.updateOne({ "_id": notification._id }, { expired: true, response: "ACCEPTED" });
+                await Notification.deleteOne({ "_id": notification._id }, { expired: true, response: "ACCEPTED" });
                 await Box.updateOne({ boxid }, {
                     $addToSet: {
                         secondaryOwner: user

@@ -3,7 +3,8 @@ const boxModel = require('../models/box')
 const logger = require('../utils/logger');
 
 const utils = require("./utils");
-const response= require('../utils/Response')
+const response= require('../utils/Response');
+const { convertToObjectID } = require('../utils/misc');
 
 
 
@@ -118,6 +119,28 @@ class Box {
             logger.info(msg, boxid);
 
             res.status(200).json({ success: true })
+        } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
+        }
+
+    }
+    async boxFactoryReset(req,res,next){
+        try {
+            let userId= req.user._id;
+            const boxid= req.body.boxid;
+            const box= await boxModel.findOne({boxid});
+            if(box.primaryOwner.toString()!==userId.toString()){
+                throw new Error("Only Primary owner can reset the box")
+            };
+            const primaryOwner=box.primaryOwner;
+            const secondaryOwner=box.secondaryOwner
+            const updatedBox=await boxModel.updateOne({_id:box._id},{
+                $unset:{primaryOwner:convertToObjectID(userId)},
+                $set:{secondaryOwner:[]},
+                boxStatus:"FACTORY-RESET"
+            });
+            response.successReponse({ status: 200, result: "Box Factory Reset Complete", res })
+            
         } catch (error) {
             response.errorResponse({ status: 400, result: error.message, res })
         }

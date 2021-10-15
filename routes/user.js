@@ -1,6 +1,6 @@
 const express = require('express');
 const userRouter = express.Router();
-const { protect, authorize } = require("../middleware/Customer")
+const { protect } = require("../middleware/Customer")
 const { protect:dashboardProtect, authorize: dashboardAuth } = require("../middleware/dashboardAuth")
 
 const user = require("../controllers/user");

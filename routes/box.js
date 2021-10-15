@@ -2,7 +2,8 @@
 const express = require('express');
 const boxRouter = express.Router();
 const boxController= require('../controllers/box')
-const { protect, authorize } = require('../middleware/dashboardAuth')
+const { protect, authorize } = require('../middleware/dashboardAuth');
+const {protect:CustomerProtect}= require('../middleware/Customer')
 
 
 
@@ -11,6 +12,7 @@ boxRouter.get("/list", protect, authorize(["BOOKING-ADMIN", "FACTORY-ADMIN"]), b
 boxRouter.put("/update", boxController.updateBox)
 boxRouter.get("/fetch", protect, authorize(["BOOKING-ADMIN", "FACTORY-ADMIN"]), boxController.getBox)
 boxRouter.post("/log", boxController.logBox);
+boxRouter.put("/resetBox",CustomerProtect,boxController.boxFactoryReset)
 
 
 

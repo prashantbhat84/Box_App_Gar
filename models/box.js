@@ -35,7 +35,7 @@ const boxschema = mongoose.Schema({
     boxStatus: {
         type: String,
         default: "WAREHOUSE",
-        enum: ["WAREHOUSE", "DISPATCHED"]
+        enum: ["WAREHOUSE", "DISPATCHED","FACTORY-RESET"]
     },
     lastUpdatedAt: String,
     lid: String,
