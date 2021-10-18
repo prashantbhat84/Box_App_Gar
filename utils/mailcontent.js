@@ -41,14 +41,16 @@ const  verifyemail= async(email,code)=>{
     }
 
 }
-const  OrderInfo= async(email,code)=>{
+const  OrderInfo= async(email,code,courier)=>{
     try {
         const subject="Your Order Details";
-        const filename=`views\/verifyEmail.hbs`
+        const filename=`views\/orderInfo.hbs`
+
        const template= helper(filename)
      const body={
        template,
-       code
+       code,
+       courier
      }
 
     await awsInstance.sendEmail(email,subject,body)
@@ -80,6 +82,6 @@ const boxUpdates=async(email,box)=>{
 
 
 
-module.exports={forgotPassword,verifyemail,boxUpdates}
+module.exports={forgotPassword,verifyemail,boxUpdates,OrderInfo}
 
 

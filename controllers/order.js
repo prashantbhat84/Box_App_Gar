@@ -5,6 +5,8 @@ const response = require('../utils/Response');
 const { convertToObjectID } = require('../utils/misc');
 const log = require('../utils/serverLogger');
 
+const { OrderInfo } = require('../utils/mailcontent')
+
 
 
 class Orders {
@@ -86,6 +88,8 @@ class Orders {
             const filterOrderBy=req.query.filterOrder;
             let orderCount, filteredOrder;
             if (req.user.role === "BOOKING-ADMIN") {
+                // filteredOrder = await Order.find({ orderStatus: "WAREHOUSE" }).populate('customer','name -_id').skip(pageNo * itemsPerPage).limit(itemsPerPage)
+                // orderCount = await Order.countDocuments({ orderStatus: "WAREHOUSE" });
                 filteredOrder = await Order.find({ orderStatus: "WAREHOUSE" }).populate('customer','name -_id').skip(pageNo * itemsPerPage).limit(itemsPerPage)
                 orderCount = await Order.countDocuments({ orderStatus: "WAREHOUSE" });
             }
@@ -135,9 +139,9 @@ class Orders {
     
     async dispatchOrder(req, res, next) {
         try {
-
-            const order = await Order.findOne({ OrderID: req.body.OrderID });
-
+              
+            const order = await Order.findOne({ OrderID: req.body.OrderID }).populate('customer');
+              log.info(req.body)
             if (!order) {
                 throw new Error(`Order with ID ${req.body.OrderID} does not exist`)
             }
@@ -147,7 +151,10 @@ class Orders {
             const dispatch = await Order.updateOne({ OrderID: req.body.OrderID }, { orderStatus: "DISPATCHED", courierName: req.body.courierName, docketNo: req.body.docketNo }, { new: true, runValidators: true })
             await Box.findOneAndUpdate({ boxid: order.Box }, { boxStatus: "DISPATCHED" }, { new: true, runValidators: true })
             dispatch.OrderID = req.body.OrderID
-            response.successReponse({ status: 200, result: dispatch, res })
+            const message= `${req.body.courierName} viz tracking no :${req.body.docketNo}`
+            //email for order dispatched
+           await OrderInfo(order._doc.customer.email,req.body.OrderID,message);
+            response.successReponse({ status: 200, result:'dispatched', res })
 
 
         } catch (error) {
@@ -202,6 +209,7 @@ class Orders {
         try {
 
             const resultObj = await Order.find({ orderStatus: "WAREHOUSE" }).select('OrderID -_id')
+           
             response.successReponse({ status: 200, result: resultObj, res })
 
         } catch (error) {
