@@ -66,7 +66,7 @@ class User {
     async userLogin(req, res, next) {
         try {
            
-            const user = await UserModel.findOne({ email:req.body.email });
+            const user = await UserModel.findOne({ email:req.body.email.toLowerCase() });
            
             if (!user) {
                 throw new Error("Email or password does not match")
