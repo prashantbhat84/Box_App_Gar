@@ -154,7 +154,7 @@ class Orders {
             const message= `${req.body.courierName} viz tracking no :${req.body.docketNo}`
             //email for order dispatched
            await OrderInfo(order._doc.customer.email,req.body.OrderID,message);
-            response.successReponse({ status: 200, result:'dispatched', res })
+            response.successReponse({ status: 200, result:dispatch, res })
 
 
         } catch (error) {
