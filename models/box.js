@@ -16,6 +16,7 @@ const boxschema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    constants:[String],
     secondaryOwner: [
         {
             name: String,

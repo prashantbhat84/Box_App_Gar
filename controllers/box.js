@@ -31,12 +31,18 @@ class Box {
 
             req.body.lastUpdated = `${dt.getHours()}:${dt.getMinutes()}`
 
-            const secret = utils.getSecret(req.body.boxid)
-            req.body.AESKEY = secret.aeskey;
-            req.body.HMAC = secret.hmac
+            let array=[];
+            for(let i=0;i<4;i++){
+                let no=Math.floor(Math.random() * 90 + 10).toString(16);
+                if(no.length<2){
+                   no ='0'+no
+                }
+              array.push(no)
+            }
+            req.body.constants=array;
             const newBox = await boxModel.create(req.body);
 
-
+         
 
             // await multichain.issue({
             //     address: process.env.blockchainaddress, qty: 1, units: 1, details: req.body, asset: {

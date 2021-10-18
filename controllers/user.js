@@ -161,7 +161,7 @@ class User {
     }
     async changePassword(req, res, next) {
         try {
-            const { email, password, confirmPassword } = req.body;
+            const { email, password, confirmPassword,code } = req.body;
             const user = await UserModel.findOne({ email: req.body.email });
             if (!user) {
                 throw new Error("User with this email does not exist")
@@ -169,12 +169,15 @@ class User {
             if (password !== confirmPassword) {
                 throw new Error("Password and confirm password must be same")
             }
+            if (code !== user.forgotPasswordCode) {
+                throw new Error("Invalid Code. Please Retry...")
+            }
             if (user.password !== null && (user.forgotPasswordCode !== "")) {
                 throw new Error("Please follow proper password reset steps")
             }
             const salt = await bcrypt.genSalt(10);
             const password1 = await bcrypt.hash(password, salt);
-            await UserModel.updateOne({ email }, { password: password1 });
+            await UserModel.updateOne({ email }, { password: password1,forgotPasswordCode:"" });
             response.successReponse({
                 status: 200, result:
                     "Password Changed Successfully"
@@ -182,7 +185,7 @@ class User {
             })
 
         } catch (error) {
-            console.log(error);
+           
             return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
