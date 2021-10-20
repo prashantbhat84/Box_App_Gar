@@ -44,7 +44,7 @@ const  verifyemail= async(email,code)=>{
 const  OrderInfo= async(email,code,courier)=>{
     try {
         const subject="Your Order Details";
-        const filename=`views\/orderInfo.hbs`
+        const filename=`views\/OrderInfo.hbs`
 
        const template= helper(filename)
      const body={

@@ -339,7 +339,7 @@ class User {
     }
     async getUserNotifications(req, res, next) {
         try {
-            const notification = await Notification.find({ userid: req.user._id, expired: false }).select(' -userid -senderid  -createdAt -updatedAt -expired -__v')
+            const notification = await Notification.find({ userid: req.user._id,  }).select(' -userid -senderid  -createdAt -updatedAt -expired -__v')
             response.successReponse({
                 status: 200, result: { notifications: notification }
 
@@ -354,6 +354,8 @@ class User {
             const response1 = req.body.response;
             const boxid = req.body.boxid;
             const user = await UserModel.findById(req.user._id)
+            const box= await Box.findOne({boxid}).populate('primaryOwner');
+            
             
                 user.apptoBoxID=convertPhoneToID(user.phonenumber);
                
@@ -372,6 +374,7 @@ class User {
 
 
             } else {
+                await Notification.create({boxid,description:`${user.name} has accepted your invitation to become secondary owner`,primaryId:box.primaryOwner.apptoBoxID,secondaryId:user.apptoBoxID,userid:box.primaryOwner._id})
                 await Notification.deleteOne({ "_id": notification._id }, { expired: true, response: "ACCEPTED" });
                 await Box.updateOne({ boxid }, {
                     $addToSet: {

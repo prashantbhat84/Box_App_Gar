@@ -17,7 +17,9 @@ const notificationschema = mongoose.Schema({
         type: Boolean,
         enum: [true, false],
         default: false
-    }
+    },
+    primaryId:[Number],
+    secondaryId:[Number]
 
 
 
