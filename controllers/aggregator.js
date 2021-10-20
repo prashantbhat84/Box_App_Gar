@@ -176,10 +176,12 @@ class Aggregator {
             const commandMessage = getCommandMessage(details.command, details.phonenumber, details.phonenumber1, details.box)
             const lidStatusMessage = getLidMessage(details.boxlid);
            
-            if(lidStatusMessage===" TAMPERED"){
+            if(lidStatusMessage===" TAMPERED"&&box.lid!=="TAMPERED"){
+                       
+
+                             await boxUpdates(box.primaryOwner.email,"Unauthorised Box Access",`There has been an unauthorised access for your box with id ${details.box}`)
+                             await awsInstance.smsaws(box.primaryOwner.phonenumber,`Unauthorised access for box with id ${details.box}`)
                          
-               await boxUpdates(box.primaryOwner.email,"Unauthorised Box Access",`There has been an unauthorised access for your box with id ${details.box}`)
-               await awsInstance.smsaws(box.primaryOwner.phonenumber,`Unauthorised access for box with id ${details.box}`)
             }
             if((details.command==="S")&&(details.phonenumber!==details.phonenumber1)){
                 const user= await User.findOne({phonenumber:details.phonenumber});
@@ -199,14 +201,19 @@ class Aggregator {
                
             }
             const motionStatus = getMotion(details.motion)
-            if(motionStatus==="MOVED"){
-                await boxUpdates(box.primaryOwner.email,"Box Moved Update",`This is to inform that  box with id ${details.box} has been moved from its current position`)
-                // await awsInstance.smsaws(box.primaryOwner.phonenumber,`box with id ${details.box} has moved from its current position`)
-            }
-            if(details.BoxBatteryStatus==="L"){
+            if((motionStatus==="MOVED")&&(box.motion==="STATIONERY")){
+               
+                          
+                    await boxUpdates(box.primaryOwner.email,"Box Moved Update",`This is to inform that  box with id ${details.box} has been moved from its current position`)
+                    // await awsInstance.smsaws(box.primaryOwner.phonenumber,`box with id ${details.box} has moved from its current position`)
                 
-                await boxUpdates(box.primaryOwner.email,"Box Battery Update",`This is to inform that  box with id ${details.box} has Low Battery`)
-                // await awsInstance.smsaws(box.primaryOwner.phonenumber,`box with id ${details.box} has low Battery`)
+            }
+            if(details.BoxBatteryStatus==="L"&&box.battery!=="L"){
+               
+
+                    await boxUpdates(box.primaryOwner.email,"Box Battery Update",`This is to inform that  box with id ${details.box} has Low Battery`)
+                    // await awsInstance.smsaws(box.primaryOwner.phonenumber,`box with id ${details.box} has low Battery`)
+                
             }
              
             // log.info({ module: "AggregatorAnd Box Update" }, details)
