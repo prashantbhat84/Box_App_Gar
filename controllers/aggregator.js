@@ -4,20 +4,14 @@ const logger = require('../utils/logger');
 const BoxModel = require('../models/box')
 const log = require("../utils/serverLogger")
 const AggregatorModel = require("../models/aggregator")
+const Notification= require("../models/Notification")
+const User= require('../models/user')
 const sms2 = require("../utils/sms2");
 const sms = require("../utils/sms");
 const awsInstance = require("../utils/awsfunctions")
 const {boxJob}= require('../jobs/Jobs')
 let lastCommand, lastBoxLidStatus;
-const mobileToEmail = [{
-    phonenumber: '8884701197', email: 'prashantbhat91@gmail.com'
-},
-{ phonenumber: '9632349451', email: 'sudarshana.rd@gariyasi.com' },
-{ phonenumber: '9652437698', email: 'mrkodi@gmail.com' },
-{ phonenumber: '9008483808', email: 'ksmadhu01@gmail.com' },
-{ phonenumber: '9845544304', email: 'raghu@gariyasi.com' },
-{ phonenumber: '7975265399', email: 'raghu@gariyasi.com' },
-{ phonenumber: "0000000000", email: "prashantbhat84@gmail.com" }]
+
 
 async function sendSms(phonenumber, phonenumber1, boxid, data) {
     log.info({ module: "Aggregator" }, 'sendsms called')
@@ -162,31 +156,75 @@ class Aggregator {
             const data = (req.body.body.data);
 
             const details = getdetails(data);
+        //   const details={
+        //     "box": "e00224000270a4e4",
+        //     "phonenumber": "8197852082",
+        //     "phonenumber1": "000000000",
+        //     "boxlid": "T",
+        //     "aggid": "dc632b8f170",
+        //     "command": "C",
+        //     "temperature": 0,
+        //     "motion": "S",
+        //     "BoxBatteryStatus": "L",
+        //     "BoxBatteryVoltage": 5,
+        //     "AggregatorBatteryStatus": "F",
+        //     "AggregatorBatteryVoltage": 2.2,
+        //     "date":"10/20/2021,13:25"
+        //   }
  
-         
+          const box= await BoxModel.findOne({boxid:details.box}).populate("primaryOwner");
             const commandMessage = getCommandMessage(details.command, details.phonenumber, details.phonenumber1, details.box)
             const lidStatusMessage = getLidMessage(details.boxlid);
-            if(details.boxlid==="T"){
-               await boxUpdates('prashant.work.1984@gmail.com',details.box)
-               await awsInstance.smsaws('9632349451',`Unauthorised access for box with id ${details.box}`)
+           
+            if(lidStatusMessage===" TAMPERED"){
+                         
+               await boxUpdates(box.primaryOwner.email,"Unauthorised Box Access",`There has been an unauthorised access for your box with id ${details.box}`)
+               await awsInstance.smsaws(box.primaryOwner.phonenumber,`Unauthorised access for box with id ${details.box}`)
+            }
+            if((details.command==="S")&&(details.phonenumber!==details.phonenumber1)){
+                const user= await User.findOne({phonenumber:details.phonenumber});
+              
+            await Notification.deleteOne({userid:user._id});
+           
+            }
+            if((details.command==="O")){
+                
+                  
+                const user = await User.findOne({phonenumber:details.phonenumber})
+                if(box.primaryOwner.phonenumber!==details.phonenumber){
+                    //  await awsInstance.smsaws(box.primaryOwner.phonenumber,`Box with id:${details.box} opened by ${user.name}`)
+                    await boxUpdates(box.primaryOwner.email,"Box Open Update",`Box with id ${details.box} has been opened by ${user.name}`)
+                   
+                }
+               
             }
             const motionStatus = getMotion(details.motion)
-            log.info({ module: "AggregatorAnd Box Update" }, details)
+            if(motionStatus==="MOVED"){
+                await boxUpdates(box.primaryOwner.email,"Box Moved Update",`This is to inform that  box with id ${details.box} has been moved from its current position`)
+                // await awsInstance.smsaws(box.primaryOwner.phonenumber,`box with id ${details.box} has moved from its current position`)
+            }
+            if(details.BoxBatteryStatus==="L"){
+                
+                await boxUpdates(box.primaryOwner.email,"Box Battery Update",`This is to inform that  box with id ${details.box} has Low Battery`)
+                // await awsInstance.smsaws(box.primaryOwner.phonenumber,`box with id ${details.box} has low Battery`)
+            }
+             
+            // log.info({ module: "AggregatorAnd Box Update" }, details)
             const message = commandMessage + "," + lidStatusMessage + " " + "&" + motionStatus + " " + `on ${details.date}`;
-            log.info({ module: "Aggregator And Box Update" }, `Date: ${details.date}`)
-            log.info("");
-            log.info({ module: "Aggregator And Box Update" }, `BoxID: ${details.box}`)
-            log.info("");
-            log.info({ module: "Aggregator And Box Update" }, `AggID: ${details.aggid}`);
-            log.info("");
-            log.info({ module: "Aggregator And Box Update" }, `BoxLid: ${lidStatusMessage}`)
-            log.info("");
-            log.info({ module: "Aggregator And Box Update" }, `Motion: ${motionStatus}`)
-            log.info("");
-            log.info({ module: "Aggregator And Box Update" }, `Temperature: ${details.temperature}`);
-            log.info("");
-            log.info({ module: "Aggregator And Box Update" }, `Command: ${commandMessage}`);
-            log.info("");
+            // log.info({ module: "Aggregator And Box Update" }, `Date: ${details.date}`)
+            // log.info("");
+            // log.info({ module: "Aggregator And Box Update" }, `BoxID: ${details.box}`)
+            // log.info("");
+            // log.info({ module: "Aggregator And Box Update" }, `AggID: ${details.aggid}`);
+            // log.info("");
+            // log.info({ module: "Aggregator And Box Update" }, `BoxLid: ${lidStatusMessage}`)
+            // log.info("");
+            // log.info({ module: "Aggregator And Box Update" }, `Motion: ${motionStatus}`)
+            // log.info("");
+            // log.info({ module: "Aggregator And Box Update" }, `Temperature: ${details.temperature}`);
+            // log.info("");
+            // log.info({ module: "Aggregator And Box Update" }, `Command: ${commandMessage}`);
+            // log.info("");
             const boxDetails = await BoxModel.findOne({ boxid: details.box });
            
             await BoxModel.findOneAndUpdate({ boxid: details.box }, {
@@ -210,7 +248,7 @@ class Aggregator {
            
            
              
-
+                    
 
             response.successReponse({ status: 200, result: { message, details }, res })
 
