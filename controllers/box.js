@@ -164,6 +164,9 @@ class Box {
      try {
         let userId = req.user._id;
         let boxid= req.query.boxId;
+        if(!boxid){
+            throw new Error("Box Id is required")
+        }
         const box = await boxModel.findOne({ boxid })
         if(!box){
             throw new Error("Box Not found")
