@@ -389,7 +389,11 @@ class User {
             }
             response.successReponse({
                 status: 200, result:
-                    "Accept Ownership Process Complete"
+                   {
+                       message: "Accept Ownership Process Complete",
+                       keys:box.keys
+                       
+                   }
                 , res
             })
 
