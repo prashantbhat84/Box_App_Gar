@@ -12,7 +12,8 @@ boxRouter.get("/list", protect, authorize(["BOOKING-ADMIN", "FACTORY-ADMIN"]), b
 boxRouter.put("/update", boxController.updateBox)
 boxRouter.get("/fetch", protect, authorize(["BOOKING-ADMIN", "FACTORY-ADMIN"]), boxController.getBox)
 boxRouter.post("/log", boxController.logBox);
-boxRouter.put("/resetBox",CustomerProtect,boxController.boxFactoryReset)
+boxRouter.put("/resetBox",CustomerProtect,boxController.boxFactoryReset);
+boxRouter.get("/boxStatus",CustomerProtect,boxController.getBoxStatus);
 
 
 

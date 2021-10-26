@@ -4,7 +4,7 @@ const logger = require('../utils/logger');
 const userModel = require("../models/user")
 const utils = require("./utils");
 const response = require('../utils/Response');
-const { convertToObjectID } = require('../utils/misc');
+const { convertToObjectID, createHmacAndBoxParameters } = require('../utils/misc');
 
 
 
@@ -31,15 +31,11 @@ class Box {
 
             req.body.lastUpdated = `${dt.getHours()}:${dt.getMinutes()}`
 
-            let array=[];
-            for(let i=0;i<4;i++){
-                let no=Math.floor(Math.random() * 90 + 10).toString(16);
-                if(no.length<2){
-                   no ='0'+no
-                }
-              array.push(no)
-            }
-            req.body.constants=array;
+           
+           
+            const params=createHmacAndBoxParameters(req.body.boxid);
+            req.body.hmac=params.resultHmac;
+            req.body.keys=params.keys
             const newBox = await boxModel.create(req.body);
 
          
@@ -163,6 +159,22 @@ class Box {
             response.errorResponse({ status: 400, result: error.message, res })
         }
 
+    }
+    async getBoxStatus(req,res,next){
+     try {
+        let userId = req.user._id;
+        let boxid= req.query.boxId;
+        const box = await boxModel.findOne({ boxid })
+        if(!box){
+            throw new Error("Box Not found")
+        }
+        if (box.primaryOwner.toString() !== userId.toString()) {
+            throw new Error("Only Primary owner can view the box Status")
+        };
+        response.successReponse({ status: 200, result: box, res })
+     } catch (error) {
+        response.errorResponse({ status: 400, result: error.message, res })
+     }
     }
 
 

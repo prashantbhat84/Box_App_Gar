@@ -25,8 +25,8 @@ const boxschema = mongoose.Schema({
             apptoBoxID: [Number]
         }
     ],
-    AESKEY: ['String'],
-    HMAC: ['String'],
+   hmac:String,
+   keys:[Number],
 
     registrationStatus: {
         type: String,
