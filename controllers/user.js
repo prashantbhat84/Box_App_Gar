@@ -216,8 +216,7 @@ class User {
             response.successReponse({
                 status: 200, result:
                 {
-                    AES: box.AESKEY,
-                    HMAC: box.HMAC
+                    keys:box.keys
                 }
                 , res
             })
@@ -369,7 +368,7 @@ class User {
                 throw new Error("This request is not for you. Please Verify ....")
             }
             if (!response1) {
-                await Notification.updateOne({ "_id": notification._id }, { expired: true, response: "REJECTED" });
+                await Notification.deleteOne({ "_id": notification._id });
                 // maybe send sms
 
 
