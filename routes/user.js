@@ -13,6 +13,7 @@ userRouter.get("/logout", protect, user.Logout)
 userRouter.post("/forgotPassword", user.forgotPassword)
 
 userRouter.put("/changePassword", user.changePassword)
+userRouter.put("/changeUserPassword",protect,user.changeUserPassword)
 userRouter.put("/addBox", protect, user.addBoxToCustomer)
 userRouter.get("/boxList", protect, user.getCustomerBoxList)
 userRouter.post("/createUserList", protect, user.createUserList);

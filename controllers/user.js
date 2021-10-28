@@ -66,7 +66,13 @@ class User {
     async userLogin(req, res, next) {
         try {
            
-            const user = await UserModel.findOne({ email:req.body.email.toLowerCase() });
+            const user = await UserModel.findOne({ email:req.body.email.toLowerCase() })
+            // const result= await UserModel.aggregate([{
+            //     $lookup:{
+            //         from:'boxes',
+            //         local
+            //     }
+            // }])
            
             if (!user) {
                 throw new Error("Email or password does not match")
@@ -476,6 +482,42 @@ class User {
                         user
                 , res
             })
+        } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
+        }
+    }
+    async changeUserPassword(req,res,next){
+        try {
+            let Id= req.user._id;
+            Id= convertToObjectID(Id);
+            const user = await UserModel.findById(Id);
+             let {password,confirmPassword,oldPassword}= req.body;
+            if(!password || !confirmPassword || !oldPassword){
+                throw new Error("Please enter password,confirm password and old password")
+            }
+            if(password!==confirmPassword){
+                throw new Error("Password and Confirm password must match")
+            }
+            if(!user){
+                throw new Error("User Not Found")
+            }
+            const comparePassword = await bcrypt.compare(oldPassword, user.password)
+            if(!comparePassword){
+                throw new Error("Old Password does not Match")
+            }
+            const salt = await bcrypt.genSalt(10);
+            password = await bcrypt.hash(req.body.password, salt)
+            await UserModel.updateOne({_id:Id},{password,$unset:{
+                token:1
+            }}
+
+            )
+            response.successReponse({
+                status: 200, result:
+                        "Password Changed. Please relogin"
+                , res
+            })
+            
         } catch (error) {
             response.errorResponse({ status: 400, result: error.message, res })
         }
