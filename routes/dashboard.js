@@ -13,4 +13,6 @@ dashboardRouter.put("/deleteUser", protect, authorize("FACTORY-ADMIN"), dashboar
 dashboardRouter.put("/forgotPassword", dashboard.forgotPasswordRequest);
 dashboardRouter.put("/verifyCode", dashboard.checkResetCode);
 dashboardRouter.put("/changePassword", dashboard.changePassword);
+
+
 module.exports = dashboardRouter;

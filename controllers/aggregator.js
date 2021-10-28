@@ -287,6 +287,14 @@ class Aggregator {
         response.successReponse({ status: 200, result: boxid, res })
 
     }
+    async listAggregator(req,res,next){
+        try {
+            const aggregators= await AggregatorModel.find();
+            response.successReponse({status:200,result:aggregators,res});
+        } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
+        }
+    }
 
 };
 

@@ -10,7 +10,12 @@ const aggregatorSchema = mongoose.Schema({
     },
     lastUpdatedAt: String,
     battery:String,
-    voltage:String
+    voltage:String,
+    health:{
+       type:Boolean,
+       default:true,
+       enum:[true,false]
+    }
 
 
 

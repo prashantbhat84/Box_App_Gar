@@ -65,24 +65,27 @@ async function aggregatorJob() {
     const aggregators = await AggregatorModel.find();
    
 
-    aggregators.forEach(aggregator => {
+ await Promise.race(   aggregators.forEach(async aggregator => {
       
-        const lastUpdated = aggregator.lastUpdatedAt;
-           
-        if(lastUpdated!==undefined && aggregator.aggregatorID!==undefined){
-            
-            const splitTimeStamp = lastUpdated.split(",");
-            const date = splitTimeStamp[0].split("/");
-            const time = splitTimeStamp[1].split(':');
-                 
-            const result = compareTimeStamp(date, time);
-           
-            if (!result) {
-                aggids.push(aggregator.aggregatorID)
-            }
+    const lastUpdated = aggregator.lastUpdatedAt;
+       
+    if(lastUpdated!==undefined && aggregator.aggregatorID!==undefined){
+        
+        const splitTimeStamp = lastUpdated.split(",");
+        const date = splitTimeStamp[0].split("/");
+        const time = splitTimeStamp[1].split(':');
+             
+        const result = compareTimeStamp(date, time);
+       
+        if (!result) {
+            await AggregatorModel.updateOne({_id:aggregator._id},{health:false});
+            aggids.push(aggregator.aggregatorID)
+        }else{
+            await AggregatorModel.updateOne({_id:aggregator._id},{health:true});
         }
+    }
 
-    });
+}))
             
     if (aggids.length > 0) {
         let message = `Aggregators which have not been updated : ${aggids}`
