@@ -46,9 +46,18 @@ const userschema = mongoose.Schema({
     
 
 },{
-    
+  toJSON:{
+      virtuals:true
+  },
+  toObject:{
+      virtuals:true
+  }  
 });
-
+userschema.virtual('boxkeys',{
+    ref:'boxschema',
+    localField:'box',
+    foreignField:'keys'
+})
 
 userschema.indexes({ email:1 }, { unique: true, })
 userschema.pre('save', function () {

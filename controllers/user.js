@@ -66,13 +66,15 @@ class User {
     async userLogin(req, res, next) {
         try {
            
-            const user = await UserModel.findOne({ email:req.body.email.toLowerCase() })
-            // const result= await UserModel.aggregate([{
-            //     $lookup:{
-            //         from:'boxes',
-            //         local
-            //     }
-            // }])
+            const user =(await UserModel.findOne({ email:req.body.email.toLowerCase() }))
+         let boxes= await Box.find({
+              boxid:{
+                  $in:user.box
+              }
+          },{boxid:1,keys:1,_id:0}) ;
+          log.info(boxes)
+
+          
            
             if (!user) {
                 throw new Error("Email or password does not match")
@@ -91,11 +93,12 @@ class User {
 
                 token, apptoBoxID
 
-            }, { new: true, runValidators: true, fields: { password: 0, __v: 0, _id: 0, emailVerify: 0, phoneVerify: 0, userlist: 0, primarybox: 0, secondarybox: 0, forgotPasswordCode: 0 } });
-
+            }, { new: true, runValidators: true, fields: { password: 0, __v: 0, _id: 0, emailVerify: 0, phoneVerify: 0, userlist: 0, primarybox: 0, secondarybox: 0, forgotPasswordCode: 0,box:0 } });
+                
+               
 
             response.successReponse({
-                status: 200, result: { user: updatedUser }
+                status: 200, result: { user: updatedUser,boxes }
                 , res
             });
         } catch (error) {
