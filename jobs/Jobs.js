@@ -137,7 +137,7 @@ async function updateBox(){
         const timestamp=`${dt.getUTCDate()}/${dt.getUTCMonth()+1}/${dt.getUTCFullYear()},${dt.getUTCHours()}:${dt.getUTCMinutes()}`;
        await BoxModel.updateOne({boxid:'e00224000270a4e1'},{lastUpdatedAt:timestamp});
     } catch (error) {
-        log.error({module:"Update Box Job"},error,message)
+        log.error({module:"Update Box Job"},error.message)
     }
 }
 

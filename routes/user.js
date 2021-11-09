@@ -25,6 +25,7 @@ userRouter.put("/acceptOwnershipRequest", protect, user.acceptOwnershipRequest)
 userRouter.get("/listSecondaryOwner", protect, user.listSecondaryOwner)
 userRouter.put("/deleteSecondaryOwner", protect, user.deleteSecondaryOwner)
 userRouter.get("/fetchUser",dashboardProtect,dashboardAuth(["FACTORY-ADMIN", "BOOKING-ADMIN"]),user.fetchUser)
+userRouter.put("/labelBox",protect,user.labelBox);
 
 
 

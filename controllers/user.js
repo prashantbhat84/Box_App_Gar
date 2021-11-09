@@ -67,17 +67,22 @@ class User {
         try {
            
             const user =(await UserModel.findOne({ email:req.body.email.toLowerCase() }))
-         let boxes= await Box.find({
-              boxid:{
-                  $in:user.box
-              }
-          },{boxid:1,keys:1,_id:0}) ;
-          log.info(boxes)
+            let boxes;
+            
+       
 
           
            
             if (!user) {
                 throw new Error("Email or password does not match")
+            }
+            if(user.box){
+                boxes= await Box.find({
+                    boxid:{
+                        $in:user.box
+                    }
+                },{boxid:1,keys:1, label:1,_id:0}) ;
+                
             }
 
             if (user.userverified === false) {
@@ -518,6 +523,27 @@ class User {
             response.successReponse({
                 status: 200, result:
                         "Password Changed. Please relogin"
+                , res
+            })
+            
+        } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
+        }
+    }
+    async labelBox(req,res,next){
+        try {
+            const box= await Box.findOne({boxid:req.body.boxid});
+            if(!box){
+                throw new Error("Box Not Found")
+            }
+            let user = req.user._id;
+            if(box.primaryOwner.toString()!==user.toString()){
+                throw new Error("You are not the primary owner of this box")
+            }
+           const updatedBox=await Box.findOneAndUpdate({boxid:req.body.boxid},{label:req.body.label});
+            response.successReponse({
+                status: 200, result:
+                       updatedBox
                 , res
             })
             

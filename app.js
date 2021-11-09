@@ -3,6 +3,7 @@ const cors = require('cors')
 const dotenv = require('dotenv')
 
 
+
 const hbs= require('handlebars')
 const pdf = require('html-pdf')
 const path = require('path')
@@ -10,18 +11,55 @@ const connectdb = require('./config/db')
 const router1 = require('./routes/routes')
 const log= require('./utils/serverLogger');
 const response= require("./utils/Response");
+
 const cron= require('node-cron');
 const {boxJob,aggregatorJob,updateBoxAndAggregator,updateAggregator, updateBox}= require('./jobs/Jobs')
 // const crypto = require('crypto');
 // const hash = crypto.createHash('A')
 
-cron.schedule('*/1 * * * *',boxJob)
-cron.schedule('*/1 * * * *',aggregatorJob)
+// cron.schedule('*/1 * * * *',boxJob)
+// cron.schedule('*/1 * * * *',aggregatorJob)
+// detect if memory leak is present in your app
+// setInterval(()=>{
+//     const util= require('util')
+   
+//     log.info(util.inspect(process.memoryUsage()))
+// },5000)
 
 updateAggregator();
 updateBox();
 
-
+const config = {
+    title: 'Express Status',
+    path: '/server',
+    spans: [{
+      interval: 1,
+      retention: 60
+    }, {
+      interval: 5,
+      retention: 60
+    },{
+        interval: 3600,
+        retention: 60
+      }],
+    chartVisibility: {
+      cpu: true,
+      mem: true,
+      load: true,
+      responseTime: true,
+      rps: true,
+      statusCodes: true
+    },
+    // healthChecks: [
+    //   {
+    //     protocol: 'http',
+    //     host: 'localhost',
+    //     path: '/admin/health/ex1',
+    //     port: '3000'
+    //   }
+    // ],
+    ignoreStartsWith: '/admin'
+  }
 
 
 dotenv.config({ path: "./config/config.env" });
@@ -35,6 +73,7 @@ const corsOptions = {
     methods: ["POST", "GET", "PUT"]
 }
 const app = express();
+// app.use(require('express-status-monitor')(config))
 app.use(express.json())
 
 app.use(cors(corsOptions));
