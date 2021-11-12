@@ -171,7 +171,9 @@ class Aggregator {
         //     "AggregatorBatteryVoltage": 2.2,
         //     "date":"10/20/2021,13:25"
         //   }
- 
+             if(details.command==="R" || details.command==="N"){
+                 return response.successReponse({status:200,result:"NO Command",res});
+             }
           const box= await BoxModel.findOne({boxid:details.box}).populate("primaryOwner");
             const commandMessage = getCommandMessage(details.command, details.phonenumber, details.phonenumber1, details.box)
             const lidStatusMessage = getLidMessage(details.boxlid);
