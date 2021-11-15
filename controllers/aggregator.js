@@ -154,7 +154,7 @@ class Aggregator {
 
      
             const data = (req.body.body.data);
-
+ log.info({ module: "Aggregator" }, { body: req.body, function: "updateAggregatorAndBox", data })
             const details = getdetails(data);
         //   const details={
         //     "box": "e00224000270a4e4",
