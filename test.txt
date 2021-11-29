@@ -3,3 +3,6 @@
     console.log(add1, timelog, temp);
 
 
+https://maps.googleapis.com/maps/api/geocode/json?latlng=12.9866,77.5954&key=AIzaSyD9I3lyxUzAq7Dy3UBGqmx8OyTRRRGFPwE
+
+https://maps.googleapis.com/maps/api/geocode/json?address=42-A,Cunningham Apts edward road bangalore 560001,+CA&key=AIzaSyD9I3lyxUzAq7Dy3UBGqmx8OyTRRRGFPwE
