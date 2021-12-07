@@ -91,7 +91,7 @@ app.use((req, res, next) => {
 
 app.get("/", (req, res) => {
    
-    res.send('Server is up')
+    res.send('Server is up and running on port 80')
 })
 
 app.use("/api", router1);
