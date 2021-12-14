@@ -8,7 +8,7 @@ const log = require('../utils/serverLogger');
 const { OrderInfo } = require('../utils/mailcontent')
 
 
-
+    
 class Orders {
     constructor () {
         if(!Orders.instance){
@@ -16,6 +16,14 @@ class Orders {
         }
            return Orders.instance;
     }
+     /**
+     * 
+     * @method POST
+     *  @route /api/v1/order/createOrder
+     * @protected YES
+     * @access Booking Admin & Factory Admin
+     * @description Creates new Order
+     */
 
     async createOrder(req, res, next) {
 
@@ -81,6 +89,15 @@ class Orders {
 
         }
     }
+
+        /**
+     * 
+     * @method GET
+     *  @route /api/v1/order/list
+     * @protected YES
+     * @access Booking Admin & Factory Admin
+     * @description Lists All Orders
+     */
     async listOrders(req, res, next) {
         try {
             const pageNo = +req.query.pageNo || 0;
@@ -119,6 +136,15 @@ class Orders {
             response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+
+        /**
+     * 
+     * @method GET
+     *  @route /api/v1/order/orderDetail
+     * @protected YES
+     * @access Booking Admin & Factory Admin
+     * @description Gets Detailed Info regarding  a purticular order no
+     */
     async getOrderDetails(req,res,next){
         try {
             if(!req.query.order){
@@ -135,7 +161,14 @@ class Orders {
         }
     }
 
- 
+     /**
+     * 
+     * @method PUT
+     *  @route /api/v1/order/dispatchOrder
+     * @protected YES
+     * @access Booking Admin & Factory Admin
+     * @description Dispatch order by entering courier details
+     */
     
     async dispatchOrder(req, res, next) {
         try {
@@ -161,6 +194,15 @@ class Orders {
             response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+
+        /**
+     * 
+     * @method PUT
+     *  @route /api/v1/order/cancelOrder
+     * @protected YES
+     * @access Factory Admin
+     * @description Cancel an existing order
+     */
     async cancelOrder(req, res, next) {
         try {
 
@@ -183,6 +225,15 @@ class Orders {
             response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+
+        /**
+     * 
+     * @method GET
+     *  @route /api/v1/order/createOrder
+     * @protected YES
+     * @access  Factory Admin
+     * @description Card Details for dashboard
+     */
     async getCardInfo(req, res, next) {
 
         try {
@@ -205,6 +256,14 @@ class Orders {
         }
 
     }
+        /**
+     * 
+     * @method GET
+     *  @route /api/v1/order/getDropDown
+     * @protected YES
+     * @access Booking Admin & Factory Admin
+     * @description Lists all orders present in warehouse
+     */
     async getOrderDropDown(req, res, next) {
         try {
 

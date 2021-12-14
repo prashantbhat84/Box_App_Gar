@@ -20,6 +20,13 @@ class User {
 
         return User.instance;
     }
+       /**
+     * 
+     * @method POST
+     *  @route /api/v1/user/signup
+     * @protected NO
+     * @description used to signup customer 
+     */
 
     async signupUser(req, res, next) {
 
@@ -46,6 +53,13 @@ class User {
             response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+     /**
+     * 
+     * @method PUT
+     *  @route /api/v1/user/verifyUser
+     * @protected NO
+     * @description used to verify customer details after signup 
+     */
     async verifyUser(req, res, next) {
         try {
             const { verifyemail, verifyphone } = req.body
@@ -63,6 +77,14 @@ class User {
             response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+
+     /**
+     * 
+     * @method POST
+     *  @route /api/v1/user/login
+     * @protected NO
+     * @description Customer Login
+     */
     async userLogin(req, res, next) {
         try {
            
@@ -110,6 +132,13 @@ class User {
             response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+     /**
+     * 
+     * @method GET
+     *  @route /api/v1/user/logout
+     * @protected YES
+     * @description customer logout
+     */
     async Logout(req, res, next) {
         try {
 
@@ -126,6 +155,13 @@ class User {
             return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+     /**
+     * 
+     * @method POST
+     *  @route /api/v1/user/forgotPassword
+     * @protected NO
+     * @description request for password reset code via email
+     */
     async forgotPassword(req, res, next) {
         try {
 
@@ -150,6 +186,7 @@ class User {
             return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+  // Function not in use
     async verifyPasswordCode(req, res, next) {
         try {
             const { email, code } = req.body;
@@ -173,6 +210,13 @@ class User {
             return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+     /**
+     * 
+     * @method PUT
+     *  @route /api/v1/user/changepassword
+     * @protected NO
+     * @description change customer password 
+     */
     async changePassword(req, res, next) {
         try {
             const { email, password, confirmPassword,code } = req.body;
@@ -203,6 +247,13 @@ class User {
             return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+     /**
+     * 
+     * @method PUT
+     *  @route /api/v1/user/addBox
+     * @protected YES
+     * @description Become the primary owner of the box
+     */
     async addBoxToCustomer(req, res, next) {
         try {
             let user = req.user._id;
@@ -238,6 +289,14 @@ class User {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
+     /**
+     * 
+     * @method GET
+     *  @route /api/v1/user/boxList
+     * @protected YES
+     * @description Get List of Boxes belonging to purticular customer 
+     */
+    
     async getCustomerBoxList(req, res, next) {
         try {
             let user = req.user._id;
@@ -253,6 +312,13 @@ class User {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
+     /**
+     * 
+     * @method POST
+     *  @route /api/v1/user/createUserList
+     * @protected YES
+     * @description dedicated list of users to be added to the box as sec owner 
+     */
     async createUserList(req, res, next) {
         log.info({ module: "Create User List" }, "User List")
         try {
@@ -279,6 +345,13 @@ class User {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
+     /**
+     * 
+     * @method GET
+     *  @route /api/v1/user/signup
+     * @protected YES
+     * @description GET dedicated user list
+     */
     async getUserList(req, res, next) {
         log.info({ module: "Get User List" }, "User List ")
         try {
@@ -297,6 +370,13 @@ class User {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
+         /**
+     * 
+     * @method PUT
+     *  @route /api/v1/user/signup
+     * @protected YES
+     * @description remove user from dedicated list
+     */
     async removeUserFromList(req, res, next) {
         try {
             const user = await UserModel.findOne(req.user._id);
@@ -320,6 +400,14 @@ class User {
         }
 
     }
+         /**
+     * 
+     * @method POST
+     *  @route /api/v1/user/addAsSecondaryOwner
+     * @protected YES
+     * @access primary owner only
+     * @description request user from dedicated list to become  secondary owner
+     */
     async addSecondaryOwner(req, res, next) {
         log.info({ module: "Add Secondary Owner" }, "Secondary Owner")
         try {
@@ -350,6 +438,13 @@ class User {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
+         /**
+     * 
+     * @method GET
+     *  @route /api/v1/user/getUserNotification
+     * @protected YES
+     * @description Get Notifications for the logged in user
+     */
     async getUserNotifications(req, res, next) {
         try {
             const notification = await Notification.find({ userid: req.user._id,  }).select(' -userid -senderid  -createdAt -updatedAt -expired -__v')
@@ -362,6 +457,13 @@ class User {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
+         /**
+     * 
+     * @method PUT
+     *  @route /api/v1/user/acceptOwnershipRequest
+     * @protected YES
+     * @description Accept request by primary onwer to become secondary owner of the box
+     */
     async acceptOwnershipRequest(req, res, next) {
         try {
             const response1 = req.body.response;
@@ -381,6 +483,7 @@ class User {
             if (req.user._id.toString() !== notification.userid.toString()) {
                 throw new Error("This request is not for you. Please Verify ....")
             }
+            // user refused to become owner
             if (!response1) {
                 await Notification.deleteOne({ "_id": notification._id });
                 // maybe send sms
@@ -415,6 +518,14 @@ class User {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
+         /**
+     * 
+     * @method GET
+     *  @route /api/v1/user/listSecondaryOwner
+     * @protected YES
+     * @access Primary Owner Only
+     * @description List all secondary owners for the box
+     */
     async listSecondaryOwner(req, res, next) {
         try {
             const boxid = req.query.boxid;
@@ -439,6 +550,14 @@ class User {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
+         /**
+     * 
+     * @method PUT
+     *  @route /api/v1/user/deleteSecondaryOwner
+     * @protected YES
+     * @access Primary Owner Only
+     * @description Remove a user as secondary owner
+     */
     async deleteSecondaryOwner(req, res, next) {
         try {
             const boxid = req.body.boxid;
@@ -530,6 +649,14 @@ class User {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
+         /**
+     * 
+     * @method PUT
+     *  @route /api/v1/user/labelBox
+     * @protected YES
+     * @access Primary Owner Only
+     * @description Give box a meaningful Name
+     */
     async labelBox(req,res,next){
         try {
             const box= await Box.findOne({boxid:req.body.boxid});

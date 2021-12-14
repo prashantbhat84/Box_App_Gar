@@ -8,7 +8,7 @@ const hbs= require('handlebars')
 const pdf = require('html-pdf')
 const path = require('path')
 const connectdb = require('./config/db')
-const router1 = require('./routes/routes')
+const router1 = require('./routes/routes');
 const log= require('./utils/serverLogger');
 const response= require("./utils/Response");
 
@@ -16,7 +16,7 @@ const cron= require('node-cron');
 const {boxJob,aggregatorJob,updateBoxAndAggregator,updateAggregator, updateBox}= require('./jobs/Jobs')
 // const crypto = require('crypto');
 // const hash = crypto.createHash('A')
-
+// every one minute  cron jobs
 cron.schedule('*/1 * * * *',boxJob)
 cron.schedule('*/1 * * * *',aggregatorJob)
 // detect if memory leak is present in your app

@@ -121,6 +121,13 @@ class Aggregator {
         }
         return Aggregator.instance;
     }
+    /**
+     * 
+     * @method post
+     *  @route /api/v1/aggregator/updateAggregator
+     * @protected NO 
+     * @description used to confirm that aggregator is alive
+     */
 
     async updateAggregator(req, res, next) {
         try {
@@ -148,6 +155,14 @@ class Aggregator {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
+
+        /**
+     * 
+     * @method put
+     *  @route /api/v1/aggregator/updateAggregatorAndBox
+     * @protected NO 
+     * @description used to update aggregator and box statuses  like open,tampered etc
+     */
     async updateAggregatorAndBox(req, res, next) {
         try {
             //    const data=[14,30,59,20,224, 2, 36, 0, 2, 112, 164, 224,79,88,84,70,11,97,90,8,48,38,8,79,0,83,70,50,21,22,17,15,9,2021,14,11,46,13,'dc632b8f170']
@@ -265,6 +280,13 @@ class Aggregator {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
+        /**
+     * 
+     * @method post
+     *  @route /api/v1/aggregator/createAggregator
+     * @protected YES 
+     * @description used to create aggregator entry in our system via fact dashboard
+     */
     async createAggregator(req, res, next) {
         try {
            
@@ -289,6 +311,13 @@ class Aggregator {
         response.successReponse({ status: 200, result: boxid, res })
 
     }
+        /**
+     * 
+     * @method GET
+     *  @route /api/v1/aggregator/listAggregator
+     * @protected YES
+     * @description used to list all aggregators
+     */
     async listAggregator(req,res,next){
         try {
             const aggregators= await AggregatorModel.find();

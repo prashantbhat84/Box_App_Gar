@@ -16,6 +16,14 @@ class dashBoardUser {
         }
            return dashBoardUser.instance;
     }
+        /**
+     * 
+     * @method POST
+     *  @route /api/v1/dashboard/createDashboardUser
+     * @protected YES
+     * @access  Factory Admin
+     * @description Creates  new Dashboard user
+     */
 
     async createUser(req, res, next) {
         try {
@@ -32,6 +40,13 @@ class dashBoardUser {
             response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+        /**
+     * 
+     * @method POST
+     *  @route /api/v1/dashboard/loginDashboardUser
+     * @protected NO 
+     * @description Login Dashboard
+     */
     async LoginUser(req, res, next) {
         try {
             const email = req.body.email;
@@ -65,6 +80,13 @@ class dashBoardUser {
             response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+        /**
+     * 
+     * @method GET
+     *  @route /api/v1/dashboard/logoutDashboardUser
+     * @protected YES     
+     * @description Dashboard Logout
+     */
     async LogoutUser(req, res, next) {
         try {
 
@@ -81,6 +103,14 @@ class dashBoardUser {
             return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+        /**
+     * 
+     * @method GET
+     *  @route /api/v1/dashboard/dashboardUser
+     * @protected YES
+     * @access  Factory Admin
+     * @description Creates  new Dashboard user
+     */
     async getDashboardUser(req, res, next) {
         try {
 
@@ -96,6 +126,14 @@ class dashBoardUser {
             return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+        /**
+     * 
+     * @method PUT
+     *  @route /api/v1/dashboard/deleteDashboardUser
+     * @protected YES
+     * @access  Factory Admin
+     * @description Deletes a dashboard user from system
+     */
     async deleteDashboardUser(req, res, next) {
         try {
             const { id } = req.body;
@@ -116,6 +154,14 @@ class dashBoardUser {
             return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+       /**
+     * 
+     * @method PUT
+     *  @route /api/v1/dashboard/forgotPassword
+     * @protected NO
+     * @access  BOOKING  Admin
+     * @description Request for password reset code via email
+     */
     async forgotPasswordRequest(req, res, next) {
         try {
             const user = await DashboardUser.findOne({ email: req.body.email });
@@ -140,6 +186,14 @@ class dashBoardUser {
             return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+       /**
+     * 
+     * @method PUT
+     *  @route /api/v1/dashboard/verifyCode
+     * @protected NO
+     * @access Booking Admin Admin
+     * @description Deletes a dashboard user from system
+     */
     async checkResetCode(req, res, next) {
         try {
             const { email, code } = req.body;
@@ -162,6 +216,14 @@ class dashBoardUser {
             return response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+       /**
+     * 
+     * @method PUT
+     *  @route /api/v1/dashboard/changePassword
+     * @protected NO
+     * @access  Booking Admin
+     * @description Changes password for booking admin
+     */
     async changePassword(req, res, next) {
         try {
             const { email, password, confirmPassword } = req.body;
