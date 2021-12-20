@@ -17,8 +17,8 @@ const {boxJob,aggregatorJob,updateBoxAndAggregator,updateAggregator, updateBox}=
 // const crypto = require('crypto');
 // const hash = crypto.createHash('A')
 // every one minute  cron jobs
-cron.schedule('*/1 * * * *',boxJob)
-cron.schedule('*/1 * * * *',aggregatorJob)
+// cron.schedule('*/1 * * * *',boxJob)
+// cron.schedule('*/1 * * * *',aggregatorJob)
 // detect if memory leak is present in your app
 // setInterval(()=>{
 //     const util= require('util')
@@ -79,7 +79,7 @@ app.use(express.json())
 app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
-  
+  console.log(req.path)
 
     const allowedMethods = ["POST", "GET", "PUT"];
     if (!allowedMethods.includes(req.method)) {
