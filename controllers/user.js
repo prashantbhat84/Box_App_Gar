@@ -34,7 +34,7 @@ class User {
 
             const user = await UserModel.findOne({
                 phonenumber: req.body.phonenumber,
-                email:req.body.email.toLowerCase()
+                email:req.body.email.toLowerCase().trim()
             });
             if (!user) {
                 throw new Error("Please Enter the email & phonenumber submitted during order placement")
@@ -88,7 +88,7 @@ class User {
     async userLogin(req, res, next) {
         try {
            
-            const user =(await UserModel.findOne({ email:req.body.email.toLowerCase() }))
+            const user =(await UserModel.findOne({ email:req.body.email.toLowerCase().trim() }))
             let boxes;
             
        
@@ -260,6 +260,7 @@ class User {
 
             const order = await Orders.findOne({ Box: req.body.boxid });
             const box = await Box.findOne({ boxid: req.body.boxid })
+            console.log(order,box,user)
             if (!order) {
                 throw new Error("Order details not found . Please contact customer care")
             }
