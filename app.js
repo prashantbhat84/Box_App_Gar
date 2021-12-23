@@ -1,4 +1,5 @@
 const express = require('express');
+const router= express.Router();
 const cors = require('cors')
 const dotenv = require('dotenv')
 
@@ -94,7 +95,7 @@ app.get("/", (req, res) => {
     res.send('Server is up and running on http port 80')
 })
 
-app.use("/api", router1);
+router.use("/api", router1);
 
 
 

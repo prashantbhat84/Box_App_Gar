@@ -427,9 +427,11 @@ class User {
             if (!user) {
                 throw new Error("User not found")
             }
+            
 
             await Notification.create({ userid: userId, description: `${req.user.name} has  requested you to become his box secondary owner`, boxid, senderid: req.user._id })
                // send sms/email to secondary user
+               await awsInstance.smsaws(user.phonenumber, `${req.user.name} has  requested you to become his box secondary owner`)
             response.successReponse({
                 status: 200, result:
                     `Have notified ${user.name} of your request to become secondary owner`
