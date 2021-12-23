@@ -95,7 +95,7 @@ app.get("/", (req, res) => {
     res.send('Server is up and running on http port 80')
 })
 
-router.use("/api", router1);
+app.use("/api", router1);
 
 
 
