@@ -197,7 +197,7 @@ class Aggregator {
                        
 
                              await boxUpdates(box.primaryOwner.email,"Unauthorised Box Access",`There has been an unauthorised access for your box with id ${details.box}`)
-                             await awsInstance.smsaws(box.primaryOwner.phonenumber,`Unauthorised access for box with id ${details.box}`)
+                            //  await awsInstance.smsaws(box.primaryOwner.phonenumber,`Unauthorised access for box with id ${details.box}`)
                          
             }
             if((details.command==="S")&&(details.phonenumber!==details.phonenumber1)){
