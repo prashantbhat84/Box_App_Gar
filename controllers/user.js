@@ -41,6 +41,8 @@ class User {
             }
             let phoneVerify = Math.floor(100000 + Math.random() * 900000);
             let emailVerify = Math.floor(100000 + Math.random() * 900000);
+            const dt= new Date();
+            
             const salt = await bcrypt.genSalt(10);
             req.body.password = await bcrypt.hash(req.body.password, salt);
             await UserModel.updateOne({ phonenumber: user.phonenumber }, { phoneVerify, emailVerify, password: req.body.password });

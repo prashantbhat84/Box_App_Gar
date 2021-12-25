@@ -263,11 +263,13 @@ class Aggregator {
                 }
 
             })
+            
             await AggregatorModel.findOneAndUpdate({ aggregatorID: details.aggid },
                 {
                     lastUpdatedAt: details.date,
                     battery: details.AggregatorBatteryStatus,
-                    voltage:details.AggregatorBatteryVoltage
+                    voltage:details.AggregatorBatteryVoltage,
+                    
                                 })
            
            
