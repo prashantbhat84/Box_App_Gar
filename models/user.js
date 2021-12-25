@@ -21,8 +21,7 @@ const userschema = mongoose.Schema({
         type: String,
 
     },
-    emailOTPExpiry:String,
-    smsOTPExpiry:String,
+    OTPExpiry:String,
     box: ["String"],
 
     userlist: [{

@@ -42,10 +42,10 @@ class User {
             let phoneVerify = Math.floor(100000 + Math.random() * 900000);
             let emailVerify = Math.floor(100000 + Math.random() * 900000);
             const dt= new Date();
-            
+            const OTPExpiry=(dt.getTime()+15*60000).toString();
             const salt = await bcrypt.genSalt(10);
             req.body.password = await bcrypt.hash(req.body.password, salt);
-            await UserModel.updateOne({ phonenumber: user.phonenumber }, { phoneVerify, emailVerify, password: req.body.password });
+            await UserModel.updateOne({ phonenumber: user.phonenumber }, { phoneVerify, emailVerify, password: req.body.password,OTPExpiry });
             await verifyemail(req.body.email, emailVerify)
             await awsInstance.smsaws(user.phonenumber, `Please enter the code ${phoneVerify} to verify your phone`)
             // sms  and email to be sent
@@ -71,6 +71,11 @@ class User {
             }
             if ((verifyemail !== user.emailVerify) || (verifyphone !== user.phoneVerify)) {
                 throw new Error("Email or phone verification unsuccessful")
+            }
+            const OTPExpiry=+(user.OTPExpiry);
+            const time= new Date().getTime();
+            if(time>=OTPExpiry){
+                throw new Error("OTP Expired. Please request new OTP's")
             }
             await UserModel.updateOne({ phonenumber: req.body.phonenumber }, { userverified: true, emailVerify: "", phoneVerify: "" })
 
