@@ -39,9 +39,10 @@ class User {
             if (!user) {
                 throw new Error("Please Enter the email & phonenumber submitted during order placement")
             }
+            const dt= new Date();
             let phoneVerify = Math.floor(100000 + Math.random() * 900000);
             let emailVerify = Math.floor(100000 + Math.random() * 900000);
-            const dt= new Date();
+            // set OTP expiry
             const OTPExpiry=(dt.getTime()+15*60000).toString();
             const salt = await bcrypt.genSalt(10);
             req.body.password = await bcrypt.hash(req.body.password, salt);
@@ -72,18 +73,51 @@ class User {
             if ((verifyemail !== user.emailVerify) || (verifyphone !== user.phoneVerify)) {
                 throw new Error("Email or phone verification unsuccessful")
             }
+            // check if otp time expired
             const OTPExpiry=+(user.OTPExpiry);
             const time= new Date().getTime();
             if(time>=OTPExpiry){
                 throw new Error("OTP Expired. Please request new OTP's")
             }
-            await UserModel.updateOne({ phonenumber: req.body.phonenumber }, { userverified: true, emailVerify: "", phoneVerify: "" })
+            await UserModel.updateOne({ phonenumber: req.body.phonenumber }, { userverified: true, $unset:{emailVerify: 1, phoneVerify: 1,OTPExpiry:1} })
 
             response.successReponse({ status: 200, result: "User Verification successful", res })
         } catch (error) {
             response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
         }
     }
+
+      /**
+     * 
+     * @method PUT
+     *  @route /api/v1/user/requestOTP
+     * @protected NO
+     * @description Request new otps for verification
+     */
+      async requestOTP(req,res,next){
+          try {
+              const user = await UserModel.findOne({email:req.body.email});
+             
+            
+               if(!user){
+                   throw new Error("User Details not found")
+               }
+               if(user.userverified){
+                   throw new Error("This user account has completed  verification")
+               }
+               const dt= new Date();
+               let phoneVerify = Math.floor(100000 + Math.random() * 900000);
+               let emailVerify = Math.floor(100000 + Math.random() * 900000);
+               // set OTP expiry
+               const OTPExpiry=(dt.getTime()+2*60000).toString();
+               await UserModel.updateOne({ phonenumber: user.phonenumber }, { phoneVerify, emailVerify,OTPExpiry });
+              // await verifyemail(req.body.email, emailVerify)
+           // await awsInstance.smsaws(user.phonenumber, `Please enter the code ${phoneVerify} to verify your phone`)
+            response.successReponse({ status: 200, result: "Please check your email and mobile for verification codes", res })
+          } catch (error) {
+            response.errorResponse({ status: 400, errors: error.stack, result: error.message, res })
+          }
+      }
 
      /**
      * 
@@ -267,7 +301,7 @@ class User {
 
             const order = await Orders.findOne({ Box: req.body.boxid });
             const box = await Box.findOne({ boxid: req.body.boxid })
-            console.log(order,box,user)
+           
             if (!order) {
                 throw new Error("Order details not found . Please contact customer care")
             }
@@ -284,7 +318,7 @@ class User {
 
             });
 
-            await Box.updateOne({ "_id": box._id }, { primaryOwner: user, registrationStatus: "REGISTERED",boxStatus:"DISPATCHED" })
+            await Box.updateOne({ "_id": box._id }, { primaryOwner: user, registrationStatus: "REGISTERED",boxStatus:"REGISTERED" })
 
             response.successReponse({
                 status: 200, result:
@@ -297,6 +331,68 @@ class User {
             response.errorResponse({ status: 400, result: error.message, res })
         }
     }
+
+     /**
+     * 
+     * @method PUT
+     *  @route /api/v1/user/giftBox
+     * @protected YES
+     * @description Transfer Box Ownership
+     */
+      async transferBoxOwnerShip(req,res,next){
+          try {
+             
+             
+              const box= await Box.findOne({boxid:req.body.boxid});
+              
+              if(!box){
+                  throw new Error("Box not found")
+              }
+              if (box.primaryOwner.toString() !== req.user._doc._id.toString()) {
+                throw new Error("Only Primary Owner can transfer ownership of the box")
+            }
+
+              const {email,phonenumber,address,name}= req.body;
+              const user= await UserModel.findOne({email,phonenumber});
+              let id;
+              if(!user){
+                const newUser= await UserModel.create({email,phonenumber,address,name});
+                id= newUser._id;
+
+              }else{
+                   id=user._id
+              }
+              const userid= convertToObjectID(id);
+           const boxPrimaryOwner= box.primaryOwner;
+           const boxSecondaryOwners= box.secondaryOwner;
+
+            await UserModel.updateOne({ "_id": boxPrimaryOwner }, {
+                $pull: {
+                    box: req.body.boxid
+                }
+            })
+            if(boxSecondaryOwners.length>0){
+                await  Promise.all( boxSecondaryOwners.map(async owner=>{
+                    await UserModel.updateOne({ "_id": owner._id }, {
+                        $pull: {
+                            box: req.body.boxid
+                        }
+                    })
+                }))
+            }
+              await Box.updateOne({"_id":box._id},{$unset:{
+                  primaryOwner:1,
+                  secondaryOwner:1
+              }});
+
+              await Orders.updateOne({"_id":box.orderid},{customer:userid});
+              response.successReponse({status:200,message:"Box Transfer Ownership complete",res})
+              
+          } catch (error) {
+            response.errorResponse({ status: 400, result: error.message, res })
+          }
+      }
+
      /**
      * 
      * @method GET

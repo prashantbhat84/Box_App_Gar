@@ -1,7 +1,13 @@
 const express = require('express');
 const router= express.Router();
 const cors = require('cors')
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
+const http= require('http')
+const app = express();
+const server=http.createServer(app); 
+global.io= require('socket.io')(server);
+
+
 
 
 
@@ -73,7 +79,7 @@ const corsOptions = {
     origin: "*",
     methods: ["POST", "GET", "PUT"]
 }
-const app = express();
+
 // app.use(require('express-status-monitor')(config))
 app.use(express.json())
 

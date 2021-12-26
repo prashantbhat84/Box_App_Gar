@@ -8,6 +8,7 @@ const user = require("../controllers/user");
 userRouter.post("/signup", user.signupUser);
 
 userRouter.put('/verifyUser', user.verifyUser)
+userRouter.put("/requestOTP",user.requestOTP)
 userRouter.post("/login", user.userLogin)
 userRouter.get("/logout", protect, user.Logout)
 userRouter.post("/forgotPassword", user.forgotPassword)
@@ -20,6 +21,7 @@ userRouter.post("/createUserList", protect, user.createUserList);
 userRouter.get("/getUserList", protect, user.getUserList)
 userRouter.put("/removeUserFromList", protect, user.removeUserFromList)
 userRouter.post("/addAsSecondaryOwner", protect, user.addSecondaryOwner)
+userRouter.put("/transferBoxOwnership",protect,user.transferBoxOwnerShip)
 userRouter.get("/getUserNotification", protect, user.getUserNotifications)
 userRouter.put("/acceptOwnershipRequest", protect, user.acceptOwnershipRequest)
 userRouter.get("/listSecondaryOwner", protect, user.listSecondaryOwner)

@@ -8,7 +8,7 @@
     "test": "jest  --runInBand --logHeapUsage",
     "start": "node index.js | bunyan -o short -L "
   },
-  "jest":{
+  "jest": {
     "collectCoverage": true
   },
   "keywords": [],
@@ -35,7 +35,7 @@
     "nodemailer": "^6.6.0",
     "poolifier": "^2.1.0",
     "siege": "^0.2.0",
-    "socket.io": "^4.0.1",
+    "socket.io": "^4.4.0",
     "workerpool": "^6.1.5"
   },
   "devDependencies": {

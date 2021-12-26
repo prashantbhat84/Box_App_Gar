@@ -9,7 +9,8 @@ const User= require('../models/user')
 const sms2 = require("../utils/sms2");
 const sms = require("../utils/sms");
 const awsInstance = require("../utils/awsfunctions")
-const {boxJob}= require('../jobs/Jobs')
+const {boxJob}= require('../jobs/Jobs');
+const { IoTWireless } = require('aws-sdk');
 let lastCommand, lastBoxLidStatus;
 
 
@@ -187,6 +188,12 @@ class Aggregator {
         //     "date":"10/20/2021,13:25"
         //   }
              if(details.command==="R" || details.command==="N"){
+                     if(details.command==="R"){
+                        io.on("connection",socket=>{
+                            socket.emit(box.boxid,{box:"RESET"});
+                            socket.disconnect();
+                        })
+                     }
                  return response.successReponse({status:200,result:"NO Command",res});
              }
           const box= await BoxModel.findOne({boxid:details.box}).populate("primaryOwner");
@@ -195,7 +202,10 @@ class Aggregator {
            
             if(lidStatusMessage===" TAMPERED"&&box.lid!=="TAMPERED"){
                        
-
+                io.on("connection",socket=>{
+                    socket.emit(box.boxid,{box:"TAMPERED"});
+                    socket.disconnect();
+                })
                              await boxUpdates(box.primaryOwner.email,"Unauthorised Box Access",`There has been an unauthorised access for your box with id ${details.box}`)
                             //  await awsInstance.smsaws(box.primaryOwner.phonenumber,`Unauthorised access for box with id ${details.box}`)
                          
@@ -211,6 +221,10 @@ class Aggregator {
                   
                 const user = await User.findOne({phonenumber:details.phonenumber})
                 if(box.primaryOwner.phonenumber!==details.phonenumber){
+                    io.on("connection",socket=>{
+                        socket.emit(box.boxid,{box:"OPENED"});
+                        socket.disconnect();
+                    })
                     //  await awsInstance.smsaws(box.primaryOwner.phonenumber,`Box with id:${details.box} opened by ${user.name}`)
                     await boxUpdates(box.primaryOwner.email,"Box Open Update",`Box with id ${details.box} has been opened by ${user.name}`)
                    
@@ -220,7 +234,10 @@ class Aggregator {
             const motionStatus = getMotion(details.motion)
             if((motionStatus==="MOVED")&&(box.motion==="STATIONERY")){
                
-                          
+                io.on("connection",socket=>{
+                    socket.emit(box.boxid,{box:"MOVED"});
+                    socket.disconnect();
+                })
                     await boxUpdates(box.primaryOwner.email,"Box Moved Update",`This is to inform that  box with id ${details.box} has been moved from its current position`)
                     // await awsInstance.smsaws(box.primaryOwner.phonenumber,`box with id ${details.box} has moved from its current position`)
                 
