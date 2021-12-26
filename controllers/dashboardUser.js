@@ -6,6 +6,7 @@ const { authorize } = require('../middleware/dashboardAuth');
 const { convertToObjectID } = require('../utils/misc');
 const awsInstance = require('../utils/awsfunctions');
 const {forgotPassword}= require('../utils/mailcontent')
+const Box= require('../models/box');
 
 
 
@@ -31,7 +32,7 @@ class dashBoardUser {
             const password = req.body.password;
 
             const salt = await bcrypt.genSalt(10);
-
+        
             req.body.password = await bcrypt.hash(password, salt);
 
             const newDashBoardUser = await DashboardUser.create(req.body);

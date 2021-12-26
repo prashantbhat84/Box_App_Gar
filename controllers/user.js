@@ -109,7 +109,7 @@ class User {
                let phoneVerify = Math.floor(100000 + Math.random() * 900000);
                let emailVerify = Math.floor(100000 + Math.random() * 900000);
                // set OTP expiry
-               const OTPExpiry=(dt.getTime()+2*60000).toString();
+               const OTPExpiry=(dt.getTime()+15*60000).toString();
                await UserModel.updateOne({ phonenumber: user.phonenumber }, { phoneVerify, emailVerify,OTPExpiry });
               // await verifyemail(req.body.email, emailVerify)
            // await awsInstance.smsaws(user.phonenumber, `Please enter the code ${phoneVerify} to verify your phone`)
@@ -342,7 +342,7 @@ class User {
       async transferBoxOwnerShip(req,res,next){
           try {
              
-             console.log(req.user)
+           
               const box= await Box.findOne({boxid:req.body.boxid});
               if(!box){
                   throw new Error("Box not found")
@@ -366,6 +366,7 @@ class User {
               }else{
                    id=user._id
               }
+               
               const userid= convertToObjectID(id);
            const boxPrimaryOwner= box.primaryOwner;
            const boxSecondaryOwners= box.secondaryOwner;

@@ -190,7 +190,7 @@ class Aggregator {
              if(details.command==="R" || details.command==="N"){
                      if(details.command==="R"){
                         io.on("connection",socket=>{
-                            socket.emit(box.boxid,{box:"RESET"});
+                            socket.emit(details.box,{box:"RESET"});
                             socket.disconnect();
                         })
                      }
@@ -203,7 +203,7 @@ class Aggregator {
             if(lidStatusMessage===" TAMPERED"&&box.lid!=="TAMPERED"){
                        
                 io.on("connection",socket=>{
-                    socket.emit(box.boxid,{box:"TAMPERED"});
+                    socket.emit(details.box,{box:"TAMPERED"});
                     socket.disconnect();
                 })
                              await boxUpdates(box.primaryOwner.email,"Unauthorised Box Access",`There has been an unauthorised access for your box with id ${details.box}`)
@@ -222,7 +222,7 @@ class Aggregator {
                 const user = await User.findOne({phonenumber:details.phonenumber})
                 if(box.primaryOwner.phonenumber!==details.phonenumber){
                     io.on("connection",socket=>{
-                        socket.emit(box.boxid,{box:"OPENED"});
+                        socket.emit(details.box,{box:"OPENED"});
                         socket.disconnect();
                     })
                     //  await awsInstance.smsaws(box.primaryOwner.phonenumber,`Box with id:${details.box} opened by ${user.name}`)
@@ -235,7 +235,7 @@ class Aggregator {
             if((motionStatus==="MOVED")&&(box.motion==="STATIONERY")){
                
                 io.on("connection",socket=>{
-                    socket.emit(box.boxid,{box:"MOVED"});
+                    socket.emit(details.box,{box:"MOVED"});
                     socket.disconnect();
                 })
                     await boxUpdates(box.primaryOwner.email,"Box Moved Update",`This is to inform that  box with id ${details.box} has been moved from its current position`)
