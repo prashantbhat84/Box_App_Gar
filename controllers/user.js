@@ -342,13 +342,17 @@ class User {
       async transferBoxOwnerShip(req,res,next){
           try {
              
-             
+             console.log(req.user)
               const box= await Box.findOne({boxid:req.body.boxid});
-              
               if(!box){
                   throw new Error("Box not found")
               }
-              if (box.primaryOwner.toString() !== req.user._doc._id.toString()) {
+              
+              if(!box.primaryOwner){
+                  throw new Error("Box Not registered")
+              }
+              
+              if (box.primaryOwner.toString() !== req.user._id.toString()) {
                 throw new Error("Only Primary Owner can transfer ownership of the box")
             }
 
@@ -386,7 +390,7 @@ class User {
               }});
 
               await Orders.updateOne({"_id":box.orderid},{customer:userid});
-              response.successReponse({status:200,message:"Box Transfer Ownership complete",res})
+              response.successReponse({status:200,result:"Box Transfer Ownership complete",res})
               
           } catch (error) {
             response.errorResponse({ status: 400, result: error.message, res })
