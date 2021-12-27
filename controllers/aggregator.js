@@ -279,13 +279,14 @@ class Aggregator {
                     aggregatorList: [details.aggid]
                 }
 
-            })
-            
+            });
+            const health= details.AggregatorBatteryStatus==="L"?false:true
             await AggregatorModel.findOneAndUpdate({ aggregatorID: details.aggid },
                 {
                     lastUpdatedAt: details.date,
                     battery: details.AggregatorBatteryStatus,
                     voltage:details.AggregatorBatteryVoltage,
+                    health
                     
                                 })
            
