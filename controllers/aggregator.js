@@ -143,8 +143,13 @@ class Aggregator {
                 result = await AggregatorModel.create({ aggregatorID: req.body.id, lastUpdatedAt: time })
 
             } else {
+                  if(aggregator.battery!=="L"){
 
-                result = await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time }, { new: true, runValidators: true })
+                      result = await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time,health:true,reason:"All Good" }, { new: true, runValidators: true })
+                  }else{
+                    result = await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time,health:false,reason:"Low Battery" }, { new: true, runValidators: true })
+
+                  }
             }
 
 
@@ -286,7 +291,8 @@ class Aggregator {
                     lastUpdatedAt: details.date,
                     battery: details.AggregatorBatteryStatus,
                     voltage:details.AggregatorBatteryVoltage,
-                    health
+                    health,
+                    reason:"Low Battery"
                     
                                 })
            

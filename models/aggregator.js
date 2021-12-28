@@ -15,7 +15,8 @@ const aggregatorSchema = mongoose.Schema({
        type:Boolean,
        default:true,
        enum:[true,false]
-    }
+    },
+    reason:String
 
 
 

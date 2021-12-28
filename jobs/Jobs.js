@@ -78,10 +78,15 @@ async function aggregatorJob() {
         const result = compareTimeStamp(date, time);
        
         if (!result) {
-            await AggregatorModel.updateOne({_id:aggregator._id},{health:false});
+            await AggregatorModel.updateOne({_id:aggregator._id},{health:false,reason:"Aggregator signals not received."});
             aggids.push(aggregator.aggregatorID)
         }else{
-            await AggregatorModel.updateOne({_id:aggregator._id},{health:true});
+              if(aggregator.battery!=="L"){
+
+                  await AggregatorModel.updateOne({_id:aggregator._id},{health:true,reason:"All Good"});
+              }else{
+                await AggregatorModel.updateOne({_id:aggregator._id},{health:false,reason:"Low Battery"});
+              }
         }
     }
 
