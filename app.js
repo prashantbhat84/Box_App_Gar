@@ -20,7 +20,7 @@ const log= require('./utils/serverLogger');
 const response= require("./utils/Response");
 
 const cron= require('node-cron');
-const {boxJob,aggregatorJob,updateBoxAndAggregator,updateAggregator, updateBox}= require('./jobs/Jobs')
+const {boxJob,aggregatorJob,updateBoxAndAggregator}= require('./jobs/Jobs')
 // const crypto = require('crypto');
 // const hash = crypto.createHash('A')
 // every one minute  cron jobs
@@ -33,8 +33,7 @@ const {boxJob,aggregatorJob,updateBoxAndAggregator,updateAggregator, updateBox}=
 //     log.info(util.inspect(process.memoryUsage()))
 // },5000)
 
-updateAggregator();
-updateBox();
+
 
 const config = {
     title: 'Express Status',
