@@ -145,7 +145,7 @@ class Aggregator {
             } else {
                   if(aggregator.battery!=="L"){
 
-                      result = await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time,health:true,reason:"All Good" }, { new: true, runValidators: true })
+                      result = await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time,health:true,reason:"Aggregator Okay" }, { new: true, runValidators: true })
                   }else{
                     result = await AggregatorModel.findOneAndUpdate({ aggregatorID: req.body.id }, { lastUpdatedAt: time,health:false,reason:"Low Battery" }, { new: true, runValidators: true })
 
@@ -286,7 +286,7 @@ class Aggregator {
 
             });
             const health= details.AggregatorBatteryStatus==="L"?false:true
-            const reason=details.AggregatorBatteryStatus==="L"?"Low Battery":"Battery Low";
+            const reason=details.AggregatorBatteryStatus==="L"?"Low Battery":"Aggregator Okay";
             await AggregatorModel.findOneAndUpdate({ aggregatorID: details.aggid },
                 {
                     lastUpdatedAt: details.date,
