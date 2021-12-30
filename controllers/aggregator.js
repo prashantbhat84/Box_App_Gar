@@ -286,7 +286,7 @@ class Aggregator {
 
             });
             const health= details.AggregatorBatteryStatus==="L"?false:true
-            const reason=details.AggregatorBatteryStatus==="L"?"Low Battery":"All Good";
+            const reason=details.AggregatorBatteryStatus==="L"?"Low Battery":"Battery Low";
             await AggregatorModel.findOneAndUpdate({ aggregatorID: details.aggid },
                 {
                     lastUpdatedAt: details.date,
