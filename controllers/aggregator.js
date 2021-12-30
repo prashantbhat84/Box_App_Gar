@@ -140,7 +140,7 @@ class Aggregator {
             const time = `${date.getUTCDate()}/${date.getUTCMonth() + 1}/${date.getUTCFullYear()}:${date.getUTCHours()}-${date.getUTCMinutes()}`
 
             if (!aggregator) {
-                result = await AggregatorModel.create({ aggregatorID: req.body.id, lastUpdatedAt: time })
+                // result = await AggregatorModel.create({ aggregatorID: req.body.id, lastUpdatedAt: time })
 
             } else {
                   if(aggregator.battery!=="L"){
