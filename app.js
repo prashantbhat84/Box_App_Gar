@@ -71,7 +71,7 @@ const config = {
 dotenv.config({ path: "./config/config.env" });
 const port = process.env.PORT;
 connectdb();
-updateBoxAndAggregator();
+
 global.express = express;
 const { errorResponse } = response
 const corsOptions = {

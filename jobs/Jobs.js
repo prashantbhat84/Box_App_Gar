@@ -83,7 +83,7 @@ async function aggregatorJob() {
         }else{
               if(aggregator.battery!=="L"){
 
-                  await AggregatorModel.updateOne({_id:aggregator._id},{health:true,reason:"Aggregator Okay"});
+                  await AggregatorModel.updateOne({_id:aggregator._id},{health:true,reason:"Aggregator Okay "});
               }else{
                 await AggregatorModel.updateOne({_id:aggregator._id},{health:false,reason:"Low Battery"});
               }
