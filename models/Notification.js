@@ -19,7 +19,8 @@ const notificationschema = mongoose.Schema({
         default: false
     },
     primaryId:[Number],
-    secondaryId:[Number]
+    secondaryId:[Number],
+    flag:String
 
 
 

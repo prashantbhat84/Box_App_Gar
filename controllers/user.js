@@ -537,7 +537,7 @@ class User {
             }
             
 
-            await Notification.create({ userid: userId, description: `${req.user.name} has  requested you to become his box secondary owner`, boxid, senderid: req.user._id })
+            await Notification.create({ userid: userId, description: `${req.user.name} has  requested you to become his box secondary owner`, boxid, senderid: req.user._id,flag:"primaryOwner" })
                // send sms/email to secondary user
                await awsInstance.smsaws(user.phonenumber, `${req.user.name} has  requested you to become his box secondary owner`)
             response.successReponse({
@@ -601,7 +601,7 @@ class User {
 
 
             } else {
-                await Notification.create({boxid,description:`${user.name} has accepted your invitation to become secondary owner`,primaryId:box.primaryOwner.apptoBoxID,secondaryId:user.apptoBoxID,userid:box.primaryOwner._id})
+                await Notification.create({boxid,description:`${user.name} has accepted your invitation to become secondary owner`,primaryId:box.primaryOwner.apptoBoxID,secondaryId:user.apptoBoxID,userid:box.primaryOwner._id,flag:"secondaryOwner"})
                 await Notification.deleteOne({ "_id": notification._id }, { expired: true, response: "ACCEPTED" });
                 await Box.updateOne({ boxid }, {
                     $addToSet: {
