@@ -25,7 +25,7 @@ const {boxJob,aggregatorJob,updateBoxAndAggregator}= require('./jobs/Jobs')
 // const hash = crypto.createHash('A')
 // every one minute  cron jobs
 // cron.schedule('*/1 * * * *',boxJob)
-// cron.schedule('*/1 * * * *',aggregatorJob)
+cron.schedule('*/1 * * * *',aggregatorJob)
 // detect if memory leak is present in your app
 // setInterval(()=>{
 //     const util= require('util')
