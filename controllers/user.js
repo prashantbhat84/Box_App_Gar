@@ -43,7 +43,7 @@ class User {
             let phoneVerify = Math.floor(100000 + Math.random() * 900000);
             let emailVerify = Math.floor(100000 + Math.random() * 900000);
             // set OTP expiry
-            const OTPExpiry=(dt.getTime()+15*60000).toString();
+            const OTPExpiry=(dt.getTime()+2*60000).toString();
             const salt = await bcrypt.genSalt(10);
             req.body.password = await bcrypt.hash(req.body.password, salt);
             await UserModel.updateOne({ phonenumber: user.phonenumber }, { phoneVerify, emailVerify, password: req.body.password,OTPExpiry });
@@ -109,7 +109,7 @@ class User {
                let phoneVerify = Math.floor(100000 + Math.random() * 900000);
                let emailVerify = Math.floor(100000 + Math.random() * 900000);
                // set OTP expiry
-               const OTPExpiry=(dt.getTime()+15*60000).toString();
+               const OTPExpiry=(dt.getTime()+2*60000).toString();
                await UserModel.updateOne({ phonenumber: user.phonenumber }, { phoneVerify, emailVerify,OTPExpiry });
               // await verifyemail(req.body.email, emailVerify)
            // await awsInstance.smsaws(user.phonenumber, `Please enter the code ${phoneVerify} to verify your phone`)
