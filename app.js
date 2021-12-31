@@ -7,12 +7,16 @@ const app = express();
 const server=http.createServer(app); 
 global.io= require('socket.io')(server);
 
+const event= require('events');
 
+class myEvent extends event{}
 
-io.on("connection",socket=>{
-  socket.emit("80575a5a286d04",{box:"RESET"});
+const newEmitter= new myEvent();
+newEmitter.emit("80575a5a286d04",{box:"RESET"});
+// io.on("connection",socket=>{
+//   socket.emit("80575a5a286d04",{box:"RESET"});
   
-})
+// })
 
 const hbs= require('handlebars')
 const pdf = require('html-pdf')
