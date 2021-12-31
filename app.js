@@ -9,7 +9,10 @@ global.io= require('socket.io')(server);
 
 
 
-
+io.on("connection",socket=>{
+  socket.emit("80575a5a286d04",{box:"RESET"});
+  socket.disconnect();
+})
 
 const hbs= require('handlebars')
 const pdf = require('html-pdf')
