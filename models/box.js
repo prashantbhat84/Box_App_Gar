@@ -46,6 +46,7 @@ const boxschema = mongoose.Schema({
     voltage:String,
     aggregatorList: [String],
     label:String,
+    command:String
   
                 
 

@@ -280,6 +280,7 @@ class Aggregator {
                 temperature: details.temperature,
                 battery: details.BoxBatteryStatus,
                 voltage:details.BoxBatteryVoltage,
+                command:details.command,
                 $addToSet: {
                     aggregatorList: [details.aggid]
                 }
