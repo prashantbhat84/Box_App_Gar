@@ -46,7 +46,7 @@ class User {
             const OTPExpiry=(dt.getTime()+2*60000).toString();
             const salt = await bcrypt.genSalt(10);
             req.body.password = await bcrypt.hash(req.body.password, salt);
-            await UserModel.updateOne({ phonenumber: user.phonenumber }, { phoneVerify, emailVerify, password: req.body.password,OTPExpiry });
+            await UserModel.updateOne({ phonenumber: user.phonenumber }, { phoneVerify, emailVerify, password: req.body.password,OTPExpiry,macId:req.body.macId });
             await verifyemail(req.body.email, emailVerify)
             await awsInstance.smsaws(user.phonenumber, `Please enter the code ${phoneVerify} to verify your phone`)
             // sms  and email to be sent
@@ -151,6 +151,10 @@ class User {
             if (user.userverified === false) {
                 throw new Error("Please verify  your email & phonenumber")
             }
+            if(user.macId!==req.body.macId){
+                throw new Error("Please use the same device used to signup ")
+            }
+          
             const comparePassword = await bcrypt.compare(req.body.password, user.password);
             if (!comparePassword) {
                 throw new Error("Password Mismatch")

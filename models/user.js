@@ -8,6 +8,7 @@ const userschema = mongoose.Schema({
         unique: true
 
     },
+    macId:String,
     phonenumber: {
         type: String,
         unique: true
